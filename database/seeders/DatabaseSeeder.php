@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         $super2->created_at = "2023-02-02 01:13:24";
         $super2->updated_at = "2023-02-02 01:13:24";
 
-        $super1->save();
+        $super2->save();
 
 
 

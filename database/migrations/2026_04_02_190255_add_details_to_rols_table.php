@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('rols', function (Blueprint $table) {
+/* 
+        Schema::table('rols_xx', function (Blueprint $table) {
             //
             $table->string('nombreRol');
 
             
         });
+ */
+
     }
 
     /**

@@ -15,15 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('codigo_postal');
-            $table->foreignId('	id_cliente_id')
-      ->constrained('id_cliente')
-      ->onUpdate('cascade')
-      ->onDelete('restrict');
-
-            $table->foreignId('	id_cliente_id')
-      ->constrained('id_cliente')
-      ->onUpdate('cascade')
-      ->onDelete('restrict');
             $table->timestamps();
         });
     }

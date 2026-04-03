@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tipo_vehiculo', function (Blueprint $table) {
+       /*  Schema::table('tipo_vehiculo', function (Blueprint $table) {
 
-        $table->string('nombre');
+            $table->string('nombre');
             $table->string('descripcion');
             //
         });
+         */
     }
 
     /**

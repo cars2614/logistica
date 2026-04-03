@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('rutas', function (Blueprint $table) {
-            //
+            /* 
               $table->string('zona');
             $table->string('guia');
             $table->string('direccion');
              $table->string('sector');
-              $table->string('ciudad');
+              $table->string('ciudad'); */
         });
     }
 

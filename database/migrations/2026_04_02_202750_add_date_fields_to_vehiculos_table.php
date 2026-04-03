@@ -10,12 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    {/* 
         Schema::table('vehiculos', function (Blueprint $table) {
             //
           
                 $table->timestamp('fecha_registro')->nullable();
-        });
+        }); */
     }
 
     /**

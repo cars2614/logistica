@@ -1,0 +1,4 @@
+php artisan migrate:refresh => elimina y vuelve a crear todas las tablas. 
+php artisan db:seed =>  crea todos los registros de seeders/DatabasesSeeder.php
+
+php artisan serve => Levanta servidor virtual.

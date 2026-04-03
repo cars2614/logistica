@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rols', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombreRol');
-           
-
-            $table->timestamps();
+        Schema::table('vehiculos', function (Blueprint $table) {
+            //
+          
+                $table->timestamp('fecha_registro')->nullable();
         });
     }
 
@@ -25,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rols');
+        Schema::table('vehiculos', function (Blueprint $table) {
+            //
+        });
     }
 };

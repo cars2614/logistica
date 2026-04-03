@@ -9,4 +9,10 @@ class Rol extends Model
 {
     /** @use HasFactory<\Database\Factories\RolFactory> */
     use HasFactory;
-}
+
+     protected $fillable = [
+        'nombre',
+        'id',
+        ];
+
+} 

@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('estado_guias', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('fecha_estado');
+            $table->string('estado');
+            $table->string('descripcion');
             $table->timestamps();
+
+    $table->unsignedBigInteger('guias_id'); // Creas la columna
+
+$table->foreign('guias_id')           // La conviertes en foránea
+      ->references('id_guias')         // <--- AQUÍ: Pon el nombre exacto de la primaria de Guías
+      ->on('guias')                   // Nombre de la tabla
+      ->onDelete('cascade');
         });
     }
 

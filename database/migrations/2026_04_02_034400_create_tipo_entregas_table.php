@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('tipo_entregas', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->string('descripcion');
+            $table->tinyInteger('estado');
+
             $table->timestamps();
         });
     }

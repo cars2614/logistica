@@ -12,8 +12,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('guias', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_guias');
+            $table->integer('num_guias');
+            $table->decimal('volumen',10,2);
+            $table->decimal('peso',10,2);
+            $table->decimal('precio',10,2);
+            $table->string('observacion');
+            $table->dateTime('fecha_admision');
+            $table->integer('unidades');
             $table->timestamps();
+
+         $table->foreignId('cliente_id')
+      ->constrained('clientes')
+      ->onDelete('cascade');
+
+          $table->foreignId('tipo_entregas_id')
+      ->constrained('tipo_entregas')
+      ->onDelete('cascade');
+
+      
+          $table->foreignId('planillas_id')
+      ->constrained('planillas')
+      ->onDelete('cascade');
+            
         });
     }
 

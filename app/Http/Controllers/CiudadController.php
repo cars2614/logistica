@@ -12,7 +12,8 @@ class CiudadController extends Controller
      */
     public function index()
     {
-        //
+        $ciudad = ciudad ::all();
+        return view('ciudad.index',compact('ciudadades'));
     }
 
     /**
@@ -20,7 +21,7 @@ class CiudadController extends Controller
      */
     public function create()
     {
-        //
+         return view('ciudad.create');
     }
 
     /**
@@ -28,7 +29,15 @@ class CiudadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+        'nombre'      => 'required',
+        'codigo_postal' => 'required',
+        // agrega todos los campos de tu tabla ciudad
+    ]);
+
+    ciudad::create($request->all());
+    return redirect()->route('ciudad.index')
+                     ->with('success', 'Ciudad creada correctamente');
     }
 
     /**

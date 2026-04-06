@@ -19,27 +19,15 @@ return new class extends Migration
             $table->string('destino');
             $table->string('departamento');
             $table->string('entidad');
-             $table->string('servicio');
-             $table->integer('piezas');
-             $table->decimal('kilos');
-             $table->string('opedor');
+            $table->string('servicio');
+            $table->integer('piezas');
+            $table->decimal('kilos');
+            $table->string('opedor');
 
-                 // ✅ Primero declaras las columnas aquí
-    $table->unsignedBigInteger('vehiculos_id');
-    $table->unsignedBigInteger('rutas_id');
-
+            
             $table->timestamps();
-
-
         });
-        Schema::table('planillas', function (Blueprint $table) {
-    $table->foreign('vehiculos_id')->references('id')->on('vehiculos');
-    $table->foreign('rutas_id')->references('id')->on('rutas');
-});
-
-
-
-        
+       
     }
 
     /**

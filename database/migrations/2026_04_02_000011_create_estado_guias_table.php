@@ -18,12 +18,7 @@ return new class extends Migration
             $table->string('descripcion');
             $table->timestamps();
 
-    $table->unsignedBigInteger('guias_id'); // Creas la columna
-
-$table->foreign('guias_id')           // La conviertes en foránea
-      ->references('id_guias')         // <--- AQUÍ: Pon el nombre exacto de la primaria de Guías
-      ->on('guias')                   // Nombre de la tabla
-      ->onDelete('cascade');
+            
         });
     }
 

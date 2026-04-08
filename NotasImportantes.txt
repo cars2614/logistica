@@ -2,3 +2,15 @@ php artisan migrate:refresh => elimina y vuelve a crear todas las tablas.
 php artisan db:seed =>  crea todos los registros de seeders/DatabasesSeeder.php
 
 php artisan serve => Levanta servidor virtual.
+
+
+
+
+
+
+
+git config --global user.name "juana221"
+
+Clave Git => juanavalentina2828
+
+git config --global user.email "senajuana43@gmail.com"

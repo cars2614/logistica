@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('modelo');
             $table->string('capacidad');
             $table->string('estado');
-            $table->timestamp('fecha_registro')->nullable();;
+            $table->timestamp('fecha_registro')->nullable();
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class Rol extends Model
     use HasFactory;
 
      protected $fillable = [
-        'nombre',
+        'nombreRol',
         'id',
         ];
 

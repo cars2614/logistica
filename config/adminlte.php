@@ -332,6 +332,25 @@ return [
             'url'  => 'admin/tipo-entrega',
             'icon' => 'fas fa-fw fa-truck',
         ],
+    [        'text' => 'Ciudades',
+            'url'  => 'admin/ciudad',
+            'icon' => 'fas fa-fw fa-city',
+        ],
+    [
+            'text' => 'Clientes',
+            'url'  => 'admin/cliente',
+            'icon' => 'fas fa-fw fa-users',
+        ],
+    [
+            'text' => 'Roles',
+            'url'  => 'admin/rol',
+            'icon' => 'fas fa-fw fa-user-shield',
+        ],
+    [
+            'text' => 'Tipos de Vehículo',
+            'url'  => 'admin/tipo-vehiculo',
+            'icon' => 'fas fa-fw fa-car',
+        ],
 
     ],
 

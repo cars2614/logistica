@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->string('placa');
-            $table->string('marca');
-            $table->string('modelo');
-            $table->string('capacidad');
-            $table->string('estado');
-            $table->timestamp('fecha_registro')->nullable();
+            $table->string('placa', 10)->unique();
+            $table->string('marca', 100);
+            $table->string('modelo', 100);
+            $table->decimal('capacidad', 10, 2);
+            $table->enum('estado', ['activo', 'inactivo', 'mantenimiento'])->default('activo');
+            $table->date('fecha_registro');
+            $table->foreignId('tipo_vehiculo_id')
+                  ->nullable()
+                  ->constrained('tipo_vehiculo')
+                  ->nullOnDelete();
             $table->timestamps();
         });
     }

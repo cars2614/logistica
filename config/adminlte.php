@@ -351,6 +351,35 @@ return [
             'url'  => 'admin/tipo-vehiculo',
             'icon' => 'fas fa-fw fa-car',
         ],
+    [
+            'text' => 'Vehículos',
+            'url'  => 'admin/vehiculo',
+            'icon' => 'fas fa-fw fa-truck-moving',
+        ],
+    [
+            'text' => 'Guías',
+            'url'  => 'admin/guia',
+            'icon' => 'fas fa-fw fa-file-invoice',
+        ],
+    [
+            'text' => 'Estados de Guía',
+            'url'  => 'admin/estado-guia',
+            'icon' => 'fas fa-fw fa-clipboard-list',
+    ],
+  [
+            'text' => 'Rutas',
+            'url'  => 'admin/ruta',
+            'icon' => 'fas fa-fw fa-route',
+        ],
+
+
+
+    [
+            'text' => 'Planillas',
+            'url'  => 'admin/planilla',
+            'icon' => 'fas fa-fw fa-file-alt',
+        ],
+    
 
     ],
 

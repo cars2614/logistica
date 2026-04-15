@@ -8,6 +8,11 @@ use App\Http\Controllers\Admin\CiudadController;
 use App\Http\Controllers\Admin\ClienteController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\TipovehiculoController;
+use App\Http\Controllers\Admin\VehiculoController;
+use App\Http\Controllers\Admin\GuiaController;
+use App\Http\Controllers\Admin\EstadoGuiaController;
+use App\Http\Controllers\Admin\PlanillaController;
+use App\Http\Controllers\Admin\RutaController;
 
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';
@@ -43,6 +48,29 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('tipo-vehiculo', TipovehiculoController::class)
         ->parameters(['tipo-vehiculo' => 'tipoVehiculo'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Vehículo
+    Route::resource('vehiculo', VehiculoController::class)
+        ->parameters(['vehiculo' => 'vehiculo'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Guía
+    Route::resource('guia', GuiaController::class)
+        ->parameters(['guia' => 'id'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Estado de Guía
+    Route::resource('estado-guia', EstadoGuiaController::class)
+        ->parameters(['estado-guia' => 'id'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Planilla
+    Route::resource('planilla', PlanillaController::class)
+        ->parameters(['planilla' => 'id'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Ruta
+    Route::resource('ruta', RutaController::class)
+        ->parameters(['ruta' => 'id'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
 });
-
-

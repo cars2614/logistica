@@ -263,6 +263,7 @@ new Chart(document.getElementById('chartVehiculos'), {
             borderRadius: 6
         }]
     },
+    
     options: {
         responsive: true,
         scales: {

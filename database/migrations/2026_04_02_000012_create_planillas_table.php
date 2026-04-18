@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('planillas', function (Blueprint $table) {
             $table->id();
-            $table->string('destinatario');
-            $table->string('direccion');
-            $table->string('comentario');
-            $table->string('destino');
-            $table->string('departamento');
-            $table->string('entidad');
-            $table->string('servicio');
+
+            $table->string('numero_planilla')->unique()->autoIncrement();
+
+            $table->foreignId('id_ciudad')->constrained('ciudades');
+            $table->foreignId('id_usuario')->constrained('usuarios');
+            $table->foreignId('id_ruta')->constrained('rutas');
+            
             $table->integer('piezas');
-            $table->decimal('kilos');
-            $table->string('opedor');
+            $table->decimal('kilos', 10, 2);         
 
             
             $table->timestamps();

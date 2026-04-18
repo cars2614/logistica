@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
         // ── Guías por Tipo de Entrega (Dona) ───────────────────────
         $guiasPorEstado = DB::table('guias')
-            ->join('tipo_entregas', 'guias.tipo_entrega_id', '=', 'tipo_entregas.id')
+            ->join('tipo_entregas', 'guias.id_tipo_entrega', '=', 'tipo_entregas.id')
             ->select('tipo_entregas.nombre as estado', DB::raw('COUNT(*) as total'))
             ->groupBy('tipo_entregas.nombre')
             ->get();
@@ -36,7 +36,7 @@ class DashboardController extends Controller
 
         // ── Top 5 Clientes con más guías (Barras horizontales) ─────
         $ciudadesActivas = DB::table('guias')
-            ->join('clientes', 'guias.cliente_id', '=', 'clientes.id')
+            ->join('clientes', 'guias.id_cliente_destino', '=', 'clientes.id')
             ->select('clientes.nombre as ciudad', DB::raw('COUNT(*) as total'))
             ->groupBy('clientes.nombre')
             ->orderByDesc('total')
@@ -45,23 +45,24 @@ class DashboardController extends Controller
 
         // ── Vehículos por Tipo (Barras) ────────────────────────────
         $vehiculosPorTipo = DB::table('vehiculos')
-            ->join('tipo_vehiculo', 'vehiculos.tipo_vehiculo_id', '=', 'tipo_vehiculo.id')
+            ->join('tipo_vehiculo', 'vehiculos.id', '=', 'tipo_vehiculo.id')
             ->select('tipo_vehiculo.nombre as tipo', DB::raw('COUNT(*) as total'))
             ->groupBy('tipo_vehiculo.nombre')
             ->get();
 
+
         // ── Últimas 8 guías registradas ────────────────────────────
         $ultimasGuias = DB::table('guias')
-            ->join('clientes', 'guias.cliente_id', '=', 'clientes.id')
-            ->join('tipo_entregas', 'guias.tipo_entrega_id', '=', 'tipo_entregas.id')
+            ->join('clientes', 'guias.id_cliente_destino', '=', 'clientes.id')
+            ->join('tipo_entregas', 'guias.id_tipo_entrega', '=', 'tipo_entregas.id')
             ->select(
-                'guias.id_guias',
+                'guias.id',
                 'guias.num_guias',
                 'clientes.nombre as cliente',
                 'tipo_entregas.nombre as estado',
-                'guias.fecha_admision'
+                'guias.created_at as fecha_admision'
             )
-            ->orderByDesc('guias.fecha_admision')
+            ->orderByDesc('guias.created_at')
             ->limit(8)
             ->get();
 

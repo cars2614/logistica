@@ -19,10 +19,10 @@ return new class extends Migration
             $table->decimal('capacidad', 10, 2);
             $table->enum('estado', ['activo', 'inactivo', 'mantenimiento'])->default('activo');
             $table->date('fecha_registro');
-            $table->foreignId('tipo_vehiculo_id')
-                  ->nullable()
-                  ->constrained('tipo_vehiculo')
-                  ->nullOnDelete();
+
+            $table->foreignId('id_tipo_vehiculo')->constrained('tipo_vehiculo');
+
+            
             $table->timestamps();
         });
     }

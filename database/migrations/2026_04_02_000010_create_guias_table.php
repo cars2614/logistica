@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('guias', function (Blueprint $table) {
-            $table->id('id_guias');
+            $table->id();
+            
             $table->integer('num_guias');
             $table->decimal('volumen', 10, 2);
             $table->decimal('peso', 10, 2);
@@ -20,6 +21,13 @@ return new class extends Migration
             $table->string('observacion');
             $table->dateTime('fecha_admision');
             $table->integer('unidades');
+
+            $table->foreignId('id_cliente_origen')->constrained('clientes');
+            $table->foreignId('id_cliente_destino')->constrained('clientes');
+            $table->foreignId('id_tipo_entrega')->constrained('tipo_entregas');
+
+
+
             $table->timestamps();
 
             

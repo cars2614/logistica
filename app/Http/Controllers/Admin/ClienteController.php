@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ciudad;
 use App\Models\cliente;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class ClienteController extends Controller
     public function index()
     {
         $clientes = cliente::orderBy('created_at', 'desc')->get();
-        return view('admin.clientes.index', compact('clientes'));
+        $ciudades = ciudad::orderBy('nombre', 'asc')->get();
+
+
+        return view('admin.clientes.index', compact('clientes', 'ciudades'));
     }
 
     /**
@@ -23,21 +27,26 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'      => 'required|string|max:100',
-            'telefono'    => 'required|string|max:20',
-            'correo'      => 'required|email|max:100|unique:clientes,correo',
+            'cedula'      => 'required',
+            'nombre'      => 'required',
+            'telefono'    => 'required',
+            'correo'      => 'required',
             'direccion'   => 'required|string|max:200',
             'descripcion' => 'nullable|string|max:500',
-        ], [
+            'id_ciudad'   => 'required',
+        ], /* [
+
+            'cedula.integer'     => 'La cédula debe ser un número entero.',
             'nombre.required'    => 'El nombre es obligatorio.',
             'telefono.required'  => 'El teléfono es obligatorio.',
             'correo.required'    => 'El correo es obligatorio.',
             'correo.email'       => 'El correo no tiene un formato válido.',
             'correo.unique'      => 'Este correo ya está registrado.',
             'direccion.required' => 'La dirección es obligatoria.',
-        ]);
+            'id_ciudad.required' => 'La ciudad es obligatoria.',
+        ] */);
 
-        cliente::create($request->only(['nombre', 'telefono', 'correo', 'direccion', 'descripcion']));
+        cliente::create($request->only(['cedula', 'nombre', 'telefono', 'correo', 'direccion', 'descripcion', 'id_ciudad']));
 
         return redirect()->route('admin.cliente.index')
             ->with('success', 'Cliente creado correctamente.');

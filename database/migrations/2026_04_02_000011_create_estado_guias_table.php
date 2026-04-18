@@ -16,6 +16,10 @@ return new class extends Migration
             $table->dateTime('fecha_estado');
             $table->string('estado');
             $table->string('descripcion');
+
+            $table->foreignId('id_guia')->constrained('guias');
+            $table->foreignId('id_usuario')->constrained('usuarios');
+
             $table->timestamps();
 
             

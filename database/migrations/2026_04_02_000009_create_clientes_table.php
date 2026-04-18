@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
+            $table->string('cedula')->unique();  /* este campo actua como una llave primearia pero no lo es. */
             $table->string('nombre');
             $table->string('telefono');
             $table->string('correo');
             $table->string('direccion');
             $table->string('descripcion');
+
+            $table->foreignId('id_ciudad')->constrained('ciudades');
 
             $table->timestamps();
         });

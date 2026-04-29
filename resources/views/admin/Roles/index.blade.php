@@ -37,17 +37,29 @@
 
                     <div class="card-body">
 
-                        {{-- Nombre del Rol - Corregido a nombreRol --}}
+                        {{-- Nombre del Rol - Selección por botones --}}
                         <div class="form-group">
-                            <label for="nombreRol">Nombre <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   name="nombreRol" 
-                                   id="nombreRol" 
-                                   class="form-control @error('nombreRol') is-invalid @enderror" 
-                                   placeholder="Ej: Administrador" 
-                                   value="{{ old('nombreRol') }}">
+                            <label>Nombre <span class="text-danger">*</span></label>
+                            <input type="hidden" name="nombreRol" id="nombreRol" value="{{ old('nombreRol') }}">
+
+                            <div class="d-flex flex-wrap" id="roles-botones">
+                                @foreach([
+                                    ['valor' => 'Administrador', 'icono' => 'fas fa-user-shield'],
+                                    ['valor' => 'Repartidor',    'icono' => 'fas fa-motorcycle'],
+                                    ['valor' => 'Cliente',       'icono' => 'fas fa-user'],
+                                ] as $opcion)
+                                    <button type="button"
+                                        class="btn btn-rol mr-2 mb-2 {{ old('nombreRol') === $opcion['valor'] ? 'active' : '' }}"
+                                        data-valor="{{ $opcion['valor'] }}"
+                                        onclick="seleccionarRol(this)">
+                                        <i class="{{ $opcion['icono'] }} mr-1"></i>
+                                        {{ $opcion['valor'] }}
+                                    </button>
+                                @endforeach
+                            </div>
+
                             @error('nombreRol')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -57,7 +69,7 @@
                         <button type="submit" class="btn btn-primary btn-block">
                             <i class="fas fa-save"></i> Guardar
                         </button>
-                        <a href="{{ route('admin.rol.index') }}" class="btn btn-secondary btn-block">
+                        <a href="{{ route('admin.rol.index') }}" class="btn btn-secondary btn-block mt-2">
                             <i class="fas fa-undo"></i> Limpiar
                         </a>
                     </div>
@@ -90,20 +102,19 @@
                             @forelse($roles as $index => $rol)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    {{-- Corregido para mostrar nombreRol --}}
-                                    <td>{{ $rol->nombreRol }}</td> 
+                                    <td>{{ $rol->nombreRol }}</td>
                                     <td>
                                         {{-- Editar --}}
-                                        <a href="{{ route('admin.rol.edit', $rol->id) }}" 
-                                           class="btn btn-warning btn-sm" 
+                                        <a href="{{ route('admin.rol.edit', $rol->id) }}"
+                                           class="btn btn-warning btn-sm"
                                            title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
 
                                         {{-- Eliminar --}}
-                                        <form action="{{ route('admin.rol.destroy', $rol->id) }}" 
-                                              method="POST" 
-                                              class="d-inline" 
+                                        <form action="{{ route('admin.rol.destroy', $rol->id) }}"
+                                              method="POST"
+                                              class="d-inline"
                                               onsubmit="return confirm('¿Estás seguro de eliminar este rol?')">
                                             @csrf
                                             @method('DELETE')
@@ -132,5 +143,49 @@
 @section('css')
     <style>
         .table thead th { font-size: 0.85rem; }
+
+        .btn-rol {
+            border: 2px solid #007bff;
+            color: #007bff;
+            background-color: white;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-rol:hover {
+            background-color: #e7f1ff;
+        }
+
+        .btn-rol.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-rol.active i {
+            color: white;
+        }
     </style>
+@stop
+
+@section('js')
+    <script>
+        function seleccionarRol(boton) {
+            document.querySelectorAll('.btn-rol').forEach(b => b.classList.remove('active'));
+            boton.classList.add('active');
+            document.getElementById('nombreRol').value = boton.dataset.valor;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const valorActual = document.getElementById('nombreRol').value;
+            if (valorActual) {
+                document.querySelectorAll('.btn-rol').forEach(function (b) {
+                    if (b.dataset.valor === valorActual) {
+                        b.classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
 @stop

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\GuiaController;
 use App\Http\Controllers\Admin\EstadoGuiaController;
 use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
+use App\Http\controllers\Admin\TrackingController;
 
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';
@@ -73,4 +74,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('ruta', RutaController::class)
         ->parameters(['ruta' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+        // routes/web.php
+Route::get('/tracking/{guia}', [TrackingController::class, 'show'])
+    ->name('tracking.show');
+
+// Para el conductor (protegida)
+Route::post('/tracking/{guia}/actualizar', [TrackingController::class, 'actualizar'])
+    ->middleware('auth')
+    ->name('tracking.actualizar');
+
+// routes/api.php
+Route::get('/tracking/{guia}/ubicaciones', [TrackingController::class, 'ubicaciones']);
 });

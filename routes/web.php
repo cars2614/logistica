@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\GuiaController;
 use App\Http\Controllers\Admin\EstadoGuiaController;
 use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
-use App\Http\controllers\Admin\TrackingController;
+use App\Http\Controllers\Admin\TrackingController;
 
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';

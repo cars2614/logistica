@@ -138,9 +138,9 @@
             font-size: 17px;
             font-weight: 300;
             line-height: 1.7;
-            color: rgba(250,246,239,0.65);
-            max-width: 420px;
-            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 600px;
+            margin-bottom: 41px;
             animation: fadeUp 0.6s 0.5s ease both;
         }
 
@@ -152,7 +152,7 @@
         .btn-primary {
             display: inline-flex; align-items: center; gap: 10px;
             background: linear-gradient(135deg, var(--orange), var(--red));
-            color: #fff;
+            color: #ffffff;
             font-family: 'DM Sans', sans-serif;
             font-size: 15px; font-weight: 500;
             padding: 14px 30px;
@@ -160,7 +160,7 @@
             text-decoration: none;
             border: none; cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 32px rgba(230,62,28,0.35);
+            box-shadow: 0 20px 300px rgb(192, 103, 31);
             position: relative; overflow: hidden;
         }
         .btn-primary::after {

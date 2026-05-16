@@ -26,64 +26,53 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // CRUD Tipo de Entrega
     Route::resource('tipo-entrega', TipoEntregaController::class)
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Ciudad
     Route::resource('ciudad', CiudadController::class)
         ->parameters(['ciudad' => 'ciudad'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Cliente
     Route::resource('cliente', ClienteController::class)
         ->parameters(['cliente' => 'cliente'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Rol
     Route::resource('rol', RolController::class)
         ->parameters(['rol' => 'rol'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Tipo de Vehículo
     Route::resource('tipo-vehiculo', TipovehiculoController::class)
         ->parameters(['tipo-vehiculo' => 'tipoVehiculo'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Vehículo
     Route::resource('vehiculo', VehiculoController::class)
         ->parameters(['vehiculo' => 'vehiculo'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Guía
     Route::resource('guia', GuiaController::class)
         ->parameters(['guia' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Estado de Guía
     Route::resource('estado-guia', EstadoGuiaController::class)
         ->parameters(['estado-guia' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Planilla
     Route::resource('planilla', PlanillaController::class)
         ->parameters(['planilla' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    // CRUD Ruta
     Route::resource('ruta', RutaController::class)
         ->parameters(['ruta' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
+});
 
-        // routes/web.php
+// Tracking — fuera del grupo admin (público + protegido)
 Route::get('/tracking/{guia}', [TrackingController::class, 'show'])
     ->name('tracking.show');
 
-// Para el conductor (protegida)
 Route::post('/tracking/{guia}/actualizar', [TrackingController::class, 'actualizar'])
     ->middleware('auth')
     ->name('tracking.actualizar');
 
-// routes/api.php
-Route::get('/tracking/{guia}/ubicaciones', [TrackingController::class, 'ubicaciones']);
-});
+Route::get('/tracking/{guia}/ubicaciones', [TrackingController::class, 'ubicaciones'])
+    ->name('tracking.ubicaciones');

@@ -53,7 +53,7 @@
         header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 22px 48px;
-            border-bottom: 1px solid rgba(59,130,246,0.1);
+            border-bottom: 1px solid rgba(28, 106, 230, 0.1);
             animation: fadeDown 0.7s ease both;
         }
         .logo-wrap {
@@ -325,7 +325,7 @@
         </p>
 
         <div class="hero-actions">
-            <a href="/login" class="btn-primary">Acceder al sistema</a>
+            
             <a href="#" class="btn-secondary">Ver seguimiento de guía →</a>
         </div>
     </section>

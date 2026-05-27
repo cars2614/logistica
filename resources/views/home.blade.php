@@ -302,7 +302,7 @@
         <nav>
             <a href="#">Seguimiento</a>
             <a href="#">Servicios</a>
-            <a href="#">Contacto</a>
+            <a href="#">Soporte</a>
         </nav>
         <a href="/login" class="btn-primary">Iniciar sesión →</a>
     </header>

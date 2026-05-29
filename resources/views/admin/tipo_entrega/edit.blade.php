@@ -40,9 +40,7 @@
 
                         {{-- Nombre --}}
                         <div class="form-group">
-                            <label for="nombre">
-                                Nombre <span class="text-danger">*</span>
-                            </label>
+                            <label for="nombre">Nombre <span class="text-danger">*</span></label>
                             <input
                                 type="text"
                                 id="nombre"
@@ -50,19 +48,19 @@
                                 value="{{ old('nombre', $tipoEntrega->nombre) }}"
                                 placeholder="Ej: Entrega a domicilio"
                                 class="form-control @error('nombre') is-invalid @enderror"
-                                maxlength="255"
+                                maxlength="100"
                                 autocomplete="off"
+                                onkeypress="return /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/.test(event.key)"
                             >
                             @error('nombre')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo letras, espacios y tildes. Máx. 100 caracteres.</small>
                         </div>
 
                         {{-- Descripción --}}
                         <div class="form-group">
-                            <label for="descripcion">
-                                Descripción <span class="text-danger">*</span>
-                            </label>
+                            <label for="descripcion">Descripción <span class="text-danger">*</span></label>
                             <textarea
                                 id="descripcion"
                                 name="descripcion"
@@ -72,31 +70,27 @@
                                 maxlength="255"
                             >{{ old('descripcion', $tipoEntrega->descripcion) }}</textarea>
                             @error('descripcion')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="desc-count-edit">0</span>/255 caracteres.</small>
                         </div>
 
                         {{-- Estado --}}
                         <div class="form-group">
-                            <label for="estado">
-                                Estado <span class="text-danger">*</span>
-                            </label>
+                            <label for="estado">Estado <span class="text-danger">*</span></label>
                             <select
                                 id="estado"
                                 name="estado"
                                 class="form-control @error('estado') is-invalid @enderror"
                             >
                                 <option value="">-- Seleccione --</option>
-                                <option value="1" {{ old('estado', $tipoEntrega->estado) == '1' ? 'selected' : '' }}>
-                                    Activo
-                                </option>
-                                <option value="0" {{ old('estado', (string) $tipoEntrega->estado) === '0' ? 'selected' : '' }}>
-                                    Inactivo
-                                </option>
+                                <option value="1" {{ old('estado', $tipoEntrega->estado) == '1' ? 'selected' : '' }}>Activo</option>
+                                <option value="0" {{ old('estado', (string) $tipoEntrega->estado) === '0' ? 'selected' : '' }}>Inactivo</option>
                             </select>
                             @error('estado')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el estado del tipo de entrega.</small>
                         </div>
 
                     </div>
@@ -118,8 +112,21 @@
 
 @stop
 
-@section('js')
+@push('js')
 <script>
+    // Nombre: solo letras y tildes
+    document.getElementById('nombre').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
+    });
+
+    // Contador de caracteres descripción
+    const descEdit = document.getElementById('descripcion');
+    const countEdit = document.getElementById('desc-count-edit');
+    countEdit.textContent = descEdit.value.length;
+    descEdit.addEventListener('input', function () {
+        countEdit.textContent = this.value.length;
+    });
+
     // Auto-cerrar alertas de sesión tras 4 segundos
     setTimeout(function () {
         document.querySelectorAll('.alert-dismissible').forEach(function (alert) {
@@ -127,4 +134,4 @@
         });
     }, 4000);
 </script>
-@stop
+@endpush

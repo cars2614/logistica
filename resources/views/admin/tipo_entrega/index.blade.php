@@ -55,9 +55,7 @@
 
                         {{-- Nombre --}}
                         <div class="form-group">
-                            <label for="nombre">
-                                Nombre <span class="text-danger">*</span>
-                            </label>
+                            <label for="nombre">Nombre <span class="text-danger">*</span></label>
                             <input
                                 type="text"
                                 id="nombre"
@@ -65,19 +63,19 @@
                                 value="{{ old('nombre') }}"
                                 placeholder="Ej: Entrega a domicilio"
                                 class="form-control @error('nombre') is-invalid @enderror"
-                                maxlength="255"
+                                maxlength="100"
                                 autocomplete="off"
+                                onkeypress="return /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/.test(event.key)"
                             >
                             @error('nombre')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo letras, espacios y tildes. Máx. 100 caracteres.</small>
                         </div>
 
                         {{-- Descripción --}}
                         <div class="form-group">
-                            <label for="descripcion">
-                                Descripción <span class="text-danger">*</span>
-                            </label>
+                            <label for="descripcion">Descripción <span class="text-danger">*</span></label>
                             <textarea
                                 id="descripcion"
                                 name="descripcion"
@@ -87,15 +85,14 @@
                                 maxlength="255"
                             >{{ old('descripcion') }}</textarea>
                             @error('descripcion')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="desc-count">0</span>/255 caracteres.</small>
                         </div>
 
                         {{-- Estado --}}
                         <div class="form-group">
-                            <label for="estado">
-                                Estado <span class="text-danger">*</span>
-                            </label>
+                            <label for="estado">Estado <span class="text-danger">*</span></label>
                             <select
                                 id="estado"
                                 name="estado"
@@ -106,8 +103,9 @@
                                 <option value="0" {{ old('estado') === '0' ? 'selected' : '' }}>Inactivo</option>
                             </select>
                             @error('estado')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                             @enderror
+                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el estado del tipo de entrega.</small>
                         </div>
 
                     </div>
@@ -116,7 +114,7 @@
                         <button type="submit" class="btn btn-primary btn-block">
                             <i class="fas fa-save mr-1"></i> Guardar
                         </button>
-                        <button type="reset" class="btn btn-secondary btn-block mt-1">
+                        <button type="reset" class="btn btn-secondary btn-block mt-1" id="btnLimpiar">
                             <i class="fas fa-undo mr-1"></i> Limpiar
                         </button>
                     </div>
@@ -166,16 +164,13 @@
                                             </span>
                                         </td>
                                         <td class="text-center align-middle">
-                                            {{-- Botón Editar --}}
-                                            <a
+                                            
                                                 href="{{ route('admin.tipo-entrega.edit', $item) }}"
                                                 class="btn btn-sm btn-warning"
                                                 title="Editar"
                                             >
                                                 <i class="fas fa-edit"></i>
                                             </a>
-
-                                            {{-- Botón Eliminar --}}
                                             <form
                                                 action="{{ route('admin.tipo-entrega.destroy', $item) }}"
                                                 method="POST"
@@ -250,11 +245,28 @@
 
 @stop
 
-@section('js')
+@push('js')
 <script>
-    let formEliminar = null;
+    // Nombre: solo letras y tildes
+    document.getElementById('nombre').addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
+    });
 
-    // Captura del botón eliminar — abre el modal de confirmación
+    // Contador de caracteres descripción
+    const desc = document.getElementById('descripcion');
+    const count = document.getElementById('desc-count');
+    count.textContent = desc.value.length;
+    desc.addEventListener('input', function () {
+        count.textContent = this.value.length;
+    });
+
+    // Limpiar contador al resetear formulario
+    document.getElementById('btnLimpiar').addEventListener('click', function () {
+        setTimeout(() => { count.textContent = 0; }, 10);
+    });
+
+    // Modal de eliminación
+    let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const nombre = this.getAttribute('data-nombre');
@@ -264,18 +276,15 @@
         });
     });
 
-    // Confirmación de eliminación
     document.getElementById('btnConfirmarEliminar').addEventListener('click', function () {
-        if (formEliminar) {
-            formEliminar.submit();
-        }
+        if (formEliminar) formEliminar.submit();
     });
 
-    // Auto-cerrar alertas de sesión tras 4 segundos
+    // Auto-cerrar alertas tras 4 segundos
     setTimeout(function () {
         document.querySelectorAll('.alert-dismissible').forEach(function (alert) {
             $(alert).fadeOut('slow');
         });
     }, 4000);
 </script>
-@stop
+@endpush

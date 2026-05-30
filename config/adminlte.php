@@ -286,6 +286,16 @@ return [
     'laravel_css_path' => 'css/app.css',
     'laravel_js_path' => 'js/app.js',
 
+    'extra_assets' => [
+    'css' => [
+        [
+            'type'     => 'css',
+            'asset'    => true,
+            'location' => 'css/resposive.css',
+        ],
+    ],
+    'js' => [],
+],
     /*
     |--------------------------------------------------------------------------
     | Menu Items

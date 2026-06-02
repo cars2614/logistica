@@ -16,15 +16,17 @@ class EstadoGuia extends Model
         'fecha_estado',
         'estado',
         'descripcion',
-        'guia_id',
+        'id_guia',
+        'id_usuario',
     ];
 
-    /**
-     * Relación: un estado pertenece a una guía.
-     * La clave primaria de guias es id_guias.
-     */
     public function guia()
     {
-        return $this->belongsTo(Guia::class, 'guia_id', 'id_guias');
+        return $this->belongsTo(Guia::class, 'id_guia', 'id_guias');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario');
     }
 }

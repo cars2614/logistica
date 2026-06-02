@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Planilla;
 use App\Models\Guia;
 use App\Models\Ruta;
+use App\Models\ciudad;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
@@ -13,38 +14,41 @@ class PlanillaController extends Controller
 {
     public function index()
     {
-        $planillas = Planilla::with(['guia', 'ruta'])
+        $planillas = Planilla::with(['ciudad', 'ruta'])
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-        $guias = Guia::orderBy('num_guias')->get();
-        $rutas = Ruta::orderBy('id')->get();
+        $ciudades = ciudad::orderBy('nombre')->get();
+        $rutas    = Ruta::orderBy('id')->get();
 
-        return view('admin.planillas.index', compact('planillas', 'guias', 'rutas'));
+        return view('admin.planillas.index', compact('planillas', 'ciudades', 'rutas'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'destinatario' => 'required|string|max:255',
-            'direccion'    => 'required|string|max:255',
-            'comentario'   => 'required|string|max:255',
-            'destino'      => 'required|string|max:255',
-            'departamento' => 'required|string|max:255',
-            'entidad'      => 'required|string|max:255',
-            'servicio'     => 'required|string|max:255',
-            'piezas'       => 'required|integer|min:0',
-            'kilos'        => 'required|numeric|min:0',
-            'opedor'       => 'required|string|max:255',
-            'guia_id'      => 'required|exists:guias,id_guias',
-            'ruta_id'      => 'required|exists:rutas,id',
+            'id_ciudad' => 'required|exists:ciudades,id',
+            'id_ruta'   => 'required|exists:rutas,id',
+            'piezas'    => 'required|integer|min:1',
+            'kilos'     => 'required|numeric|min:0',
+        ], [
+            'id_ciudad.required' => 'La ciudad es obligatoria.',
+            'id_ciudad.exists'   => 'La ciudad seleccionada no existe.',
+            'id_ruta.required'   => 'La ruta es obligatoria.',
+            'id_ruta.exists'     => 'La ruta seleccionada no existe.',
+            'piezas.required'    => 'Las piezas son obligatorias.',
+            'piezas.min'         => 'Las piezas deben ser al menos 1.',
+            'kilos.required'     => 'Los kilos son obligatorios.',
+            'kilos.min'          => 'Los kilos no pueden ser negativos.',
         ]);
 
-        Planilla::create($request->only([
-            'destinatario', 'direccion', 'comentario', 'destino',
-            'departamento', 'entidad', 'servicio', 'piezas',
-            'kilos', 'opedor', 'guia_id', 'ruta_id',
-        ]));
+        Planilla::create([
+            'id_ciudad'  => $request->id_ciudad,
+            'id_usuario' => auth()->id(),
+            'id_ruta'    => $request->id_ruta,
+            'piezas'     => $request->piezas,
+            'kilos'      => $request->kilos,
+        ]);
 
         return redirect()->route('admin.planilla.index')
             ->with('success', 'Planilla creada correctamente.');
@@ -53,10 +57,10 @@ class PlanillaController extends Controller
     public function edit($id)
     {
         $planilla = Planilla::findOrFail($id);
-        $guias    = Guia::orderBy('num_guias')->get();
+        $ciudades = ciudad::orderBy('nombre')->get();
         $rutas    = Ruta::orderBy('id')->get();
 
-        return view('admin.planilla.edit', compact('planilla', 'guias', 'rutas'));
+        return view('admin.planillas.edit', compact('planilla', 'ciudades', 'rutas'));
     }
 
     public function update(Request $request, $id)
@@ -64,25 +68,27 @@ class PlanillaController extends Controller
         $planilla = Planilla::findOrFail($id);
 
         $request->validate([
-            'destinatario' => 'required|string|max:255',
-            'direccion'    => 'required|string|max:255',
-            'comentario'   => 'required|string|max:255',
-            'destino'      => 'required|string|max:255',
-            'departamento' => 'required|string|max:255',
-            'entidad'      => 'required|string|max:255',
-            'servicio'     => 'required|string|max:255',
-            'piezas'       => 'required|integer|min:0',
-            'kilos'        => 'required|numeric|min:0',
-            'opedor'       => 'required|string|max:255',
-            'guia_id'      => 'required|exists:guias,id_guias',
-            'ruta_id'      => 'required|exists:rutas,id',
+            'id_ciudad' => 'required|exists:ciudades,id',
+            'id_ruta'   => 'required|exists:rutas,id',
+            'piezas'    => 'required|integer|min:1',
+            'kilos'     => 'required|numeric|min:0',
+        ], [
+            'id_ciudad.required' => 'La ciudad es obligatoria.',
+            'id_ciudad.exists'   => 'La ciudad seleccionada no existe.',
+            'id_ruta.required'   => 'La ruta es obligatoria.',
+            'id_ruta.exists'     => 'La ruta seleccionada no existe.',
+            'piezas.required'    => 'Las piezas son obligatorias.',
+            'piezas.min'         => 'Las piezas deben ser al menos 1.',
+            'kilos.required'     => 'Los kilos son obligatorios.',
+            'kilos.min'          => 'Los kilos no pueden ser negativos.',
         ]);
 
-        $planilla->update($request->only([
-            'destinatario', 'direccion', 'comentario', 'destino',
-            'departamento', 'entidad', 'servicio', 'piezas',
-            'kilos', 'opedor', 'guia_id', 'ruta_id',
-        ]));
+        $planilla->update([
+            'id_ciudad' => $request->id_ciudad,
+            'id_ruta'   => $request->id_ruta,
+            'piezas'    => $request->piezas,
+            'kilos'     => $request->kilos,
+        ]);
 
         return redirect()->route('admin.planilla.index')
             ->with('success', 'Planilla actualizada correctamente.');

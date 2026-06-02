@@ -7,89 +7,54 @@ use App\Models\Guia;
 use App\Models\Cliente;
 use App\Models\TipoEntrega;
 use Illuminate\Http\Request;
-use Illuminate\Database\QueryException;
 
 class GuiaController extends Controller
 {
     public function index()
     {
-        $guias        = Guia::with(['cliente', 'tipoEntrega'])->orderBy('id_guias', 'desc')->paginate(10);
-        $clientes     = Cliente::orderBy('nombre')->get();
-        $tipoEntregas = TipoEntrega::orderBy('nombre')->get();
-
+        // 1. Carga las guías con paginación
+        $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->paginate(10);
+        
+        // 2. Traemos todos los clientes de la BD para el formulario modal
+        $clientes = Cliente::all();
+        
+        // 3. Traemos los tipos de entrega por si tu formulario los necesita
+        $tipoEntregas = TipoEntrega::all();
+        
+        // 4. Enviamos todas las variables juntas a la vista
         return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas'));
     }
 
     public function store(Request $request)
     {
+        // 1. Validamos los datos tal como vienen del formulario en la pantalla
         $request->validate([
             'num_guias'       => 'required|integer',
-            'volumen'         => 'required|numeric|min:0',
-            'peso'            => 'required|numeric|min:0',
-            'precio'          => 'required|numeric|min:0',
-            'observacion'     => 'nullable|string|max:255',
+            'volumen'         => 'required|numeric',
+            'peso'            => 'required|numeric',
+            'precio'          => 'required|numeric',
             'fecha_admision'  => 'required|date',
             'unidades'        => 'required|integer|min:1',
             'cliente_id'      => 'required|exists:clientes,id',
             'tipo_entrega_id' => 'required|exists:tipo_entregas,id',
-        ]);
-
-        Guia::create($request->only([
-            'num_guias', 'volumen', 'peso', 'precio',
-            'observacion', 'fecha_admision', 'unidades',
-            'cliente_id', 'tipo_entrega_id',
-        ]));
-
-        return redirect()->route('admin.guia.index')
-            ->with('success', 'Guía creada correctamente.');
-    }
-
-    public function edit($id)
-    {
-        $guia         = Guia::findOrFail($id);
-        $clientes     = Cliente::orderBy('nombre')->get();
-        $tipoEntregas = TipoEntrega::orderBy('nombre')->get();
-
-        return view('admin.guia.edit', compact('guia', 'clientes', 'tipoEntregas'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $guia = Guia::findOrFail($id);
-
-        $request->validate([
-            'num_guias'       => 'required|integer',
-            'volumen'         => 'required|numeric|min:0',
-            'peso'            => 'required|numeric|min:0',
-            'precio'          => 'required|numeric|min:0',
             'observacion'     => 'nullable|string|max:255',
-            'fecha_admision'  => 'required|date',
-            'unidades'        => 'required|integer|min:1',
-            'cliente_id'      => 'required|exists:clientes,id',
-            'tipo_entrega_id' => 'required|exists:tipo_entregas,id',
         ]);
 
-        $guia->update($request->only([
-            'num_guias', 'volumen', 'peso', 'precio',
-            'observacion', 'fecha_admision', 'unidades',
-            'cliente_id', 'tipo_entrega_id',
-        ]));
+        // 2. Creamos la guía mapeando los inputs a las columnas reales de la BD
+        Guia::create([
+            'num_guias'          => $request->num_guias,
+            'volumen'            => $request->volumen,
+            'peso'               => $request->peso,
+            'precio'             => $request->precio,
+            'observacion'        => $request->observacion ?? 'Ninguna',
+            'fecha_admision'     => $request->fecha_admision,
+            'unidades'           => $request->unidades,
+            'id_cliente_origen'  => $request->cliente_id, 
+            'id_cliente_destino' => $request->cliente_id, 
+            'id_tipo_entrega'    => $request->tipo_entrega_id,
+        ]);
 
-        return redirect()->route('admin.guia.index')
-            ->with('success', 'Guía actualizada correctamente.');
-    }
-
-    public function destroy($id)
-    {
-        $guia = Guia::findOrFail($id);
-
-        try {
-            $guia->delete();
-            return redirect()->route('admin.guia.index')
-                ->with('success', 'Guía eliminada correctamente.');
-        } catch (QueryException $e) {
-            return redirect()->route('admin.guia.index')
-                ->with('error', 'No se puede eliminar esta guía porque tiene registros asociados.');
-        }
+        // 3. Redireccionamos con mensaje de éxito al listado
+        return redirect()->route('admin.guia.index')->with('success', 'Guía creada correctamente.');
     }
 }

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->decimal('volumen', 10, 2);
             $table->decimal('peso', 10, 2);
             $table->decimal('precio', 10, 2);
-            $table->string('observacion');
+            $table->string('observacion')->nullable();
+
             $table->dateTime('fecha_admision');
             $table->integer('unidades');
 

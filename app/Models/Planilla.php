@@ -9,38 +9,28 @@ class Planilla extends Model
 {
     use HasFactory;
 
-    protected $table      = 'planillas';
-    protected $primaryKey = 'id';
+    protected $table = 'planillas';
 
     protected $fillable = [
-        'destinatario',
-        'direccion',
-        'comentario',
-        'destino',
-        'departamento',
-        'entidad',
-        'servicio',
+        'id_ciudad',
+        'id_usuario',
+        'id_ruta',
         'piezas',
         'kilos',
-        'opedor',
-        'guia_id',
-        'ruta_id',
     ];
 
-    /**
-     * Una planilla pertenece a una guía.
-     * La PK de guias es id_guias (no el id estándar).
-     */
-    public function guia()
+    public function ciudad()
     {
-        return $this->belongsTo(Guia::class, 'guia_id', 'id_guias');
+        return $this->belongsTo(ciudad::class, 'id_ciudad');
     }
 
-    /**
-     * Una planilla pertenece a una ruta.
-     */
     public function ruta()
     {
-        return $this->belongsTo(Ruta::class, 'ruta_id', 'id');
+        return $this->belongsTo(Ruta::class, 'id_ruta');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario');
     }
 }

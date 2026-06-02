@@ -23,16 +23,24 @@ class EstadoGuiaController extends Controller
         $request->validate([
             'fecha_estado' => 'required|date',
             'estado'       => 'required|string|max:255',
-            'descripcion'  => 'required|string|max:255',
-            'guia_id'      => 'required|exists:guias,id_guias',
+            'descripcion'  => 'required|string|min:10|max:255',
+            'id_guia'      => 'required|exists:guias,id_guias',
+        ], [
+            'fecha_estado.required' => 'La fecha del estado es obligatoria.',
+            'estado.required'       => 'El estado es obligatorio.',
+            'descripcion.required'  => 'La descripción es obligatoria.',
+            'descripcion.min'       => 'La descripción debe tener al menos 10 caracteres.',
+            'id_guia.required'      => 'La guía es obligatoria.',
+            'id_guia.exists'        => 'La guía seleccionada no existe.',
         ]);
 
-        EstadoGuia::create($request->only([
-            'fecha_estado',
-            'estado',
-            'descripcion',
-            'guia_id',
-        ]));
+        EstadoGuia::create([
+            'fecha_estado' => $request->fecha_estado,
+            'estado'       => $request->estado,
+            'descripcion'  => $request->descripcion,
+            'id_guia'      => $request->id_guia,
+            'id_usuario'   => auth()->id(),
+        ]);
 
         return redirect()->route('admin.estado-guia.index')
             ->with('success', 'Estado de guía creado correctamente.');
@@ -53,16 +61,23 @@ class EstadoGuiaController extends Controller
         $request->validate([
             'fecha_estado' => 'required|date',
             'estado'       => 'required|string|max:255',
-            'descripcion'  => 'required|string|max:255',
-            'guia_id'      => 'required|exists:guias,id_guias',
+            'descripcion'  => 'required|string|min:10|max:255',
+            'id_guia'      => 'required|exists:guias,id_guias',
+        ], [
+            'fecha_estado.required' => 'La fecha del estado es obligatoria.',
+            'estado.required'       => 'El estado es obligatorio.',
+            'descripcion.required'  => 'La descripción es obligatoria.',
+            'descripcion.min'       => 'La descripción debe tener al menos 10 caracteres.',
+            'id_guia.required'      => 'La guía es obligatoria.',
+            'id_guia.exists'        => 'La guía seleccionada no existe.',
         ]);
 
-        $estadoGuia->update($request->only([
-            'fecha_estado',
-            'estado',
-            'descripcion',
-            'guia_id',
-        ]));
+        $estadoGuia->update([
+            'fecha_estado' => $request->fecha_estado,
+            'estado'       => $request->estado,
+            'descripcion'  => $request->descripcion,
+            'id_guia'      => $request->id_guia,
+        ]);
 
         return redirect()->route('admin.estado-guia.index')
             ->with('success', 'Estado de guía actualizado correctamente.');

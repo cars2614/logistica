@@ -1,3 +1,5 @@
+{{-- resources/views/admin/guia/index.blade.php --}}
+
 @extends('adminlte::page')
 
 @section('title', 'Guías')
@@ -6,9 +8,52 @@
     <h1>Gestión de Guías</h1>
 @stop
 
+{{-- ESTILOS EXCLUSIVOS PARA REPARAR LOS INPUTS PLANOS DEL MODAL DE GUÍAS --}}
+@section('css')
+<style>
+    /* Forzar a que todos los campos del modal tengan su borde gris y fondo blanco completo */
+    #modalCrear .form-control, 
+    #modalCrear select.form-control,
+    #modalCrear .input-group-text {
+        border: 1px solid #ced4da !important;
+        border-radius: 0.25rem !important;
+        background-color: #ffffff !important;
+        color: #495057 !important;
+        height: calc(2.25rem + 2px) !important;
+        padding: 0.375rem 0.75rem !important;
+    }
+
+    /* Ajustar el prefijo del signo de precio ($) para que no se desfase */
+    #modalCrear .input-group-prepend .input-group-text {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-right: none !important;
+    }
+    #modalCrear .input-group > .form-control {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    /* Efecto de borde azul clásico al hacer clic (Focus) */
+    #modalCrear .form-control:focus {
+        border-color: #80bdff !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    }
+
+    /* Separación correcta entre filas del formulario */
+    #modalCrear .form-group {
+        margin-bottom: 1.25rem !important;
+    }
+    #modalCrear .form-text {
+        margin-top: 0.3rem !important;
+        display: block !important;
+    }
+</style>
+@stop
+
 @section('content')
 
-{{-- Alertas --}}
+{{-- Alertas del Sistema --}}
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="fas fa-check-circle mr-1"></i> {{ session('success') }}
@@ -34,6 +79,7 @@
     </div>
 @endif
 
+{{-- Tabla Principal --}}
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title mb-0">Listado de Guías</h3>
@@ -62,31 +108,24 @@
                 <tbody>
                     @forelse($guias as $guia)
                         <tr>
-                            <td>{{ $guia->id_guias }}</td>
+                            <td>{{ $guia->id }}</td>
                             <td>{{ $guia->num_guias }}</td>
-                            <td>{{ $guia->cliente->nombre ?? '—' }}</td>
+                            <td>{{ $guia->clienteOrigen->nombre ?? '—' }}</td>
                             <td>{{ $guia->tipoEntrega->nombre ?? '—' }}</td>
-                            <td>{{ number_format($guia->volumen, 2) }}</td>
-                            <td>{{ number_format($guia->peso, 2) }}</td>
+                            <td>{{ number_format($guia->volumen, 2) }} m³</td>
+                            <td>{{ number_format($guia->peso, 2) }} kg</td>
                             <td>${{ number_format($guia->precio, 2) }}</td>
                             <td>{{ $guia->unidades }}</td>
                             <td>{{ \Carbon\Carbon::parse($guia->fecha_admision)->format('d/m/Y') }}</td>
                             <td>{{ $guia->observacion ?? '—' }}</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.guia.edit', $guia->id_guias) }}"
-                                   class="btn btn-warning btn-xs" title="Editar">
+                                <a href="{{ route('admin.guia.edit', $guia->id) }}" class="btn btn-warning btn-xs" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.guia.destroy', $guia->id_guias) }}"
-                                      method="POST" class="d-inline form-eliminar">
+                                <form action="{{ route('admin.guia.destroy', $guia->id) }}" method="POST" class="d-inline form-eliminar">
                                     @csrf
                                     @method('DELETE')
-                                    <button
-                                        type="button"
-                                        class="btn btn-danger btn-xs btn-eliminar"
-                                        title="Eliminar"
-                                        data-num="{{ $guia->num_guias }}"
-                                    >
+                                    <button type="button" class="btn btn-danger btn-xs btn-eliminar" title="Eliminar" data-num="{{ $guia->num_guias }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -142,9 +181,7 @@
                                     value="{{ old('num_guias') }}"
                                     placeholder="Ej: 1001"
                                     min="1"
-                                    max="9999999"
                                     autocomplete="off"
-                                    onkeypress="return /[0-9]/.test(event.key)"
                                     required
                                 >
                                 @error('num_guias')
@@ -185,8 +222,7 @@
                                 >
                                     <option value="">-- Seleccionar cliente --</option>
                                     @foreach($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}"
-                                            {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                                        <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
                                             {{ $cliente->nombre }}
                                         </option>
                                     @endforeach
@@ -210,8 +246,7 @@
                                 >
                                     <option value="">-- Seleccionar tipo --</option>
                                     @foreach($tipoEntregas as $tipo)
-                                        <option value="{{ $tipo->id }}"
-                                            {{ old('tipo_entrega_id') == $tipo->id ? 'selected' : '' }}>
+                                        <option value="{{ $tipo->id }}" {{ old('tipo_entrega_id') == $tipo->id ? 'selected' : '' }}>
                                             {{ $tipo->nombre }}
                                         </option>
                                     @endforeach
@@ -236,7 +271,6 @@
                                     placeholder="Ej: 1.50"
                                     step="0.01"
                                     min="0.01"
-                                    max="99999.99"
                                     autocomplete="off"
                                     required
                                 >
@@ -260,7 +294,6 @@
                                     placeholder="Ej: 10.50"
                                     step="0.01"
                                     min="0.01"
-                                    max="99999.99"
                                     autocomplete="off"
                                     required
                                 >
@@ -283,9 +316,7 @@
                                     value="{{ old('unidades') }}"
                                     placeholder="Ej: 5"
                                     min="1"
-                                    max="99999"
                                     autocomplete="off"
-                                    onkeypress="return /[0-9]/.test(event.key)"
                                     required
                                 >
                                 @error('unidades')
@@ -312,7 +343,6 @@
                                         placeholder="Ej: 25000.00"
                                         step="0.01"
                                         min="0.01"
-                                        max="999999999.99"
                                         autocomplete="off"
                                         required
                                     >
@@ -320,7 +350,7 @@
                                         <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Valor positivo en pesos. Ej: 25000.00</small>
+                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Valor positivo en pesos.</small>
                             </div>
                         </div>
 
@@ -341,7 +371,7 @@
                                 @error('observacion')
                                     <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="obs-count-modal">0</span>/255 caracteres.</small>
+                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="obs-count-modal">0</span>/255 caract.</small>
                             </div>
                         </div>
 
@@ -362,31 +392,20 @@
     </div>
 </div>
 
-{{-- Modal confirmación eliminar --}}
+{{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>Confirmar eliminación
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmar eliminación</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">
-                ¿Está seguro que desea eliminar la guía N°
-                <strong id="numEliminar"></strong>?
-                <br>
-                <small class="text-muted">Esta acción no se puede deshacer.</small>
+                ¿Está seguro que desea eliminar la guía N° <strong id="numEliminar"></strong>?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    <i class="fas fa-times mr-1"></i>Cancelar
-                </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                    <i class="fas fa-trash mr-1"></i>Eliminar
-                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
             </div>
         </div>
     </div>
@@ -397,63 +416,39 @@
 @push('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
-
-    // Fecha de admisión modal: no permite fechas futuras
     document.getElementById('m_fecha_admision').setAttribute('max', hoy);
 
-    // N° de guía modal: solo enteros positivos
-    document.getElementById('m_num_guias').addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
-        if (parseInt(this.value) < 1) this.value = '';
-    });
-
-    // Unidades modal: solo enteros positivos
-    document.getElementById('m_unidades').addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
-        if (parseInt(this.value) < 1) this.value = '';
-    });
-
-    // Volumen, peso y precio modal: no permite negativos
-    ['m_volumen', 'm_peso', 'm_precio'].forEach(function (id) {
-        document.getElementById(id).addEventListener('input', function () {
-            if (parseFloat(this.value) < 0) this.value = '';
+    // Filtrar solo números enteros
+    ['m_num_guias', 'm_unidades'].forEach(function(id) {
+        document.getElementById(id).addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
         });
     });
 
-    // Contador observación modal
+    // Contador de texto dinámico
     const obsModal = document.getElementById('m_observacion');
     const obsCountModal = document.getElementById('obs-count-modal');
-    obsCountModal.textContent = obsModal.value.length;
-    obsModal.addEventListener('input', function () {
+    obsModal.addEventListener('input', function() {
         obsCountModal.textContent = this.value.length;
     });
 
-    // Modal eliminar
+    // Scripts para el modal de eliminación
     let formEliminar = null;
-    document.querySelectorAll('.btn-eliminar').forEach(function (btn) {
-        btn.addEventListener('click', function () {
+    document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
+        btn.addEventListener('click', function() {
             document.getElementById('numEliminar').textContent = this.getAttribute('data-num');
             formEliminar = this.closest('form');
             $('#modalEliminar').modal('show');
         });
     });
 
-    document.getElementById('btnConfirmarEliminar').addEventListener('click', function () {
-        if (formEliminar) formEliminar.submit();
+    document.getElementById('btnConfirmarEliminar').addEventListener('click', function() {
+        if(formEliminar) formEliminar.submit();
     });
 
-    // Reabrir modal si hubo errores de validación
+    // Reabrir modal en caso de error de validación
     @if($errors->any())
-        $(document).ready(function () {
-            $('#modalCrear').modal('show');
-        });
+        $(document).ready(function() { $('#modalCrear').modal('show'); });
     @endif
-
-    // Auto-cerrar alertas tras 4 segundos
-    setTimeout(function () {
-        document.querySelectorAll('.alert-dismissible').forEach(function (alert) {
-            $(alert).fadeOut('slow');
-        });
-    }, 4000);
 </script>
 @endpush

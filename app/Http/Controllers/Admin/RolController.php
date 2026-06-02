@@ -8,22 +8,20 @@ use Illuminate\Http\Request;
 
 class RolController extends Controller
 {
-    /**
-     * Muestra el listado de roles.
-     */
     public function index()
     {
         $roles = Rol::orderBy('created_at', 'desc')->get();
         return view('admin.roles.index', compact('roles'));
     }
 
-    /**
-     * Guarda un nuevo rol en la base de datos.
-     */
     public function store(Request $request)
     {
+        // Normalizar: primera letra mayúscula, resto minúsculas
+        $request->merge([
+            'nombreRol' => ucfirst(strtolower(trim($request->nombreRol)))
+        ]);
+
         $request->validate([
-            // Validamos 'nombreRol' que es el nombre en tu tabla 'rols'
             'nombreRol' => 'required|string|max:100|unique:rols,nombreRol',
         ], [
             'nombreRol.required' => 'El nombre del rol es obligatorio.',
@@ -31,28 +29,25 @@ class RolController extends Controller
             'nombreRol.max'      => 'El nombre no puede superar 100 caracteres.',
         ]);
 
-        // Guardamos usando el nombre correcto de la columna
         Rol::create($request->only('nombreRol'));
 
-        return redirect()->route('admin.rol.index') // Ajustado a tu ruta estándar
+        return redirect()->route('admin.rol.index')
             ->with('success', 'Rol creado correctamente.');
     }
 
-    /**
-     * Muestra el formulario de edición.
-     */
     public function edit(Rol $rol)
     {
         return view('admin.roles.edit', compact('rol'));
     }
 
-    /**
-     * Actualiza el rol.
-     */
     public function update(Request $request, Rol $rol)
     {
+        // Normalizar: primera letra mayúscula, resto minúsculas
+        $request->merge([
+            'nombreRol' => ucfirst(strtolower(trim($request->nombreRol)))
+        ]);
+
         $request->validate([
-            // Corregido para usar 'nombreRol' y la tabla 'rols'
             'nombreRol' => 'required|string|max:100|unique:rols,nombreRol,' . $rol->id,
         ], [
             'nombreRol.required' => 'El nombre del rol es obligatorio.',
@@ -66,13 +61,9 @@ class RolController extends Controller
             ->with('success', 'Rol actualizado correctamente.');
     }
 
-    /**
-     * Elimina el rol.
-     */
     public function destroy(Rol $rol)
     {
         $rol->delete();
-
         return redirect()->route('admin.rol.index')
             ->with('success', 'Rol eliminado correctamente.');
     }

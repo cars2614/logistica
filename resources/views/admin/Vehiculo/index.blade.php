@@ -5,164 +5,214 @@
 @section('title', 'Vehículos')
 
 @section('content_header')
-    <h1><i class="fas fa-car"></i> Vehículos</h1>
+    <div class="container-fluid pt-3">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <h1 class="m-0 font-weight-bold text-secondary">
+                <i class="fas fa-car text-primary mr-2"></i>Vehículos
+            </h1>
+            <ol class="breadcrumb m-0 bg-transparent p-0">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Vehículos</li>
+            </ol>
+        </div>
+    </div>
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-4">
 
-    {{-- Alertas --}}
+    {{-- Alertas Premium --}}
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle mr-1"></i>{{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle mr-2 fa-lg"></i>
+                <div>{{ session('success') }}</div>
+            </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" class="text-white">&times;</span>
             </button>
         </div>
     @endif
 
     @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle mr-1"></i>{{ session('error') }}
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle mr-2 fa-lg"></i>
+                <div>{{ session('error') }}</div>
+            </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" class="text-white">&times;</span>
             </button>
         </div>
     @endif
 
-    <div class="card card-outline card-primary">
-        <div class="card-header">
-            <h3 class="card-title">Listado de Vehículos</h3>
-            <div class="card-tools">
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCrear">
-                    <i class="fas fa-plus"></i> Nuevo Vehículo
-                </button>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card card-outline card-primary shadow-sm border-0">
+                <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
+                    <h3 class="card-title font-weight-bold text-dark mb-0">
+                        <i class="fas fa-list text-primary mr-2"></i>Listado de Vehículos
+                    </h3>
+                    <div class="card-tools d-flex align-items-center" style="gap: 10px;">
+                        <span class="badge badge-pill badge-primary px-3 py-2 font-weight-bold shadow-sm">
+                            Total: {{ $vehiculos->total() }}
+                        </span>
+                        <button class="btn btn-primary btn-sm font-weight-bold shadow-sm px-3" data-toggle="modal" data-target="#modalCrear">
+                            <i class="fas fa-plus mr-1"></i> Nuevo Vehículo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light border-bottom text-secondary">
+                                <tr>
+                                    <th width="5%" class="text-center font-weight-bold border-0">#</th>
+                                    <th width="12%" class="font-weight-bold border-0">Placa</th>
+                                    <th width="15%" class="font-weight-bold border-0">Marca</th>
+                                    <th width="15%" class="font-weight-bold border-0">Modelo</th>
+                                    <th width="15%" class="font-weight-bold border-0">Tipo</th>
+                                    <th width="12%" class="font-weight-bold border-0">Capacidad</th>
+                                    <th width="12%" class="font-weight-bold border-0">Estado</th>
+                                    <th width="14%" class="font-weight-bold border-0">Fecha Registro</th>
+                                    <th width="10%" class="text-center font-weight-bold border-0">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($vehiculos as $index => $vehiculo)
+                                    <tr class="align-middle">
+                                        <td class="text-center align-middle font-weight-bold text-muted">
+                                            {{ $vehiculos->firstItem() + $index }}
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="badge badge-plate px-2 py-1 shadow-sm font-weight-bold text-uppercase">
+                                                {{ $vehiculo->placa }}
+                                            </span>
+                                        </td>
+                                        <td class="align-middle text-dark font-weight-bold text-uppercase" style="font-size: 0.85rem;">{{ $vehiculo->marca }}</td>
+                                        <td class="align-middle text-secondary" style="font-size: 0.85rem;">{{ $vehiculo->modelo }}</td>
+                                        <td class="align-middle text-secondary" style="font-size: 0.85rem;">
+                                            <i class="fas fa-truck text-muted mr-1" style="opacity: 0.5;"></i>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}
+                                        </td>
+                                        <td class="align-middle font-weight-bold text-dark" style="font-size: 0.85rem;">{{ number_format($vehiculo->capacidad) }} kg</td>
+                                        <td class="align-middle">
+                                            @if($vehiculo->estado === 'activo')
+                                                <span class="badge badge-pill badge-success px-2 py-1" style="font-size: 0.75rem; font-weight: 700;">ACTIVO</span>
+                                            @elseif($vehiculo->estado === 'inactivo')
+                                                <span class="badge badge-pill badge-secondary px-2 py-1" style="font-size: 0.75rem; font-weight: 700;">INACTIVO</span>
+                                            @else
+                                                <span class="badge badge-pill badge-warning px-2 py-1 text-dark" style="font-size: 0.75rem; font-weight: 700;">MANTENIMIENTO</span>
+                                            @endif
+                                        </td>
+                                        <td class="align-middle text-muted" style="font-size: 0.85rem;">
+                                            {{ \Carbon\Carbon::parse($vehiculo->fecha_registro)->format('d/m/Y') }}
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="d-inline-flex" style="gap: 6px;">
+                                                <a href="{{ route('admin.vehiculo.edit', $vehiculo->id) }}"
+                                                   class="btn btn-sm btn-info shadow-sm d-flex align-items-center justify-content-center" 
+                                                   title="Editar" style="width: 32px; height: 32px; border-radius: 6px;">
+                                                    <i class="fas fa-pen fa-sm"></i>
+                                                </a>
+                                                
+                                                <form action="{{ route('admin.vehiculo.destroy', $vehiculo->id) }}"
+                                                      method="POST" class="d-inline form-eliminar">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-sm btn-danger shadow-sm d-flex align-items-center justify-content-center btn-eliminar"
+                                                        title="Eliminar"
+                                                        style="width: 32px; height: 32px; border-radius: 6px;"
+                                                        data-placa="{{ $vehiculo->placa }}"
+                                                    >
+                                                        <i class="fas fa-trash fa-sm"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted py-5 bg-white">
+                                            <i class="fas fa-folder-open fa-3x mb-3 text-muted" style="opacity: 0.5;"></i>
+                                            <p class="mb-0 font-weight-bold">No hay vehículos registrados.</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                @if($vehiculos->hasPages())
+                    <div class="card-footer bg-white border-top py-3">
+                        <div class="d-flex justify-content-center">
+                            {{ $vehiculos->links() }}
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
-
-        <div class="card-body p-0">
-            <table class="table table-striped table-hover mb-0">
-                <thead class="bg-dark text-white">
-                    <tr>
-                        <th style="width:50px">#</th>
-                        <th>Placa</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Tipo</th>
-                        <th>Capacidad</th>
-                        <th>Estado</th>
-                        <th>Fecha Registro</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($vehiculos as $index => $vehiculo)
-                        <tr>
-                            <td>{{ $vehiculos->firstItem() + $index }}</td>
-                            <td><strong>{{ $vehiculo->placa }}</strong></td>
-                            <td>{{ $vehiculo->marca }}</td>
-                            <td>{{ $vehiculo->modelo }}</td>
-                            <td>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</td>
-                            <td>{{ number_format($vehiculo->capacidad) }} kg</td>
-                            <td>
-                                @if($vehiculo->estado === 'activo')
-                                    <span class="badge badge-success">Activo</span>
-                                @elseif($vehiculo->estado === 'inactivo')
-                                    <span class="badge badge-secondary">Inactivo</span>
-                                @else
-                                    <span class="badge badge-warning">Mantenimiento</span>
-                                @endif
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($vehiculo->fecha_registro)->format('d/m/Y') }}</td>
-                            <td class="text-center">
-                                <a href="{{ route('admin.vehiculo.edit', $vehiculo->id) }}"
-                                   class="btn btn-warning btn-sm" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.vehiculo.destroy', $vehiculo->id) }}"
-                                      method="POST" class="d-inline form-eliminar">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button
-                                        type="button"
-                                        class="btn btn-danger btn-sm btn-eliminar"
-                                        title="Eliminar"
-                                        data-placa="{{ $vehiculo->placa }}"
-                                    >
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
-                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                                No hay vehículos registrados.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        @if($vehiculos->hasPages())
-        <div class="card-footer clearfix">
-            <div class="float-right">
-                {{ $vehiculos->links() }}
-            </div>
-        </div>
-        @endif
     </div>
 </div>
 
-{{-- Modal Crear --}}
+{{-- Modal Crear Premium --}}
 <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg">
             <form action="{{ route('admin.vehiculo.store') }}" method="POST">
                 @csrf
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalCrearLabel"><i class="fas fa-plus mr-1"></i>Nuevo Vehículo</h5>
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title font-weight-bold mb-0" id="modalCrearLabel">
+                        <i class="fas fa-plus-circle mr-2"></i>Nuevo Vehículo
+                    </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <div class="row">
 
                         {{-- Placa --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_placa">Placa <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_placa" class="font-weight-bold text-secondary mb-1">Placa <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-id-card"></i></span>
+                                </div>
                                 <input
                                     type="text"
                                     name="placa"
                                     id="m_placa"
-                                    class="form-control @error('placa') is-invalid @enderror"
+                                    class="form-control border-left-0 text-uppercase font-weight-bold @error('placa') is-invalid @enderror"
                                     value="{{ old('placa') }}"
                                     placeholder="Ej: ABC-123"
                                     maxlength="10"
                                     autocomplete="off"
                                     onkeypress="return /[a-zA-Z0-9\-]/.test(event.key)"
-                                    style="text-transform: uppercase;"
+                                    style="text-transform: uppercase; letter-spacing: 0.5px;"
                                     required
                                 >
                                 @error('placa')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Letras, números y guión. Ej: ABC-123.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Letras, números y guión. Ej: ABC-123.</small>
                         </div>
 
                         {{-- Tipo de Vehículo --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_tipo_vehiculo_id">Tipo de Vehículo <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_tipo_vehiculo_id" class="font-weight-bold text-secondary mb-1">Tipo de Vehículo <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-truck"></i></span>
+                                </div>
                                 <select
                                     name="tipo_vehiculo_id"
                                     id="m_tipo_vehiculo_id"
-                                    class="form-control @error('tipo_vehiculo_id') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('tipo_vehiculo_id') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
@@ -175,19 +225,22 @@
                                 @error('tipo_vehiculo_id')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el tipo de vehículo.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Seleccione la categoría correspondiente.</small>
                         </div>
 
                         {{-- Marca --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_marca">Marca <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_marca" class="font-weight-bold text-secondary mb-1">Marca <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-copyright"></i></span>
+                                </div>
                                 <input
                                     type="text"
                                     name="marca"
                                     id="m_marca"
-                                    class="form-control @error('marca') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('marca') is-invalid @enderror"
                                     value="{{ old('marca') }}"
                                     placeholder="Ej: Chevrolet"
                                     maxlength="100"
@@ -198,19 +251,22 @@
                                 @error('marca')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo letras, espacios y tildes.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Solo letras, espacios y tildes.</small>
                         </div>
 
                         {{-- Modelo --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_modelo">Modelo <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_modelo" class="font-weight-bold text-secondary mb-1">Modelo / Línea <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-car-side"></i></span>
+                                </div>
                                 <input
                                     type="text"
                                     name="modelo"
                                     id="m_modelo"
-                                    class="form-control @error('modelo') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('modelo') is-invalid @enderror"
                                     value="{{ old('modelo') }}"
                                     placeholder="Ej: NHR 2022"
                                     maxlength="100"
@@ -221,19 +277,22 @@
                                 @error('modelo')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Letras y números. Ej: NHR 2022.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Letras y números. Ej: NHR 2022.</small>
                         </div>
 
                         {{-- Capacidad --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_capacidad">Capacidad (kg) <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_capacidad" class="font-weight-bold text-secondary mb-1">Capacidad (kg) <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-weight-hanging"></i></span>
+                                </div>
                                 <input
                                     type="number"
                                     name="capacidad"
                                     id="m_capacidad"
-                                    class="form-control @error('capacidad') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('capacidad') is-invalid @enderror"
                                     value="{{ old('capacidad') }}"
                                     placeholder="Ej: 5000"
                                     min="1"
@@ -245,59 +304,65 @@
                                 @error('capacidad')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo números enteros positivos. Ej: 5000.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Solo números enteros positivos.</small>
                         </div>
 
                         {{-- Estado --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_estado">Estado <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="m_estado" class="font-weight-bold text-secondary mb-1">Estado inicial <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-toggle-on"></i></span>
+                                </div>
                                 <select
                                     name="estado"
                                     id="m_estado"
-                                    class="form-control @error('estado') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('estado') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
-                                    <option value="activo"        {{ old('estado') === 'activo'        ? 'selected' : '' }}>Activo</option>
-                                    <option value="inactivo"      {{ old('estado') === 'inactivo'      ? 'selected' : '' }}>Inactivo</option>
-                                    <option value="mantenimiento" {{ old('estado') === 'mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
+                                    <option value="activo" {{ old('estado') == 'activo' ? 'selected' : '' }}>Activo</option>
+                                    <option value="inactivo" {{ old('estado') == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                                    <option value="mantenimiento" {{ old('estado') == 'mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
                                 </select>
                                 @error('estado')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el estado actual del vehículo.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Disponibilidad inicial de la unidad.</small>
                         </div>
 
                         {{-- Fecha de Registro --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="m_fecha_registro">Fecha de Registro <span class="text-danger">*</span></label>
+                        <div class="col-md-6 form-group mb-0">
+                            <label for="m_fecha_registro" class="font-weight-bold text-secondary mb-1">Fecha de Registro <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-calendar-alt"></i></span>
+                                </div>
                                 <input
                                     type="date"
                                     name="fecha_registro"
                                     id="m_fecha_registro"
-                                    class="form-control @error('fecha_registro') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('fecha_registro') is-invalid @enderror"
                                     value="{{ old('fecha_registro') }}"
                                     required
                                 >
                                 @error('fecha_registro')
                                     <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                 @enderror
-                                <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>No puede ser una fecha futura.</small>
                             </div>
+                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>No puede ser una fecha futura.</small>
                         </div>
 
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <div class="modal-footer bg-light border-top-0 py-3">
+                    <button type="button" class="btn btn-outline-secondary font-weight-bold shadow-sm px-3" data-dismiss="modal">
                         <i class="fas fa-times mr-1"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save mr-1"></i>Guardar
+                    <button type="submit" class="btn btn-primary font-weight-bold shadow-sm px-3">
+                        <i class="fas fa-save mr-1"></i>Guardar Vehículo
                     </button>
                 </div>
             </form>
@@ -305,39 +370,73 @@
     </div>
 </div>
 
-{{-- Modal confirmación eliminar --}}
+{{-- Modal Confirmación Eliminar Premium --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white py-3">
+                <h5 class="modal-title font-weight-bold mb-0">
                     <i class="fas fa-exclamation-triangle mr-2"></i>Confirmar eliminación
                 </h5>
                 <button type="button" class="close text-white" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                ¿Está seguro que desea eliminar el vehículo con placa
-                <strong id="placaEliminar"></strong>?
-                <br>
-                <small class="text-muted">Esta acción no se puede deshacer.</small>
+            <div class="modal-body p-4">
+                <p class="text-dark mb-2" style="font-size: 1rem;">¿Está seguro que desea eliminar el vehículo con placa <strong id="placaEliminar" class="text-danger"></strong>?</p>
+                <small class="text-muted bg-light d-block p-2 rounded border-left border-danger">
+                    <i class="fas fa-info-circle mr-1"></i>Esta acción no se puede deshacer y desvinculará el historial operativo del vehículo.
+                </small>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <div class="modal-footer bg-light border-top-0 py-3">
+                <button type="button" class="btn btn-outline-secondary font-weight-bold shadow-sm px-3" data-dismiss="modal">
                     <i class="fas fa-times mr-1"></i>Cancelar
                 </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                    <i class="fas fa-trash mr-1"></i>Eliminar
+                <button type="button" class="btn btn-danger font-weight-bold shadow-sm px-3" id="btnConfirmarEliminar">
+                    <i class="fas fa-trash mr-1"></i>Eliminar Registro
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 @stop
 
-@push('js')
+@section('css')
+<style>
+    /* Efecto hover suave en la tabla */
+    .table-hover tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.02) !important;
+    }
+    
+    /* Inputs unificados con iconos integrados */
+    .input-group-text {
+        border-right: none !important;
+    }
+    .form-control {
+        border-left: none !important;
+    }
+    .form-control:focus {
+        border-color: #ced4da !important;
+        box-shadow: none !important;
+    }
+
+    /* Estilo premium simulación placa vehicular */
+    .badge-plate {
+        background-color: #f9f9f9;
+        color: #2c3e50;
+        border: 2px solid #bdc3c7;
+        font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+        border-radius: 4px;
+    }
+</style>
+@stop
+
+@section('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
 
@@ -365,7 +464,7 @@
         if (parseInt(this.value) < 1) this.value = '';
     });
 
-    // Modal eliminar
+    // Modal eliminar personalizado
     let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -379,18 +478,18 @@
         if (formEliminar) formEliminar.submit();
     });
 
-    // Abrir modal si hay errores de validación
+    // Reabrir el modal en caso de que falle la validación backend de Laravel
     @if ($errors->any())
         $(document).ready(function () {
             $('#modalCrear').modal('show');
         });
     @endif
 
-    // Auto-cerrar alertas tras 4 segundos
+    // Desvanecimiento suave controlado de las alertas
     setTimeout(function () {
         document.querySelectorAll('.alert-dismissible').forEach(function (alert) {
             $(alert).fadeOut('slow');
         });
     }, 4000);
 </script>
-@endpush
+@stop

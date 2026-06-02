@@ -20,18 +20,18 @@ class VehiculoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'placa'            => 'required|string|max:10|unique:vehiculos,placa',
-            'marca'            => 'required|string|max:100',
-            'modelo'           => 'required|string|max:100',
-            'capacidad'        => 'required|numeric|min:0',
-            'estado'           => 'required|in:activo,inactivo,mantenimiento',
-            'fecha_registro'   => 'required|date',
-            'tipo_vehiculo_id' => 'required|exists:tipo_vehiculo,id',
+            'placa'             => 'required|string|max:10|unique:vehiculos,placa',
+            'marca'             => 'required|string|max:100',
+            'modelo'            => 'required|string|max:100',
+            'capacidad'         => 'required|numeric|min:0',
+            'estado'            => 'required|in:activo,inactivo,mantenimiento',
+            'fecha_registro'    => 'required|date',
+            'id_tipo_vehiculo'  => 'required|exists:tipo_vehiculo,id',
         ]);
 
         Vehiculo::create($request->only([
             'placa', 'marca', 'modelo', 'capacidad',
-            'estado', 'fecha_registro', 'tipo_vehiculo_id'
+            'estado', 'fecha_registro', 'id_tipo_vehiculo'
         ]));
 
         return redirect()->route('admin.vehiculo.index')
@@ -50,18 +50,18 @@ class VehiculoController extends Controller
         $vehiculo = Vehiculo::findOrFail($id);
 
         $request->validate([
-            'placa'            => 'required|string|max:10|unique:vehiculos,placa,' . $id,
-            'marca'            => 'required|string|max:100',
-            'modelo'           => 'required|string|max:100',
-            'capacidad'        => 'required|numeric|min:0',
-            'estado'           => 'required|in:activo,inactivo,mantenimiento',
-            'fecha_registro'   => 'required|date',
-            'tipo_vehiculo_id' => 'required|exists:tipo_vehiculo,id',
+            'placa'             => 'required|string|max:10|unique:vehiculos,placa,' . $id,
+            'marca'             => 'required|string|max:100',
+            'modelo'            => 'required|string|max:100',
+            'capacidad'         => 'required|numeric|min:0',
+            'estado'            => 'required|in:activo,inactivo,mantenimiento',
+            'fecha_registro'    => 'required|date',
+            'id_tipo_vehiculo'  => 'required|exists:tipo_vehiculo,id',
         ]);
 
         $vehiculo->update($request->only([
             'placa', 'marca', 'modelo', 'capacidad',
-            'estado', 'fecha_registro', 'tipo_vehiculo_id'
+            'estado', 'fecha_registro', 'id_tipo_vehiculo'
         ]));
 
         return redirect()->route('admin.vehiculo.index')

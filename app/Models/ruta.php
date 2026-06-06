@@ -13,12 +13,13 @@ class Ruta extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'zona',
-        'guia',
-        'direccion',
-        'sector',
-        'ciudad',
-    ];
+    'zona',
+    'guia',
+    'direccion',
+    'sector',
+    'ciudad',
+    'descripcion', // Déjalo si ya venía de antes
+];
 
     /**
      * Una ruta tiene muchas planillas.

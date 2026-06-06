@@ -26,9 +26,13 @@ class RutaController extends Controller
             'ciudad'    => 'required|string|max:255',
         ]);
 
-        Ruta::create($request->only([
-            'zona', 'guia', 'direccion', 'sector', 'ciudad',
-        ]));
+        // Capturamos los datos que pasaron la validación
+        $datos = $request->only(['zona', 'guia', 'direccion', 'sector', 'ciudad']);
+        
+        // Parche: Llenamos 'descripcion' con un string vacío para satisfacer a la BD vieja
+        $datos['descripcion'] = ''; 
+
+        Ruta::create($datos);
 
         return redirect()->route('admin.ruta.index')
             ->with('success', 'Ruta creada correctamente.');
@@ -53,9 +57,13 @@ class RutaController extends Controller
             'ciudad'    => 'required|string|max:255',
         ]);
 
-        $ruta->update($request->only([
-            'zona', 'guia', 'direccion', 'sector', 'ciudad',
-        ]));
+        // Capturamos los datos para actualizar
+        $datos = $request->only(['zona', 'guia', 'direccion', 'sector', 'ciudad']);
+        
+        // Parche: Mantenemos el campo feliz en la actualización también
+        $datos['descripcion'] = ''; 
+
+        $ruta->update($datos);
 
         return redirect()->route('admin.ruta.index')
             ->with('success', 'Ruta actualizada correctamente.');

@@ -299,21 +299,13 @@
                 <span class="logo-sub">Sistema Operativo</span>
             </div>
         </div>
-        <nav>
-            <a href="#">Seguimiento</a>
-            <a href="#">Servicios</a>
-            <a href="#">Soporte</a>
-        </nav>
+        
         <a href="/login" class="btn-primary">Iniciar sesión →</a>
     </header>
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-tag">
-            <span class="dot"></span>
-            Sistema activo · 13 de mayo, 2026
-        </div>
-
+        
         <h1>
             Logística que<br>
             <span class="accent">mueve tu negocio</span>

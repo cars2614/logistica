@@ -46,6 +46,25 @@
         </div>
     @endif
 
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle mr-2 fa-lg"></i>
+                <div>
+                    <strong class="d-block mb-1">Por favor corrige los siguientes errores:</strong>
+                    <ul class="mb-0 pl-3">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-white">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="row mt-3">
         <div class="col-12">
             <div class="card card-outline card-primary shadow-sm border-0">
@@ -92,9 +111,27 @@
                                         </td>
                                         <td class="align-middle text-dark font-weight-bold text-uppercase" style="font-size: 0.85rem;">{{ $vehiculo->marca }}</td>
                                         <td class="align-middle text-secondary" style="font-size: 0.85rem;">{{ $vehiculo->modelo }}</td>
+                                        
+                                        {{-- Celda con Iconos Dinámicos según el Tipo de Vehículo --}}
                                         <td class="align-middle text-secondary" style="font-size: 0.85rem;">
-                                            <i class="fas fa-truck text-muted mr-1" style="opacity: 0.5;"></i>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}
+                                            @php
+                                                $nombreTipo = strtolower($vehiculo->tipoVehiculo->nombre ?? '');
+                                                $icono = 'fas fa-car'; 
+
+                                                if (str_contains($nombreTipo, 'moto')) {
+                                                    $icono = 'fas fa-motorcycle';
+                                                } elseif (str_contains($nombreTipo, 'camion') || str_contains($nombreTipo, 'furgon') || str_contains($nombreTipo, 'tracto') || str_contains($nombreTipo, 'carga')) {
+                                                    $icono = 'fas fa-truck';
+                                                } elseif (str_contains($nombreTipo, 'cicla') || str_contains($nombreTipo, 'bici')) {
+                                                    $icono = 'fas fa-bicycle';
+                                                } elseif (str_contains($nombreTipo, 'van') || str_contains($nombreTipo, 'bus') || str_contains($nombreTipo, 'colectivo')) {
+                                                    $icono = 'fas fa-bus';
+                                                }
+                                            @endphp
+                                            <i class="{{ $icono }} text-primary mr-2" style="opacity: 0.8;"></i>
+                                            <strong>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</strong>
                                         </td>
+
                                         <td class="align-middle font-weight-bold text-dark" style="font-size: 0.85rem;">{{ number_format($vehiculo->capacidad) }} kg</td>
                                         <td class="align-middle">
                                             @if($vehiculo->estado === 'activo')
@@ -158,7 +195,7 @@
     </div>
 </div>
 
-{{-- Modal Crear Premium --}}
+{{-- Modal Crear --}}
 <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content border-0 shadow-lg">
@@ -191,15 +228,13 @@
                                     placeholder="Ej: ABC-123"
                                     maxlength="10"
                                     autocomplete="off"
-                                    onkeypress="return /[a-zA-Z0-9\-]/.test(event.key)"
                                     style="text-transform: uppercase; letter-spacing: 0.5px;"
                                     required
                                 >
                                 @error('placa')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Letras, números y guión. Ej: ABC-123.</small>
                         </div>
 
                         {{-- Tipo de Vehículo --}}
@@ -210,23 +245,22 @@
                                     <span class="input-group-text bg-light text-muted"><i class="fas fa-truck"></i></span>
                                 </div>
                                 <select
-                                    name="tipo_vehiculo_id"
+                                    name="id_tipo_vehiculo"
                                     id="m_tipo_vehiculo_id"
-                                    class="form-control border-left-0 @error('tipo_vehiculo_id') is-invalid @enderror"
+                                    class="form-control border-left-0 @error('id_tipo_vehiculo') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
                                     @foreach($tipoVehiculos as $tipo)
-                                        <option value="{{ $tipo->id }}" {{ old('tipo_vehiculo_id') == $tipo->id ? 'selected' : '' }}>
+                                        <option value="{{ $tipo->id }}" {{ old('id_tipo_vehiculo') == $tipo->id ? 'selected' : '' }}>
                                             {{ $tipo->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('tipo_vehiculo_id')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                @error('id_tipo_vehiculo')
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Seleccione la categoría correspondiente.</small>
                         </div>
 
                         {{-- Marca --}}
@@ -244,15 +278,12 @@
                                     value="{{ old('marca') }}"
                                     placeholder="Ej: Chevrolet"
                                     maxlength="100"
-                                    autocomplete="off"
-                                    onkeypress="return /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/.test(event.key)"
                                     required
                                 >
                                 @error('marca')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Solo letras, espacios y tildes.</small>
                         </div>
 
                         {{-- Modelo --}}
@@ -270,15 +301,12 @@
                                     value="{{ old('modelo') }}"
                                     placeholder="Ej: NHR 2022"
                                     maxlength="100"
-                                    autocomplete="off"
-                                    onkeypress="return /[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s]/.test(event.key)"
                                     required
                                 >
                                 @error('modelo')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Letras y números. Ej: NHR 2022.</small>
                         </div>
 
                         {{-- Capacidad --}}
@@ -296,16 +324,12 @@
                                     value="{{ old('capacidad') }}"
                                     placeholder="Ej: 5000"
                                     min="1"
-                                    max="999999"
-                                    autocomplete="off"
-                                    onkeypress="return /[0-9]/.test(event.key)"
                                     required
                                 >
                                 @error('capacidad')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Solo números enteros positivos.</small>
                         </div>
 
                         {{-- Estado --}}
@@ -322,15 +346,14 @@
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
-                                    <option value="activo" {{ old('estado') == 'activo' ? 'selected' : '' }}>Activo</option>
-                                    <option value="inactivo" {{ old('estado') == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
-                                    <option value="mantenimiento" {{ old('estado') == 'mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
+                                    <option value="activo" {{ old('estado') === 'activo' ? 'selected' : '' }}>Activo</option>
+                                    <option value="inactivo" {{ old('estado') === 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                                    <option value="mantenimiento" {{ old('estado') === 'mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
                                 </select>
                                 @error('estado')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>Disponibilidad inicial de la unidad.</small>
                         </div>
 
                         {{-- Fecha de Registro --}}
@@ -349,52 +372,36 @@
                                     required
                                 >
                                 @error('fecha_registro')
-                                    <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
+                                    <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted mt-1"><i class="fas fa-info-circle mr-1"></i>No puede ser una fecha futura.</small>
                         </div>
 
                     </div>
                 </div>
                 <div class="modal-footer bg-light border-top-0 py-3">
-                    <button type="button" class="btn btn-outline-secondary font-weight-bold shadow-sm px-3" data-dismiss="modal">
-                        <i class="fas fa-times mr-1"></i>Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary font-weight-bold shadow-sm px-3">
-                        <i class="fas fa-save mr-1"></i>Guardar Vehículo
-                    </button>
+                    <button type="button" class="btn btn-outline-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Guardar Vehículo</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-{{-- Modal Confirmación Eliminar Premium --}}
+{{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-danger text-white py-3">
-                <h5 class="modal-title font-weight-bold mb-0">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>Confirmar eliminación
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+                <h5 class="modal-title font-weight-bold mb-0">Confirmar eliminación</h5>
+                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body p-4">
-                <p class="text-dark mb-2" style="font-size: 1rem;">¿Está seguro que desea eliminar el vehículo con placa <strong id="placaEliminar" class="text-danger"></strong>?</p>
-                <small class="text-muted bg-light d-block p-2 rounded border-left border-danger">
-                    <i class="fas fa-info-circle mr-1"></i>Esta acción no se puede deshacer y desvinculará el historial operativo del vehículo.
-                </small>
+                <p class="text-dark mb-2">¿Está seguro que desea eliminar el vehículo con placa <strong id="placaEliminar" class="text-danger"></strong>?</p>
             </div>
-            <div class="modal-footer bg-light border-top-0 py-3">
-                <button type="button" class="btn btn-outline-secondary font-weight-bold shadow-sm px-3" data-dismiss="modal">
-                    <i class="fas fa-times mr-1"></i>Cancelar
-                </button>
-                <button type="button" class="btn btn-danger font-weight-bold shadow-sm px-3" id="btnConfirmarEliminar">
-                    <i class="fas fa-trash mr-1"></i>Eliminar Registro
-                </button>
+            <div class="modal-footer bg-light py-3">
+                <button type="button" class="btn btn-outline-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger font-weight-bold" id="btnConfirmarEliminar">Eliminar Registro</button>
             </div>
         </div>
     </div>
@@ -403,35 +410,13 @@
 
 @section('css')
 <style>
-    /* Efecto hover suave en la tabla */
-    .table-hover tbody tr {
-        transition: background-color 0.2s ease;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.02) !important;
-    }
-    
-    /* Inputs unificados con iconos integrados */
-    .input-group-text {
-        border-right: none !important;
-    }
-    .form-control {
-        border-left: none !important;
-    }
-    .form-control:focus {
-        border-color: #ced4da !important;
-        box-shadow: none !important;
-    }
-
-    /* Estilo premium simulación placa vehicular */
+    .table-hover tbody tr:hover { background-color: rgba(0, 123, 255, 0.02) !important; }
+    .input-group-text { border-right: none !important; }
+    .form-control { border-left: none !important; }
     .badge-plate {
-        background-color: #f9f9f9;
-        color: #2c3e50;
-        border: 2px solid #bdc3c7;
-        font-family: 'Courier New', Courier, monospace;
-        letter-spacing: 1px;
-        font-size: 0.9rem;
-        border-radius: 4px;
+        background-color: #f9f9f9; color: #2c3e50; border: 2px solid #bdc3c7;
+        font-family: 'Courier New', Courier, monospace; letter-spacing: 1px;
+        font-size: 0.9rem; border-radius: 4px;
     }
 </style>
 @stop
@@ -439,32 +424,12 @@
 @section('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
-
-    // Fecha máxima = hoy en modal
     document.getElementById('m_fecha_registro').setAttribute('max', hoy);
 
-    // Placa modal: mayúsculas y filtra al pegar
     document.getElementById('m_placa').addEventListener('input', function () {
         this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
     });
 
-    // Marca modal: solo letras
-    document.getElementById('m_marca').addEventListener('input', function () {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
-    });
-
-    // Modelo modal: letras y números
-    document.getElementById('m_modelo').addEventListener('input', function () {
-        this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
-    });
-
-    // Capacidad modal: solo enteros positivos
-    document.getElementById('m_capacidad').addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
-        if (parseInt(this.value) < 1) this.value = '';
-    });
-
-    // Modal eliminar personalizado
     let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -478,18 +443,12 @@
         if (formEliminar) formEliminar.submit();
     });
 
-    // Reabrir el modal en caso de que falle la validación backend de Laravel
     @if ($errors->any())
-        $(document).ready(function () {
-            $('#modalCrear').modal('show');
-        });
+        $(document).ready(function () { $('#modalCrear').modal('show'); });
     @endif
 
-    // Desvanecimiento suave controlado de las alertas
     setTimeout(function () {
-        document.querySelectorAll('.alert-dismissible').forEach(function (alert) {
-            $(alert).fadeOut('slow');
-        });
-    }, 4000);
+        $('.alert-dismissible').fadeOut('slow');
+    }, 5000);
 </script>
 @stop

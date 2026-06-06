@@ -23,13 +23,14 @@
         padding: 0.375rem 0.75rem !important;
     }
 
-    /* Ajustar el prefijo del signo de precio ($) para que no se desfase */
+    /* Ajustar el prefijo de los iconos para que no se desfasen ni queden planos */
     #modalCrear .input-group-prepend .input-group-text {
         border-top-right-radius: 0 !important;
         border-bottom-right-radius: 0 !important;
         border-right: none !important;
     }
-    #modalCrear .input-group > .form-control {
+    #modalCrear .input-group > .form-control,
+    #modalCrear .input-group > select.form-control {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
     }
@@ -173,20 +174,25 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="m_num_guias">N° de Guía <span class="text-danger">*</span></label>
-                                <input
-                                    type="number"
-                                    name="num_guias"
-                                    id="m_num_guias"
-                                    class="form-control @error('num_guias') is-invalid @enderror"
-                                    value="{{ old('num_guias') }}"
-                                    placeholder="Ej: 1001"
-                                    min="1"
-                                    autocomplete="off"
-                                    required
-                                >
-                                @error('num_guias')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        name="num_guias"
+                                        id="m_num_guias"
+                                        class="form-control @error('num_guias') is-invalid @enderror"
+                                        value="{{ old('num_guias') }}"
+                                        placeholder="Ej: 1001"
+                                        min="1"
+                                        autocomplete="off"
+                                        required
+                                    >
+                                    @error('num_guias')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo números enteros positivos.</small>
                             </div>
                         </div>
@@ -195,17 +201,22 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="m_fecha_admision">Fecha de Admisión <span class="text-danger">*</span></label>
-                                <input
-                                    type="date"
-                                    name="fecha_admision"
-                                    id="m_fecha_admision"
-                                    class="form-control @error('fecha_admision') is-invalid @enderror"
-                                    value="{{ old('fecha_admision') }}"
-                                    required
-                                >
-                                @error('fecha_admision')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input
+                                        type="date"
+                                        name="fecha_admision"
+                                        id="m_fecha_admision"
+                                        class="form-control @error('fecha_admision') is-invalid @enderror"
+                                        value="{{ old('fecha_admision') }}"
+                                        required
+                                    >
+                                    @error('fecha_admision')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>No puede ser una fecha futura.</small>
                             </div>
                         </div>
@@ -214,22 +225,27 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="m_cliente_id">Cliente <span class="text-danger">*</span></label>
-                                <select
-                                    name="cliente_id"
-                                    id="m_cliente_id"
-                                    class="form-control @error('cliente_id') is-invalid @enderror"
-                                    required
-                                >
-                                    <option value="">-- Seleccionar cliente --</option>
-                                    @foreach($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                                            {{ $cliente->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('cliente_id')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <select
+                                        name="cliente_id"
+                                        id="m_cliente_id"
+                                        class="form-control @error('cliente_id') is-invalid @enderror"
+                                        required
+                                    >
+                                        <option value="">-- Seleccionar cliente --</option>
+                                        @foreach($clientes as $cliente)
+                                            <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                                                {{ $cliente->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('cliente_id')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el cliente asociado.</small>
                             </div>
                         </div>
@@ -238,22 +254,27 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="m_tipo_entrega_id">Tipo de Entrega <span class="text-danger">*</span></label>
-                                <select
-                                    name="tipo_entrega_id"
-                                    id="m_tipo_entrega_id"
-                                    class="form-control @error('tipo_entrega_id') is-invalid @enderror"
-                                    required
-                                >
-                                    <option value="">-- Seleccionar tipo --</option>
-                                    @foreach($tipoEntregas as $tipo)
-                                        <option value="{{ $tipo->id }}" {{ old('tipo_entrega_id') == $tipo->id ? 'selected' : '' }}>
-                                            {{ $tipo->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('tipo_entrega_id')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-box"></i></span>
+                                    </div>
+                                    <select
+                                        name="tipo_entrega_id"
+                                        id="m_tipo_entrega_id"
+                                        class="form-control @error('tipo_entrega_id') is-invalid @enderror"
+                                        required
+                                    >
+                                        <option value="">-- Seleccionar tipo --</option>
+                                        @foreach($tipoEntregas as $tipo)
+                                            <option value="{{ $tipo->id }}" {{ old('tipo_entrega_id') == $tipo->id ? 'selected' : '' }}>
+                                                {{ $tipo->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('tipo_entrega_id')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el tipo de entrega.</small>
                             </div>
                         </div>
@@ -262,21 +283,26 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="m_volumen">Volumen (m³) <span class="text-danger">*</span></label>
-                                <input
-                                    type="number"
-                                    name="volumen"
-                                    id="m_volumen"
-                                    class="form-control @error('volumen') is-invalid @enderror"
-                                    value="{{ old('volumen') }}"
-                                    placeholder="Ej: 1.50"
-                                    step="0.01"
-                                    min="0.01"
-                                    autocomplete="off"
-                                    required
-                                >
-                                @error('volumen')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-cube"></i></span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        name="volumen"
+                                        id="m_volumen"
+                                        class="form-control @error('volumen') is-invalid @enderror"
+                                        value="{{ old('volumen') }}"
+                                        placeholder="Ej: 1.50"
+                                        step="0.01"
+                                        min="0.01"
+                                        autocomplete="off"
+                                        required
+                                    >
+                                    @error('volumen')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Número positivo. Ej: 1.50</small>
                             </div>
                         </div>
@@ -285,21 +311,26 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="m_peso">Peso (kg) <span class="text-danger">*</span></label>
-                                <input
-                                    type="number"
-                                    name="peso"
-                                    id="m_peso"
-                                    class="form-control @error('peso') is-invalid @enderror"
-                                    value="{{ old('peso') }}"
-                                    placeholder="Ej: 10.50"
-                                    step="0.01"
-                                    min="0.01"
-                                    autocomplete="off"
-                                    required
-                                >
-                                @error('peso')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-weight-hanging"></i></span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        name="peso"
+                                        id="m_peso"
+                                        class="form-control @error('peso') is-invalid @enderror"
+                                        value="{{ old('peso') }}"
+                                        placeholder="Ej: 10.50"
+                                        step="0.01"
+                                        min="0.01"
+                                        autocomplete="off"
+                                        required
+                                    >
+                                    @error('peso')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Número positivo. Ej: 10.50</small>
                             </div>
                         </div>
@@ -308,20 +339,25 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="m_unidades">Unidades <span class="text-danger">*</span></label>
-                                <input
-                                    type="number"
-                                    name="unidades"
-                                    id="m_unidades"
-                                    class="form-control @error('unidades') is-invalid @enderror"
-                                    value="{{ old('unidades') }}"
-                                    placeholder="Ej: 5"
-                                    min="1"
-                                    autocomplete="off"
-                                    required
-                                >
-                                @error('unidades')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-boxes"></i></span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        name="unidades"
+                                        id="m_unidades"
+                                        class="form-control @error('unidades') is-invalid @enderror"
+                                        value="{{ old('unidades') }}"
+                                        placeholder="Ej: 5"
+                                        min="1"
+                                        autocomplete="off"
+                                        required
+                                    >
+                                    @error('unidades')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo enteros positivos. Ej: 5</small>
                             </div>
                         </div>
@@ -332,7 +368,7 @@
                                 <label for="m_precio">Precio <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
+                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
                                     <input
                                         type="number"
@@ -358,19 +394,24 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="m_observacion">Observación</label>
-                                <input
-                                    type="text"
-                                    name="observacion"
-                                    id="m_observacion"
-                                    class="form-control @error('observacion') is-invalid @enderror"
-                                    value="{{ old('observacion') }}"
-                                    placeholder="Ej: Frágil, manejar con cuidado"
-                                    maxlength="255"
-                                    autocomplete="off"
-                                >
-                                @error('observacion')
-                                    <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-comment-alt"></i></span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        name="observacion"
+                                        id="m_observacion"
+                                        class="form-control @error('observacion') is-invalid @enderror"
+                                        value="{{ old('observacion') }}"
+                                        placeholder="Ej: Frágil, manejar con cuidado"
+                                        maxlength="255"
+                                        autocomplete="off"
+                                    >
+                                    @error('observacion')
+                                        <div class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="obs-count-modal">0</span>/255 caract.</small>
                             </div>
                         </div>
@@ -428,9 +469,11 @@
     // Contador de texto dinámico
     const obsModal = document.getElementById('m_observacion');
     const obsCountModal = document.getElementById('obs-count-modal');
-    obsModal.addEventListener('input', function() {
-        obsCountModal.textContent = this.value.length;
-    });
+    if (obsModal && obsCountModal) {
+        obsModal.addEventListener('input', function() {
+            obsCountModal.textContent = this.value.length;
+        });
+    }
 
     // Scripts para el modal de eliminación
     let formEliminar = null;

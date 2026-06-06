@@ -11,7 +11,9 @@ class Planilla extends Model
 
     protected $table = 'planillas';
 
+    // CORREGIDO: Agregamos 'numero_planilla' para que Laravel permita registrarlo desde el controlador
     protected $fillable = [
+        'numero_planilla', // <-- Línea clave obligatoria
         'id_ciudad',
         'id_usuario',
         'id_ruta',
@@ -21,7 +23,7 @@ class Planilla extends Model
 
     public function ciudad()
     {
-        return $this->belongsTo(ciudad::class, 'id_ciudad');
+        return $this->belongsTo(Ciudad::class, 'id_ciudad');
     }
 
     public function ruta()

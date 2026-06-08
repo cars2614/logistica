@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ciudad;
-use App\Models\cliente;
+use App\Models\Ciudad;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = cliente::orderBy('created_at', 'desc')->get();
-        $ciudades = ciudad::orderBy('nombre', 'asc')->get();
-        return view('admin.clientes.index', compact('clientes', 'ciudades'));
+        $clientes = Cliente::orderBy('created_at', 'desc')->get();
+        $ciudades = Ciudad::orderBy('nombre', 'asc')->get();
+        return view('admin.cliente.index', compact('clientes', 'ciudades'));
     }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class ClienteController extends Controller
             'id_ciudad.required' => 'La ciudad es obligatoria.',
         ]);
 
-        cliente::create([
+        Cliente::create([
             'cedula'      => $request->cedula,
             'nombre'      => $request->nombre,
             'telefono'    => $request->telefono,
@@ -53,13 +53,13 @@ class ClienteController extends Controller
             ->with('success', 'Cliente creado correctamente.');
     }
 
-    public function edit(cliente $cliente)
+    public function edit(Cliente $cliente)
     {
-        $ciudades = ciudad::orderBy('nombre', 'asc')->get();
-        return view('admin.clientes.edit', compact('cliente', 'ciudades'));
+        $ciudades = Ciudad::orderBy('nombre', 'asc')->get();
+        return view('admin.cliente.edit', compact('cliente', 'ciudades'));
     }
 
-    public function update(Request $request, cliente $cliente)
+    public function update(Request $request, Cliente $cliente)
     {
         $request->validate([
             'cedula'      => 'required|string|max:20|unique:clientes,cedula,' . $cliente->id,
@@ -95,7 +95,7 @@ class ClienteController extends Controller
             ->with('success', 'Cliente actualizado correctamente.');
     }
 
-    public function destroy(cliente $cliente)
+    public function destroy(Cliente $cliente)
     {
         $cliente->delete();
         return redirect()->route('admin.cliente.index')

@@ -240,6 +240,7 @@
                                         </td>
                                         <td class="text-center align-middle">
                                             <div class="d-inline-flex" style="gap: 6px;">
+                                                
                                                 {{-- Editar --}}
                                                 <a href="{{ route('admin.cliente.edit', $item->id) }}"
                                                    class="btn btn-sm btn-info shadow-sm d-flex align-items-center justify-content-center" 

@@ -50,6 +50,7 @@ class CiudadController extends Controller
         // Pasamos el objeto $ciudad directamente gracias al Binding de Laravel
         $ciudades = Ciudad::latest('id')->get();
         return view('admin.Ciudad.index', compact('ciudad', 'ciudades'));
+        
     }
 
     /**

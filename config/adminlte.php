@@ -287,15 +287,15 @@ return [
     'laravel_js_path' => 'js/app.js',
 
     'extra_assets' => [
-    'css' => [
-        [
-            'type'     => 'css',
-            'asset'    => true,
-            'location' => 'css/resposive.css',
+        'css' => [
+            [
+                'type'     => 'css',
+                'asset'    => true,
+                'location' => 'css/resposive.css',
+            ],
         ],
+        'js' => [],
     ],
-    'js' => [],
-],
     /*
     |--------------------------------------------------------------------------
     | Menu Items
@@ -334,62 +334,103 @@ return [
             'icon' => 'fas fa-fw fa-tachometer-alt',
         ],
 
-        // ── Configuración general ─────────────────────────────────────────────
-        ['header' => 'CONFIGURACIÓN GENERAL'],
+        // ══════════════════════════════════════════════════════════════════════
+        // MÓDULO 1: Cliente
+        // ══════════════════════════════════════════════════════════════════════
+        ['header' => 'CLIENTES'],
 
         [
-            'text' => 'Tipos de Entrega',
-            'url'  => 'admin/tipo-entrega',
-            'icon' => 'fas fa-fw fa-truck',
-        ],
-    [        'text' => 'Ciudades',
-            'url'  => 'admin/ciudad',
-            'icon' => 'fas fa-fw fa-city',
-        ],
-    [
-            'text' => 'Clientes',
-            'url'  => 'admin/cliente',
-            'icon' => 'fas fa-fw fa-users',
-        ],
-    [
-            'text' => 'Roles',
-            'url'  => 'admin/rol',
-            'icon' => 'fas fa-fw fa-user-shield',
-        ],
-    [
-            'text' => 'Tipos de Vehículo',
-            'url'  => 'admin/tipo-vehiculo',
-            'icon' => 'fas fa-fw fa-car',
-        ],
-    [
-            'text' => 'Vehículos',
-            'url'  => 'admin/vehiculo',
-            'icon' => 'fas fa-fw fa-truck-moving',
-        ],
-    [
-            'text' => 'Guías',
-            'url'  => 'admin/guia',
-            'icon' => 'fas fa-fw fa-file-invoice',
-        ],
-    [
-            'text' => 'Estados de Guía',
-            'url'  => 'admin/estado-guia',
-            'icon' => 'fas fa-fw fa-clipboard-list',
-    ],
-  [
-            'text' => 'Rutas',
-            'url'  => 'admin/ruta',
-            'icon' => 'fas fa-fw fa-route',
+            'text'    => 'Clientes',
+            'icon'    => 'fas fa-fw fa-users',
+            'submenu' => [
+                [
+                    'text' => 'Gestión de Clientes',
+                    'url'  => 'admin/cliente',
+                    'icon' => 'fas fa-fw fa-user',
+                ],
+                [
+                    'text' => 'Ciudades',
+                    'url'  => 'admin/ciudad',
+                    'icon' => 'fas fa-fw fa-city',
+                ],
+            ],
         ],
 
+        // ══════════════════════════════════════════════════════════════════════
+        // MÓDULO 2: Vehículo - Usuario
+        // ══════════════════════════════════════════════════════════════════════
+        ['header' => 'VEHÍCULO - USUARIO'],
 
-
-    [
-            'text' => 'Planillas',
-            'url'  => 'admin/planilla',
-            'icon' => 'fas fa-fw fa-file-alt',
+        [
+            'text'    => 'Vehículos y Usuarios',
+            'icon'    => 'fas fa-fw fa-truck',
+            'submenu' => [
+                [
+                    'text' => 'Vehículos',
+                    'url'  => 'admin/vehiculo',
+                    'icon' => 'fas fa-fw fa-truck-moving',
+                ],
+                [
+                    'text' => 'Tipos de Vehículo',
+                    'url'  => 'admin/tipo-vehiculo',
+                    'icon' => 'fas fa-fw fa-car',
+                ],
+            ],
         ],
-    
+
+        // ══════════════════════════════════════════════════════════════════════
+        // MÓDULO 3: Guía y Gestión
+        // ══════════════════════════════════════════════════════════════════════
+        ['header' => 'GUÍA Y GESTIÓN'],
+
+        [
+            'text'    => 'Guías y Gestión',
+            'icon'    => 'fas fa-fw fa-file-invoice',
+            'submenu' => [
+                [
+                    'text' => 'Guías',
+                    'url'  => 'admin/guia',
+                    'icon' => 'fas fa-fw fa-file-invoice',
+                ],
+                [
+                    'text' => 'Rutas',
+                    'url'  => 'admin/ruta',
+                    'icon' => 'fas fa-fw fa-route',
+                ],
+                [
+                    'text' => 'Planillas',
+                    'url'  => 'admin/planilla',
+                    'icon' => 'fas fa-fw fa-file-alt',
+                ],
+                [
+                    'text' => 'Estados de Guía',
+                    'url'  => 'admin/estado-guia',
+                    'icon' => 'fas fa-fw fa-clipboard-list',
+                ],
+            ],
+        ],
+
+        // ══════════════════════════════════════════════════════════════════════
+        // MÓDULO 4: Gestión del Sistema
+        // ══════════════════════════════════════════════════════════════════════
+        ['header' => 'GESTIÓN DEL SISTEMA'],
+
+        [
+            'text'    => 'Sistema',
+            'icon'    => 'fas fa-fw fa-cogs',
+            'submenu' => [
+                [
+                    'text' => 'Roles',
+                    'url'  => 'admin/rol',
+                    'icon' => 'fas fa-fw fa-user-shield',
+                ],
+                [
+                    'text' => 'Tipos de Entrega',
+                    'url'  => 'admin/tipo-entrega',
+                    'icon' => 'fas fa-fw fa-boxes',
+                ],
+            ],
+        ],
 
     ],
 

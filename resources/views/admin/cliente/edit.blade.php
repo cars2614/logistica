@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -38,15 +38,24 @@
 
                     <div class="card-body">
 
+
+                        {{-- Cedula --}}
+                        <div class="form-group">
+                            <label for="cedula">Cédula <span class="text-danger">*</span></label>
+                            <input type="text" name="cedula" id="cedula"
+                                class="form-control @error('cedula') is-invalid @enderror" placeholder="Ej: 123456789"
+                                value="{{ old('cedula', $cliente->cedula) }}">
+                            @error('nombre')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         {{-- Nombre --}}
                         <div class="form-group">
                             <label for="nombre">Nombre <span class="text-danger">*</span></label>
-                            <input type="text"
-                                   name="nombre"
-                                   id="nombre"
-                                   class="form-control @error('nombre') is-invalid @enderror"
-                                   placeholder="Ej: Juan Pérez"
-                                   value="{{ old('nombre', $cliente->nombre) }}">
+                            <input type="text" name="nombre" id="nombre"
+                                class="form-control @error('nombre') is-invalid @enderror" placeholder="Ej: Juan Pérez"
+                                value="{{ old('nombre', $cliente->nombre) }}">
                             @error('nombre')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
@@ -55,12 +64,9 @@
                         {{-- Teléfono --}}
                         <div class="form-group">
                             <label for="telefono">Teléfono <span class="text-danger">*</span></label>
-                            <input type="text"
-                                   name="telefono"
-                                   id="telefono"
-                                   class="form-control @error('telefono') is-invalid @enderror"
-                                   placeholder="Ej: 3001234567"
-                                   value="{{ old('telefono', $cliente->telefono) }}">
+                            <input type="text" name="telefono" id="telefono"
+                                class="form-control @error('telefono') is-invalid @enderror" placeholder="Ej: 3001234567"
+                                value="{{ old('telefono', $cliente->telefono) }}">
                             @error('telefono')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
@@ -69,12 +75,9 @@
                         {{-- Correo --}}
                         <div class="form-group">
                             <label for="correo">Correo <span class="text-danger">*</span></label>
-                            <input type="email"
-                                   name="correo"
-                                   id="correo"
-                                   class="form-control @error('correo') is-invalid @enderror"
-                                   placeholder="Ej: cliente@correo.com"
-                                   value="{{ old('correo', $cliente->correo) }}">
+                            <input type="email" name="correo" id="correo"
+                                class="form-control @error('correo') is-invalid @enderror"
+                                placeholder="Ej: cliente@correo.com" value="{{ old('correo', $cliente->correo) }}">
                             @error('correo')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
@@ -83,12 +86,9 @@
                         {{-- Dirección --}}
                         <div class="form-group">
                             <label for="direccion">Dirección <span class="text-danger">*</span></label>
-                            <input type="text"
-                                   name="direccion"
-                                   id="direccion"
-                                   class="form-control @error('direccion') is-invalid @enderror"
-                                   placeholder="Ej: Calle 10 # 5-23"
-                                   value="{{ old('direccion', $cliente->direccion) }}">
+                            <input type="text" name="direccion" id="direccion"
+                                class="form-control @error('direccion') is-invalid @enderror"
+                                placeholder="Ej: Calle 10 # 5-23" value="{{ old('direccion', $cliente->direccion) }}">
                             @error('direccion')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
@@ -97,15 +97,30 @@
                         {{-- Descripción --}}
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
-                            <textarea name="descripcion"
-                                      id="descripcion"
-                                      rows="4"
-                                      class="form-control @error('descripcion') is-invalid @enderror"
-                                      placeholder="Descripción del cliente...">{{ old('descripcion', $cliente->descripcion) }}</textarea>
+                            <textarea name="descripcion" id="descripcion" rows="4"
+                                class="form-control @error('descripcion') is-invalid @enderror" placeholder="Descripción del cliente...">{{ old('descripcion', $cliente->descripcion) }}</textarea>
                             @error('descripcion')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>
+
+
+                         {{-- Ciudad --}}
+                        <div class="form-group">
+                            <label for="id_ciudad">Ciudad</label>
+                            <select name="id_ciudad" id="id_ciudad" class="form-control @error('id_ciudad') is-invalid @enderror">
+                                <option value="">Seleccione una ciudad</option>
+                                @foreach ($ciudades as $ciudad)
+                                    <option value="{{ $ciudad->id }}" {{ old('id_ciudad', $cliente->id_ciudad ?? '') == $ciudad->id ? 'selected' : '' }}>
+                                        [{{ $ciudad->codigo_postal }}] {{ $ciudad->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_ciudad')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
 
                     </div>
 

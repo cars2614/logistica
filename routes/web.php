@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\EstadoGuiaController;
 use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
 use App\Http\Controllers\Admin\TrackingController;
+use App\Http\Controllers\Admin\RepartidorController;
 
 // Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';
@@ -64,15 +65,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('ruta', RutaController::class)
         ->parameters(['ruta' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
+    Route::resource('repartidor', RepartidorController::class)
+    ->parameters(['repartidor' => 'repartidor'])
+    ->only(['index', 'store', 'edit', 'update', 'destroy']);
 });
 
-// Tracking — fuera del grupo admin (público + protegido)
-Route::get('/tracking/{guia}', [TrackingController::class, 'show'])
-    ->name('tracking.show');
-
-Route::post('/tracking/{guia}/actualizar', [TrackingController::class, 'actualizar'])
-    ->middleware('auth')
-    ->name('tracking.actualizar');
-
-Route::get('/tracking/{guia}/ubicaciones', [TrackingController::class, 'ubicaciones'])
-    ->name('tracking.ubicaciones');

@@ -1,1 +1,0 @@
-@include('mail::layout', ['actionUrl' => $actionUrl ?? null])

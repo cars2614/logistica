@@ -57,7 +57,6 @@ class DashboardController extends Controller
             ->join('tipo_entregas', 'guias.id_tipo_entrega', '=', 'tipo_entregas.id')
             ->select(
                 'guias.id',
-                'guias.num_guias',
                 'clientes.nombre as cliente',
                 'tipo_entregas.nombre as estado',
                 'guias.created_at as fecha_admision'

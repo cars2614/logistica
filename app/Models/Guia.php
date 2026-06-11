@@ -13,7 +13,6 @@ class Guia extends Model
     protected $primaryKey = 'id'; 
 
     protected $fillable = [
-        'num_guias',
         'volumen',
         'peso',
         'precio',

@@ -17,7 +17,7 @@ class PlanillaController extends Controller
         $planillas = Planilla::orderBy('id', 'desc')->paginate(10);
         
         // Cargamos las guías junto con su cliente de origen
-        $guias = Guia::with('clienteOrigen')->orderBy('num_guias')->get(); 
+        $guias = Guia::with('clienteOrigen')->orderBy('id')->get(); 
         
         // Usamos el ID como identificador para la vista
         $rutas = Ruta::orderBy('id')->get();

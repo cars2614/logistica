@@ -402,7 +402,6 @@
                             @forelse($ultimasGuias as $guia)
                                 <tr>
                                     <td><span style="color: rgba(255,255,255,0.3);">#{{ $guia->id }}</span></td>
-                                    <td><strong class="text-white">{{ $guia->num_guias }}</strong></td>
                                     <td>{{ $guia->clienteOrigen->nombre ?? 'Sin Cliente' }}</td>
                                     <td>
                                         <span class="badge-status-premium">

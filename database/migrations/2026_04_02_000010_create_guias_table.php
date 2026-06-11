@@ -12,22 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('guias', function (Blueprint $table) {
-            $table->id();
-            
-            $table->integer('num_guias');
-            $table->decimal('volumen', 10, 2);
-            $table->decimal('peso', 10, 2);
-            $table->decimal('precio', 10, 2);
-            $table->string('observacion')->nullable();
-
-            $table->dateTime('fecha_admision');
-            $table->integer('unidades');
+            $table->id();            
+           
+            $table->foreignId('id_tipo_entrega')->constrained('tipo_entregas');
 
             $table->foreignId('id_cliente_origen')->constrained('clientes');
             $table->foreignId('id_cliente_destino')->constrained('clientes');
-            $table->foreignId('id_tipo_entrega')->constrained('tipo_entregas');
 
+            $table->integer('unidades')->default(1);
+            $table->decimal('peso', 10, 2)->default(1);
 
+            $table->decimal('largo', 10, 2)->default(1);
+            $table->decimal('ancho', 10, 2)->default(1);
+            $table->decimal('alto', 10, 2)->default(1);            
+
+            $table->decimal('precio_envio', 10, 2)->default(9800);
+            $table->decimal('valor_declarado', 10, 2)->default(20000);
+
+            $table->string('observacion')->nullable();
+            $table->boolean('activo')->default(true);
+
+            
 
             $table->timestamps();
 

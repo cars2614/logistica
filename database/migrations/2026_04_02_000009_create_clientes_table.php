@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('telefono');
             $table->string('correo');
             $table->string('direccion');
-            $table->string('descripcion');
+            $table->string('descripcion')->default('Sin descripción');
 
             $table->foreignId('id_ciudad')->constrained('ciudades');
 

@@ -13,7 +13,10 @@ class GuiaController extends Controller
     public function index()
     {
         // 1. Carga las guías con paginación
-        $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->paginate(10);
+        /* $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->paginate(10); */
+
+        $guias = Guia::all(); // Para mostrar todas las guías sin paginación, puedes usar esto en su lugar
+        
         
         // 2. Traemos todos los clientes de la BD para el formulario modal
         $clientes = Cliente::all();
@@ -29,29 +32,39 @@ class GuiaController extends Controller
     {
         // 1. Validamos los datos tal como vienen del formulario en la pantalla
         $request->validate([
-            'num_guias'       => 'required|integer',
-            'volumen'         => 'required|numeric',
-            'peso'            => 'required|numeric',
-            'precio'          => 'required|numeric',
-            'fecha_admision'  => 'required|date',
-            'unidades'        => 'required|integer|min:1',
-            'cliente_id'      => 'required|exists:clientes,id',
-            'tipo_entrega_id' => 'required|exists:tipo_entregas,id',
-            'observacion'     => 'nullable|string|max:255',
+
+            'id_tipo_entrega'     => 'required|numeric',
+            'id_cliente_origen'   => 'required|exists:clientes,id',
+            'id_cliente_destino'  => 'required|exists:clientes,id',
+            'unidades'            => 'required|integer|min:1',
+            'peso'                => 'required|numeric',
+            
+            'largo'               => 'required|numeric',
+            'ancho'               => 'required|numeric',
+            'alto'                => 'required|numeric',
+            'precio_envio'        => 'required|numeric',
+            'valor_declarado'     => 'required|numeric',
+
+            'observacion'         => 'nullable|string|max:255',
         ]);
 
         // 2. Creamos la guía mapeando los inputs a las columnas reales de la BD
         Guia::create([
-            'num_guias'          => $request->num_guias,
-            'volumen'            => $request->volumen,
+
+            'id_tipo_entrega'    => $request->id_tipo_entrega,
+            'id_cliente_origen'  => $request->id_cliente_origen,
+            'id_cliente_destino' => $request->id_cliente_destino,
+            'unidades'           => $request->unidades,            
             'peso'               => $request->peso,
-            'precio'             => $request->precio,
+            'largo'              => $request->largo,
+            'ancho'              => $request->ancho,
+            'alto'               => $request->alto,
+            'precio_envio'       => $request->precio_envio,
+            'valor_declarado'    => $request->valor_declarado,
             'observacion'        => $request->observacion ?? 'Ninguna',
-            'fecha_admision'     => $request->fecha_admision,
-            'unidades'           => $request->unidades,
-            'id_cliente_origen'  => $request->cliente_id, 
-            'id_cliente_destino' => $request->cliente_id, 
-            'id_tipo_entrega'    => $request->tipo_entrega_id,
+                       
+            
+            
         ]);
 
         // 3. Redireccionamos con mensaje de éxito al listado

@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Ciudad;
 use App\Models\Cliente;
+use App\Models\EstadoGuia;
+use App\Models\TipoEntrega;
+use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -1242,6 +1245,144 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => '2026-02-02 01:13:24',
             ]);
         }
+
+
+
+        //******************* ESTADOS DE LA GUIA  ****************** */
+
+        $tiposEntrega = [
+
+            [
+                'nombre' => 'Sobre',
+                'descripcion' => 'Documentos, cartas, contratos y correspondencia.'
+            ],
+
+            [
+                'nombre' => 'Paquete Pequeño',
+                'descripcion' => 'Paquetes entre 1 y 5 kilogramos.'
+            ],
+
+            [
+                'nombre' => 'Paquete Mediano',
+                'descripcion' => 'Paquetes entre 6 y 12 kilogramos.'
+            ],
+
+            [
+                'nombre' => 'Paquete Grande',
+                'descripcion' => 'Paquetes entre 13 y 40 kilogramos.'
+            ],
+
+            [
+                'nombre' => 'Carga Pesada',
+                'descripcion' => 'Mercancía entre 41 y 400 kilogramos.'
+            ],
+
+            [
+                'nombre' => 'Carga Paletizada',
+                'descripcion' => 'Mercancía organizada en estibas o pallets.'
+            ],
+
+            [
+                'nombre' => 'Mercancía Frágil',
+                'descripcion' => 'Artículos delicados que requieren manejo especial.'
+            ],
+
+            [
+                'nombre' => 'Mercancía Refrigerada',
+                'descripcion' => 'Productos que requieren control de temperatura.'
+            ],
+
+            [
+                'nombre' => 'Entrega Estándar',
+                'descripcion' => 'Servicio normal de entrega.'
+            ],
+
+            [
+                'nombre' => 'Entrega Urgente',
+                'descripcion' => 'Servicio prioritario con tiempos reducidos.'
+            ],
+
+            [
+                'nombre' => 'Entrega Express',
+                'descripcion' => 'Entrega el mismo día o en pocas horas.'
+            ],
+
+            [
+                'nombre' => 'Servicio Especial',
+                'descripcion' => 'Envíos con requerimientos especiales.'
+            ],
+
+            [
+                'nombre' => 'Contra Entrega',
+                'descripcion' => 'Cobro del envío al momento de la entrega.'
+            ],
+
+            [
+                'nombre' => 'Recolección Programada',
+                'descripcion' => 'Recogida en fecha y hora acordada.'
+            ],
+
+            [
+                'nombre' => 'Entrega Programada',
+                'descripcion' => 'Entrega en fecha específica solicitada por el cliente.'
+            ],
+
+            [
+                'nombre' => 'Envío Nacional',
+                'descripcion' => 'Transporte dentro del territorio nacional.'
+            ],
+
+            [
+                'nombre' => 'Envío Internacional',
+                'descripcion' => 'Transporte con destino fuera del país.'
+            ]
+
+        ];
+
+        foreach ($tiposEntrega as $tipo) {
+
+            TipoEntrega::create([
+                'nombre' => $tipo['nombre'],
+                'descripcion' => $tipo['descripcion'],
+                'estado' => 1
+            ]);
+        }
+
+
+
+        //******************* CLIENTES ****************** */
+
+        $clientes = [];
+
+        /* $faker = Faker\Factory::create('es_CO'); */
+        $faker = Factory::create('es_CO');
+
+        for ($i = 1; $i <= 100; $i++) {
+
+            $clientes[] = [
+                'cedula' => $faker->unique()->numberBetween(10000000, 99999999),
+                'nombre' => $faker->name(),
+                'telefono' => $faker->numerify('3#########'),
+                'correo' => $faker->unique()->safeEmail(),
+                'direccion' => $faker->streetAddress(),
+                'id_ciudad' => rand(1, 1000),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        Cliente::insert($clientes);
+
+
+
+
+
+
+
+        //*******************   ****************** */
+
+
+
 
 
 

@@ -118,18 +118,23 @@
                             <tr>
                                 <td>{{ \Carbon\Carbon::parse($guia->created_at)->format('d/m/Y') }}</td>
                                 <td>{{ $guia->id }}</td>
-                                <td>{{ $guia->id_tipo_entrega ?? '—' }}</td>
+                                <td>{{ $guia->tipoEntrega->nombre ?? '—' }}</td>
                                 {{-- ojo mejorar la consulta para que aparezca el nombre del tipo de entrega --}}
                                 
-                                <td>{{ $guia->id_cliente_origen->nombre ?? '—' }}</td>
-                                <td>{{ $guia->id_cliente_destino->nombre ?? '—' }}</td>
+                                <td>{{ $guia->clienteOrigen->nombre ?? '—' }}</td>
+                                <td>{{ $guia->clienteDestino->nombre ?? '—' }}</td>
                                 
                              
                                 <td>{{ $guia->unidades }}</td>
                                 <td>{{ $guia->peso }}</td>
+
                                 <td>{{ $guia->largo }}</td>
                                 <td>{{ $guia->ancho }}</td>
                                 <td>{{ $guia->alto }}</td>
+
+                                <td>{{ $guia->precio_envio }}</td>
+                                <td>{{ $guia->valor_declarado }}</td>
+                                
 
                                 <td>{{ $guia->observacion ?? '—' }}</td>
 
@@ -138,6 +143,7 @@
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
+{{-- 
                                     <form action="{{ route('admin.guia.destroy', $guia->id) }}" method="POST"
                                         class="d-inline form-eliminar">
                                         @csrf
@@ -147,6 +153,7 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                     --}}
                                 </td>
                             </tr>
                         @empty
@@ -221,7 +228,7 @@
 
                                         @foreach ($clientes as $cliente)
                                             <option value="{{ $cliente->id }}">
-                                                {{ $cliente->nombre }}
+                                               {{ $cliente->cedula }}  {{ $cliente->nombre }}
                                             </option>
                                         @endforeach
 
@@ -240,7 +247,7 @@
 
                                         @foreach ($clientes as $cliente)
                                             <option value="{{ $cliente->id }}">
-                                                {{ $cliente->nombre }}
+                                                {{ $cliente->cedula }}  {{ $cliente->nombre }}
                                             </option>
                                         @endforeach
 

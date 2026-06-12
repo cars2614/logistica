@@ -143,6 +143,10 @@
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
+
+                                    <a href="{{ route('tracking.show', $guia->id) }}" class="btn btn-info btn-xs" title="Ver Tracking">
+    <i class="fas fa-satellite-dish"></i>
+</a>
 {{-- 
                                     <form action="{{ route('admin.guia.destroy', $guia->id) }}" method="POST"
                                         class="d-inline form-eliminar">

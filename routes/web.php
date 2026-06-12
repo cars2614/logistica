@@ -15,13 +15,11 @@ use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
 use App\Http\Controllers\Admin\TrackingController;
 
-// Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';
 
-// Página pública de inicio
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Panel administrativo — protegido por autenticación
+// Panel administrativo
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -66,13 +64,18 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 });
 
-// Tracking — fuera del grupo admin (público + protegido)
-Route::get('/tracking/{guia}', [TrackingController::class, 'show'])
-    ->name('tracking.show');
 
-Route::post('/tracking/{guia}/actualizar', [TrackingController::class, 'actualizar'])
-    ->middleware('auth')
-    ->name('tracking.actualizar');
 
-Route::get('/tracking/{guia}/ubicaciones', [TrackingController::class, 'ubicaciones'])
-    ->name('tracking.ubicaciones');
+// Grupo de rutas protegidas por autenticación (si ya usa el middleware auth)
+Route::middleware(['auth'])->group(function () {
+    
+    // 🗺️ 1. Ruta para mostrar la vista principal del mapa y control de estados
+    Route::get('/tracking/{id}', [TrackingController::class, 'show'])->name('tracking.show');
+
+    // ⚡ 2. Ruta POST para recibir las actualizaciones del GPS o del botón manual
+    Route::post('/tracking/{id}/actualizar', [TrackingController::class, 'actualizar'])->name('tracking.actualizar');
+
+    // 🔄 3. Ruta GET que consulta los puntos históricos para pintar la línea en el mapa
+    Route::get('/tracking/{id}/ubicaciones', [TrackingController::class, 'ubicaciones'])->name('tracking.ubicaciones');
+
+});

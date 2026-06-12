@@ -9,22 +9,20 @@ class Guia extends Model
 {
     use HasFactory;
 
-    protected $table = 'guias';
-    protected $primaryKey = 'id'; 
+    protected $table      = 'guias';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'volumen',
-        'peso',
-        'precio',
-        'observacion',
-        'fecha_admision',
-        'unidades',
-        'id_cliente_origen',
-        'id_cliente_destino',
-        'id_tipo_entrega',
+        'volumen', 'peso', 'precio', 'observacion',
+        'fecha_admision', 'unidades',
+        'id_cliente_origen', 'id_cliente_destino', 'id_tipo_entrega',
     ];
 
-    // Relación clave: Vincula la guía con el cliente que envía
+    public function estados()
+    {
+        return $this->hasMany(EstadoGuia::class, 'id_guia', 'id');
+    }
+
     public function clienteOrigen()
     {
         return $this->belongsTo(Cliente::class, 'id_cliente_origen');

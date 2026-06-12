@@ -1,7 +1,7 @@
 @extends('adminlte::page')
-
+ 
 @section('title', 'Tipos de Vehículo — Carga y Logística Tolima')
-
+ 
 @section('content_header')
     <div class="container-fluid pt-3 header-module-container">
         <div class="d-flex justify-content-between align-items-center pb-2">
@@ -15,10 +15,10 @@
         </div>
     </div>
 @stop
-
+ 
 @section('content')
     <div class="container-fluid pb-4 premium-module-wrap">
-
+ 
         {{-- Alertas con diseño premium traslúcido --}}
         @if (session('success'))
             <div class="alert alert-premium-success alert-dismissible fade show mt-2" role="alert">
@@ -32,7 +32,7 @@
                     </< /button>
             </div>
         @endif
-
+ 
         <div class="row mt-3">
             <div class="col-12">
                 <div class="card-premium-box">
@@ -49,7 +49,7 @@
                             </button>
                         </div>
                     </div>
-
+ 
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-premium-mod table-hover mb-0">
@@ -87,7 +87,7 @@
                                                         class="btn-action-edit" title="Editar">
                                                         <i class="fas fa-pen fa-sm"></i>
                                                     </a>
-
+ 
                                                     {{-- Eliminar --}}
                                                     <form
                                                         action="{{ route('admin.tipo-vehiculo.destroy', $tipoVehiculo->id) }}"
@@ -117,7 +117,7 @@
                             </table>
                         </div>
                     </div>
-
+ 
                     @if ($tipoVehiculos->hasPages())
                         <div class="card-footer-premium py-3 border-top-divider">
                             <div class="d-flex justify-content-center custom-premium-pagination">
@@ -129,7 +129,7 @@
             </div>
         </div>
     </div>
-
+ 
     {{-- Modal Crear Premium --}}
     <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel"
         aria-hidden="true">
@@ -148,7 +148,7 @@
                         </button>
                     </div>
                     <div class="modal-body p-4">
-
+ 
                         {{-- Nombre --}}
                         <div class="form-group mb-4">
                             <label for="nombre_modal" class="premium-label">Nombre <span
@@ -170,7 +170,7 @@
                             <small class="form-text-hint"><i class="fas fa-info-circle mr-1"></i>Letras, números, espacios
                                 y tildes. Máx. 100 caracteres.</small>
                         </div>
-
+ 
                         {{-- Descripción --}}
                         <div class="form-group mb-2">
                             <label for="descripcion_modal" class="premium-label">Descripción</label>
@@ -188,7 +188,7 @@
                                         style="color: #0EA5E9;">0</span>/255</small>
                             </div>
                         </div>
-
+ 
                     </div>
                     <div class="modal-footer-premium border-top-divider py-3 px-4 d-flex justify-content-end"
                         style="gap: 10px;">
@@ -203,7 +203,7 @@
             </div>
         </div>
     </div>
-
+ 
     {{-- Modal Confirmación Eliminar Premium --}}
     <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -240,18 +240,27 @@
         </div>
     </div>
 @stop
-
+ 
 @section('css')
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
+ 
         /* ── BASE GENERAL DEL CONTENEDOR ── */
         .content-wrapper {
-            background-color: #0A0F1E !important;
+            background-color: #080C14 !important;
             position: relative;
             overflow-x: hidden;
         }
-
+ 
+        /* NAVBAR */
+        .main-header.navbar { background: #0D1220 !important; border-bottom: 1px solid rgba(59,130,246,0.12) !important; }
+        .navbar-light, .navbar-white { background: transparent !important; }
+        .main-header.navbar .nav-link, .main-header.navbar span, .main-header.navbar a { color: rgba(200,215,255,0.8) !important; }
+        .main-header.navbar .nav-link:hover { color: #3B82F6 !important; }
+        .main-header .dropdown-menu { background: #0F1628 !important; border: 1px solid rgba(59,130,246,0.12) !important; border-radius: 10px !important; }
+        .main-header .dropdown-item { color: rgba(200,215,255,0.85) !important; border-radius: 7px !important; font-size: 13px !important; }
+        .main-header .dropdown-item:hover { background: rgba(59,130,246,0.1) !important; color: #fff !important; }
+ 
         .content-wrapper::before {
             content: "";
             position: absolute;
@@ -266,40 +275,40 @@
             pointer-events: none;
             z-index: 1;
         }
-
+ 
         .premium-module-wrap {
             font-family: 'Inter', sans-serif;
             position: relative;
             z-index: 2;
         }
-
+ 
         .header-module-container {
             margin-bottom: 10px;
         }
-
+ 
         .module-title-main {
             font-size: 24px;
             letter-spacing: -0.02em;
         }
-
+ 
         .module-title-main i {
             color: #0EA5E9;
         }
-
+ 
         .custom-breadcrumb .breadcrumb-item a {
             color: rgba(255, 255, 255, 0.45);
             transition: color 0.2s;
         }
-
+ 
         .custom-breadcrumb .breadcrumb-item a:hover {
             color: #0EA5E9;
             text-decoration: none;
         }
-
+ 
         .custom-breadcrumb .breadcrumb-item::before {
             color: rgba(255, 255, 255, 0.2) !important;
         }
-
+ 
         /* ── COMPONENTES TARJETA (CARDS) ── */
         .card-premium-box {
             background: rgba(13, 19, 35, 0.65) !important;
@@ -311,13 +320,13 @@
             margin-bottom: 24px;
             overflow: hidden;
         }
-
+ 
         .card-header-premium {
             padding: 20px 24px;
             background: transparent;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
-
+ 
         .card-title-premium {
             font-size: 16px;
             font-weight: 600;
@@ -327,11 +336,11 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         .card-title-premium .style-icon-lead {
             color: #0EA5E9;
         }
-
+ 
         .badge-count-premium {
             background: rgba(14, 165, 233, 0.15);
             color: #38BDF8;
@@ -341,10 +350,10 @@
             border-radius: 8px;
             border: 1px solid rgba(14, 165, 233, 0.2);
         }
-
+ 
         /* ── BOTONES DE ACCIÓN INTERACTIVOS ── */
         .btn-premium-trigger {
-            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%) !important;
             border: none !important;
             border-radius: 10px !important;
             color: #fff !important;
@@ -358,12 +367,12 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease !important;
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
         }
-
+ 
         .btn-premium-trigger:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(14, 165, 233, 0.35) !important;
         }
-
+ 
         /* ── TABLAS DE DATOS PREMIUM ── */
         .table-premium-mod th {
             background-color: rgba(255, 255, 255, 0.01) !important;
@@ -376,7 +385,7 @@
             padding: 16px !important;
             border-top: none !important;
         }
-
+ 
         .table-premium-mod td {
             padding: 16px !important;
             vertical-align: middle !important;
@@ -385,15 +394,15 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
             border-top: none !important;
         }
-
+ 
         .table-premium-mod tbody tr {
             transition: background-color 0.2s ease;
         }
-
+ 
         .table-premium-mod tbody tr:hover {
             background-color: rgba(255, 255, 255, 0.02) !important;
         }
-
+ 
         /* ── BOTONES DE ACCIÓN INTERNOS ── */
         .btn-action-edit {
             background: rgba(14, 165, 233, 0.1) !important;
@@ -407,14 +416,14 @@
             justify-content: center;
             transition: all 0.2s;
         }
-
+ 
         .btn-action-edit:hover {
             background: #0EA5E9 !important;
             color: #fff !important;
             transform: scale(1.05);
             text-decoration: none;
         }
-
+ 
         .btn-action-delete {
             background: rgba(239, 68, 68, 0.1) !important;
             border: 1px solid rgba(239, 68, 68, 0.2) !important;
@@ -428,36 +437,36 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-
+ 
         .btn-action-delete:hover {
             background: #EF4444 !important;
             color: #fff !important;
             transform: scale(1.05);
         }
-
+ 
         /* ── MODALES PREMIUM ADAPTADOS ── */
         .modal-premium-box {
             background: #0D1324 !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
             border-radius: 16px !important;
         }
-
+ 
         .modal-header-premium {
             background: transparent;
         }
-
+ 
         .modal-footer-premium {
             background: transparent;
         }
-
+ 
         .border-bottom-divider {
             border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
-
+ 
         .border-top-divider {
             border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
-
+ 
         /* FORMULARIOS INTERNOS DEL MODAL */
         .premium-label {
             font-size: 12px;
@@ -468,11 +477,11 @@
             text-transform: uppercase;
             display: block;
         }
-
+ 
         .premium-label .required-dot {
             color: #EF4444;
         }
-
+ 
         .input-group-text-premium {
             background-color: rgba(10, 15, 30, 0.6) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -484,7 +493,7 @@
             display: flex;
             align-items: center;
         }
-
+ 
         .premium-input {
             background-color: rgba(10, 15, 30, 0.6) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -496,16 +505,16 @@
             transition: all 0.2s ease-in-out !important;
             height: auto !important;
         }
-
+ 
         .premium-input:focus {
             border-color: #0EA5E9 !important;
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
         }
-
+ 
         .premium-input::placeholder {
             color: rgba(255, 255, 255, 0.25);
         }
-
+ 
         .premium-textarea {
             background-color: rgba(10, 15, 30, 0.6) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -515,21 +524,21 @@
             font-size: 14px !important;
             transition: all 0.2s ease-in-out !important;
         }
-
+ 
         .premium-textarea:focus {
             border-color: #0EA5E9 !important;
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
         }
-
+ 
         .form-text-hint {
             color: rgba(255, 255, 255, 0.35);
             font-size: 11px;
             margin-top: 6px;
         }
-
+ 
         /* BOTONES MODAL */
         .btn-premium-modal-save {
-            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%) !important;
             border: none !important;
             border-radius: 10px !important;
             color: #fff !important;
@@ -538,12 +547,12 @@
             padding: 10px 22px !important;
             transition: all 0.2s;
         }
-
+ 
         .btn-premium-modal-save:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
         }
-
+ 
         .btn-premium-modal-close {
             background: rgba(255, 255, 255, 0.04) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -554,12 +563,12 @@
             padding: 10px 22px !important;
             transition: all 0.2s;
         }
-
+ 
         .btn-premium-modal-close:hover {
             background: rgba(255, 255, 255, 0.08) !important;
             color: #fff !important;
         }
-
+ 
         .btn-premium-modal-danger {
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
             border: none !important;
@@ -570,12 +579,12 @@
             padding: 10px 22px !important;
             transition: all 0.2s;
         }
-
+ 
         .btn-premium-modal-danger:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
         }
-
+ 
         /* CAJA DE ADVERTENCIA ELIMINAR */
         .premium-danger-notice {
             display: flex;
@@ -587,7 +596,7 @@
             color: #FCA5A5;
             font-size: 0.88rem;
         }
-
+ 
         /* ALERTAS SUTILES */
         .alert-premium-success {
             background: rgba(16, 185, 129, 0.1) !important;
@@ -595,24 +604,24 @@
             border-radius: 12px !important;
             padding: 16px !important;
         }
-
+ 
         /* PAGINACIÓN ADAPTADA */
         .card-footer-premium {
             background: transparent;
         }
-
+ 
         .custom-premium-pagination .page-item .page-link {
             background-color: rgba(255, 255, 255, 0.03) !important;
             border-color: rgba(255, 255, 255, 0.06) !important;
             color: rgba(255, 255, 255, 0.6) !important;
         }
-
+ 
         .custom-premium-pagination .page-item.active .page-link {
-            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%) !important;
             border-color: transparent !important;
             color: #fff !important;
         }
-
+ 
         .custom-premium-pagination .page-item.disabled .page-link {
             background-color: rgba(255, 255, 255, 0.01) !important;
             border-color: rgba(255, 255, 255, 0.02) !important;
@@ -620,14 +629,14 @@
         }
     </style>
 @stop
-
+ 
 @section('js')
     <script>
         // Nombre modal: letras, números y tildes
         document.getElementById('nombre_modal').addEventListener('input', function() {
             this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
         });
-
+ 
         // Contador dinámico de caracteres en descripción modal
         const descModal = document.getElementById('descripcion_modal');
         const countModal = document.getElementById('desc-count-modal');
@@ -635,7 +644,7 @@
         descModal.addEventListener('input', function() {
             countModal.textContent = this.value.length;
         });
-
+ 
         // Manejo personalizado de eliminación
         let formEliminar = null;
         document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
@@ -645,23 +654,39 @@
                 $('#modalEliminar').modal('show');
             });
         });
-
+ 
         document.getElementById('btnConfirmarEliminar').addEventListener('click', function() {
             if (formEliminar) formEliminar.submit();
         });
-
+ 
         // Reabrir modal en caso de que falle la validación backend
         @if ($errors->any())
             $(document).ready(function() {
                 $('#modalCrear').modal('show');
             });
         @endif
-
+ 
         // Cierre controlado de alertas
         setTimeout(function() {
             document.querySelectorAll('.alert-premium-success').forEach(function(alert) {
                 $(alert).fadeOut('slow');
             });
         }, 4000);
+ 
+        // Logo sidebar
+        document.addEventListener("DOMContentLoaded", function() {
+            const brandLink = document.querySelector(".brand-link");
+            if (brandLink) {
+                brandLink.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <img src="{{ asset('images/logo-carga.png') }}" alt="Logo" style="width:38px;height:auto;object-fit:contain;">
+                        <div style="display:flex;flex-direction:column;line-height:1.2;">
+                            <span style="color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.3px;text-transform:uppercase;">Carga y Logística</span>
+                            <span style="color:rgba(255,255,255,0.4);font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:9px;letter-spacing:0.8px;text-transform:uppercase;">Tolima</span>
+                        </div>
+                    </div>
+                `;
+            }
+        });
     </script>
 @stop

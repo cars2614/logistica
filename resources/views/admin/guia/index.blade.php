@@ -1,59 +1,132 @@
 {{-- resources/views/admin/guia/index.blade.php --}}
-
+ 
 @extends('adminlte::page')
-
+ 
 @section('title', 'Guías')
-
+ 
 @section('content_header')
     <h1>Gestión de Guías</h1>
 @stop
-
+ 
 {{-- ESTILOS EXCLUSIVOS PARA REPARAR LOS INPUTS PLANOS DEL MODAL DE GUÍAS --}}
 @section('css')
 <style>
-    /* Forzar a que todos los campos del modal tengan su borde gris y fondo blanco completo */
-    #modalCrear .form-control, 
-    #modalCrear select.form-control,
-    #modalCrear .input-group-text {
-        border: 1px solid #ced4da !important;
-        border-radius: 0.25rem !important;
-        background-color: #ffffff !important;
-        color: #495057 !important;
-        height: calc(2.25rem + 2px) !important;
-        padding: 0.375rem 0.75rem !important;
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+ 
+    :root {
+        --dark:   #080C14;
+        --dark2:  #0D1220;
+        --card:   #0F1628;
+        --border: rgba(59,130,246,0.12);
+        --blue:   #3B82F6;
+        --indigo: #6366F1;
+        --muted:  rgba(200,215,255,0.6);
     }
-
-    /* Ajustar el prefijo de los iconos para que no se desfasen ni queden planos */
+ 
+    body, h1, h2, h3, h4, h5, h6, p, a, span, td, th, label, input, select, textarea, button, .nav-link {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    i[class*="fa-"] { font-family: "Font Awesome 5 Free","Font Awesome 6 Free" !important; font-weight: 900 !important; }
+ 
+    /* NAVBAR */
+    .main-header.navbar { background: var(--dark2) !important; border-bottom: 1px solid var(--border) !important; }
+    .navbar-light, .navbar-white { background: transparent !important; }
+    .main-header.navbar .nav-link, .main-header.navbar span, .main-header.navbar a { color: rgba(200,215,255,0.8) !important; }
+    .main-header.navbar .nav-link:hover { color: var(--blue) !important; }
+    .main-header .dropdown-menu { background: #0F1628 !important; border: 1px solid var(--border) !important; border-radius: 10px !important; }
+    .main-header .dropdown-item { color: rgba(200,215,255,0.85) !important; border-radius: 7px !important; font-size: 13px !important; }
+    .main-header .dropdown-item:hover { background: rgba(59,130,246,0.1) !important; color: #fff !important; }
+ 
+    /* SIDEBAR */
+    .main-sidebar { background: var(--dark) !important; border-right: 1px solid var(--border) !important; }
+    .brand-link { background: var(--dark) !important; border-bottom: 1px solid var(--border) !important; }
+    .brand-text { color: #fff !important; font-weight: 700 !important; }
+    .nav-sidebar .nav-header { color: rgba(99,130,200,0.6) !important; font-size: 10px !important; font-weight: 700 !important; letter-spacing: 0.12em !important; }
+    .nav-sidebar .nav-link { color: rgba(200,215,255,0.7) !important; border-radius: 8px !important; margin: 2px 8px !important; font-size: 13px !important; font-weight: 500 !important; transition: all 0.2s !important; }
+    .nav-sidebar .nav-link:hover { background: rgba(59,130,246,0.1) !important; color: #fff !important; }
+    .nav-sidebar .nav-link.active { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(99,102,241,0.15)) !important; color: #fff !important; border-left: 3px solid var(--blue) !important; font-weight: 600 !important; }
+ 
+    /* CONTENT */
+    .content-wrapper { background: var(--dark) !important; }
+    .content-header h1 { color: #fff !important; font-size: 20px !important; font-weight: 700 !important; }
+    .content-header .breadcrumb-item a { color: var(--blue) !important; }
+    .content-header .breadcrumb-item.active { color: var(--muted) !important; }
+ 
+    /* CARDS */
+    .card { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 12px !important; }
+    .card-header { background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid var(--border) !important; }
+    .card-title { color: #fff !important; font-weight: 700 !important; }
+    .card-body { background: transparent !important; }
+    .card-footer { background: rgba(255,255,255,0.02) !important; border-top: 1px solid var(--border) !important; }
+ 
+    /* TEXTOS */
+    .text-muted { color: rgba(200,215,255,0.4) !important; }
+ 
+    /* TABLA */
+    .table { color: #C8D7FF !important; }
+    .table thead th { background: rgba(255,255,255,0.03) !important; color: rgba(200,215,255,0.55) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.07em !important; border-bottom: 1px solid var(--border) !important; border-top: none !important; }
+    .table tbody td { border-bottom: 1px solid rgba(255,255,255,0.04) !important; vertical-align: middle !important; color: #C8D7FF !important; }
+    .table-striped tbody tr:nth-of-type(odd) { background: rgba(255,255,255,0.02) !important; }
+    .table-hover tbody tr:hover { background: rgba(59,130,246,0.05) !important; }
+    .thead-dark th { background: rgba(255,255,255,0.05) !important; color: rgba(200,215,255,0.7) !important; }
+ 
+    /* INPUTS MODAL */
+    #modalCrear .form-control,
+    #modalCrear select.form-control {
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid var(--border) !important;
+        color: #fff !important;
+        border-radius: 0 8px 8px 0 !important;
+        height: auto !important;
+        padding: 10px 14px !important;
+    }
+    #modalCrear .form-control:focus { border-color: var(--blue) !important; box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important; background: rgba(59,130,246,0.05) !important; }
+    #modalCrear .form-control::placeholder { color: rgba(200,215,255,0.3) !important; }
     #modalCrear .input-group-prepend .input-group-text {
-        border-top-right-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
+        background: rgba(255,255,255,0.06) !important;
+        border: 1px solid var(--border) !important;
         border-right: none !important;
+        color: rgba(200,215,255,0.6) !important;
+        border-radius: 8px 0 0 8px !important;
     }
     #modalCrear .input-group > .form-control,
     #modalCrear .input-group > select.form-control {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
     }
-
-    /* Efecto de borde azul clásico al hacer clic (Focus) */
-    #modalCrear .form-control:focus {
-        border-color: #80bdff !important;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
-    }
-
-    /* Separación correcta entre filas del formulario */
-    #modalCrear .form-group {
-        margin-bottom: 1.25rem !important;
-    }
-    #modalCrear .form-text {
-        margin-top: 0.3rem !important;
-        display: block !important;
-    }
+    #modalCrear select.form-control option { background: var(--card) !important; color: #fff !important; }
+    #modalCrear label { color: rgba(200,215,255,0.85) !important; font-weight: 600 !important; font-size: 13px !important; }
+    #modalCrear .form-text { color: rgba(200,215,255,0.35) !important; }
+ 
+    /* BOTONES */
+    .btn-primary { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; border: none !important; color: #fff !important; border-radius: 8px !important; font-weight: 600 !important; }
+    .btn-primary:hover { opacity: 0.9 !important; color: #fff !important; }
+    .btn-secondary { background: rgba(255,255,255,0.08) !important; border: 1px solid var(--border) !important; color: rgba(200,215,255,0.7) !important; border-radius: 8px !important; }
+    .btn-warning { background: linear-gradient(135deg, #F59E0B, #D97706) !important; border: none !important; color: #fff !important; border-radius: 6px !important; }
+    .btn-danger { background: linear-gradient(135deg, #EF4444, #DC2626) !important; border: none !important; color: #fff !important; border-radius: 6px !important; }
+ 
+    /* MODAL */
+    .modal-content { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 14px !important; }
+    .modal-header.bg-primary { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; }
+    .modal-header.bg-danger { background: linear-gradient(135deg, #EF4444, #DC2626) !important; }
+    .modal-body { background: transparent !important; color: #C8D7FF !important; }
+    .modal-footer { background: rgba(255,255,255,0.02) !important; border-top: 1px solid var(--border) !important; }
+ 
+    /* ALERTAS */
+    .alert-success { background: rgba(16,185,129,0.1) !important; border: none !important; border-left: 4px solid #10B981 !important; color: #6EE7B7 !important; border-radius: 10px !important; }
+    .alert-danger { background: rgba(239,68,68,0.08) !important; border: none !important; border-left: 4px solid #EF4444 !important; color: #FCA5A5 !important; border-radius: 10px !important; }
+ 
+    /* PAGINACIÓN */
+    .pagination .page-link { background: rgba(255,255,255,0.05) !important; border-color: var(--border) !important; color: var(--blue) !important; border-radius: 6px !important; margin: 0 2px !important; }
+    .pagination .page-item.active .page-link { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; border-color: transparent !important; color: #fff !important; }
+ 
+    /* FOOTER */
+    .main-footer { background: var(--dark2) !important; border-top: 1px solid var(--border) !important; color: var(--muted) !important; }
 </style>
 @stop
-
+ 
 @section('content')
-
+ 
 {{-- Alertas del Sistema --}}
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -61,14 +134,14 @@
         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
     </div>
 @endif
-
+ 
 @if(session('error'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="fas fa-exclamation-circle mr-1"></i> {{ session('error') }}
         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
     </div>
 @endif
-
+ 
 @if($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <ul class="mb-0">
@@ -79,7 +152,7 @@
         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
     </div>
 @endif
-
+ 
 {{-- Tabla Principal --}}
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -150,12 +223,12 @@
         </div>
     @endif
 </div>
-
+ 
 {{-- Modal Crear Guía --}}
 <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-
+ 
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="modalCrearLabel">
                     <i class="fas fa-plus-circle mr-1"></i> Nueva Guía
@@ -164,12 +237,12 @@
                     <span>&times;</span>
                 </button>
             </div>
-
+ 
             <form action="{{ route('admin.guia.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-
+ 
                         {{-- Número de guía --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -196,7 +269,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo números enteros positivos.</small>
                             </div>
                         </div>
-
+ 
                         {{-- Fecha de admisión --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -220,7 +293,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>No puede ser una fecha futura.</small>
                             </div>
                         </div>
-
+ 
                         {{-- Cliente --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -249,7 +322,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el cliente asociado.</small>
                             </div>
                         </div>
-
+ 
                         {{-- Tipo de Entrega --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -278,7 +351,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Seleccione el tipo de entrega.</small>
                             </div>
                         </div>
-
+ 
                         {{-- Volumen --}}
                         <div class="col-md-4">
                             <div class="form-group">
@@ -306,7 +379,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Número positivo. Ej: 1.50</small>
                             </div>
                         </div>
-
+ 
                         {{-- Peso --}}
                         <div class="col-md-4">
                             <div class="form-group">
@@ -334,7 +407,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Número positivo. Ej: 10.50</small>
                             </div>
                         </div>
-
+ 
                         {{-- Unidades --}}
                         <div class="col-md-4">
                             <div class="form-group">
@@ -361,7 +434,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Solo enteros positivos. Ej: 5</small>
                             </div>
                         </div>
-
+ 
                         {{-- Precio --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -389,7 +462,7 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Valor positivo en pesos.</small>
                             </div>
                         </div>
-
+ 
                         {{-- Observación --}}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -415,10 +488,10 @@
                                 <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i>Opcional. <span id="obs-count-modal">0</span>/255 caract.</small>
                             </div>
                         </div>
-
+ 
                     </div>
                 </div>
-
+ 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         <i class="fas fa-times mr-1"></i> Cancelar
@@ -428,11 +501,11 @@
                     </button>
                 </div>
             </form>
-
+ 
         </div>
     </div>
 </div>
-
+ 
 {{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -451,21 +524,21 @@
         </div>
     </div>
 </div>
-
+ 
 @stop
-
+ 
 @push('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('m_fecha_admision').setAttribute('max', hoy);
-
+ 
     // Filtrar solo números enteros
     ['m_num_guias', 'm_unidades'].forEach(function(id) {
         document.getElementById(id).addEventListener('input', function() {
             this.value = this.value.replace(/\D/g, '');
         });
     });
-
+ 
     // Contador de texto dinámico
     const obsModal = document.getElementById('m_observacion');
     const obsCountModal = document.getElementById('obs-count-modal');
@@ -474,7 +547,7 @@
             obsCountModal.textContent = this.value.length;
         });
     }
-
+ 
     // Scripts para el modal de eliminación
     let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
@@ -484,14 +557,30 @@
             $('#modalEliminar').modal('show');
         });
     });
-
+ 
     document.getElementById('btnConfirmarEliminar').addEventListener('click', function() {
         if(formEliminar) formEliminar.submit();
     });
-
+ 
     // Reabrir modal en caso de error de validación
     @if($errors->any())
         $(document).ready(function() { $('#modalCrear').modal('show'); });
     @endif
+ 
+    // Logo sidebar
+    document.addEventListener("DOMContentLoaded", function() {
+        const brandLink = document.querySelector(".brand-link");
+        if (brandLink) {
+            brandLink.innerHTML = `
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <img src="{{ asset('images/logo-carga.png') }}" alt="Logo" style="width:38px;height:auto;object-fit:contain;">
+                    <div style="display:flex;flex-direction:column;line-height:1.2;">
+                        <span style="color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.3px;text-transform:uppercase;">Carga y Logística</span>
+                        <span style="color:rgba(255,255,255,0.4);font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:9px;letter-spacing:0.8px;text-transform:uppercase;">Tolima</span>
+                    </div>
+                </div>
+            `;
+        }
+    });
 </script>
 @endpush

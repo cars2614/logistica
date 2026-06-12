@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class CiudadController extends Controller
+class CiudadController extends Controller 
 {
     /**
      * Muestra la lista de ciudades.

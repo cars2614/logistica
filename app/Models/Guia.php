@@ -13,16 +13,18 @@ class Guia extends Model
     protected $primaryKey = 'id'; 
 
     protected $fillable = [
-        'num_guias',
-        'volumen',
-        'peso',
-        'precio',
-        'observacion',
-        'fecha_admision',
-        'unidades',
+        'id',
+        'id_tipo_entrega',
         'id_cliente_origen',
         'id_cliente_destino',
-        'id_tipo_entrega',
+        'unidades',
+        'peso',
+        'largo',
+        'ancho',
+        'alto',
+        'precio_envio',
+        'valor_declarado',
+        'observacion',
     ];
 
     // Relación clave: Vincula la guía con el cliente que envía

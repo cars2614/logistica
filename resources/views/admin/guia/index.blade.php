@@ -169,13 +169,13 @@
             </div>
         </div>
 
-
-        {{-- @if ($guias->hasPages())
+{{-- 
+         @if ($guias->hasPages())
             <div class="card-footer">
                 {{ $guias->links() }}
             </div>
-        @endif --}}
-
+        @endif
+ --}}
 
     </div>
 

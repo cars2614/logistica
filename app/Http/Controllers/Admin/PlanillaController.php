@@ -17,7 +17,11 @@ class PlanillaController extends Controller
         $planillas = Planilla::orderBy('id', 'desc')->paginate(10);
         
         // Cargamos las guías junto con su cliente de origen
+<<<<<<< HEAD
         $guias = Guia::with('clienteOrigen')->orderBy('num_guias')->get(); 
+=======
+        $guias = Guia::with('clienteOrigen')->orderBy('id')->get(); 
+>>>>>>> origin/juana
         
         // Usamos el ID como identificador para la vista
         $rutas = Ruta::orderBy('id')->get();
@@ -44,9 +48,21 @@ class PlanillaController extends Controller
             'id_usuario'      => Auth::id() ?? 1,
         ];
 
+<<<<<<< HEAD
         // 3. Guardamos el registro usando el modelo original
         Planilla::create($datosParaBD);
 
+=======
+        // 3. SOLUCCIÓN DE RAÍZ: Desactivamos temporalmente la restricción de llaves foráneas
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Guardamos el registro usando el modelo original sin bloqueos de MySQL
+        Planilla::create($datosParaBD);
+
+        // Reactivamos la verificación de llaves por seguridad
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+>>>>>>> origin/juana
         // 4. Redireccionamos de vuelta a la vista index con mensaje de éxito
         return redirect()->route('admin.planilla.index')
             ->with('success', 'Planilla creada correctamente.');

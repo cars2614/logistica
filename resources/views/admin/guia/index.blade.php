@@ -51,6 +51,7 @@
             margin-top: 0.3rem !important;
             display: block !important;
         }
+<<<<<<< HEAD
 
         /* Select2 CSS Bootstrap 4 Theme */
         .select2-container--bootstrap4 .select2-selection--single {
@@ -60,6 +61,9 @@
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+=======
+    </style>
+>>>>>>> origin/juana
 @stop
 
 @section('content')
@@ -116,7 +120,11 @@
                             <th>Alto</th>                              
                             <th>Precio Envio</th>
                             <th>Precio Declarado</th>                            
+<<<<<<< HEAD
                             <th>Repartidor</th>
+=======
+                            
+>>>>>>> origin/juana
                             <th>Observación</th>
                             <th class="text-center">Acciones</th>
                         </tr>
@@ -143,7 +151,11 @@
                                 <td>{{ $guia->precio_envio }}</td>
                                 <td>{{ $guia->valor_declarado }}</td>
                                 
+<<<<<<< HEAD
                                 <td>{{ $guia->repartidor->name ?? 'Sin asignar' }}</td>
+=======
+
+>>>>>>> origin/juana
                                 <td>{{ $guia->observacion ?? '—' }}</td>
 
                                 <td class="text-center">
@@ -151,6 +163,13 @@
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
+<<<<<<< HEAD
+=======
+
+                                    <a href="{{ route('tracking.show', $guia->id) }}" class="btn btn-info btn-xs" title="Ver Tracking">
+    <i class="fas fa-satellite-dish"></i>
+</a>
+>>>>>>> origin/juana
 {{-- 
                                     <form action="{{ route('admin.guia.destroy', $guia->id) }}" method="POST"
                                         class="d-inline form-eliminar">
@@ -177,6 +196,7 @@
             </div>
         </div>
 
+<<<<<<< HEAD
 {{-- 
          @if ($guias->hasPages())
             <div class="card-footer">
@@ -184,6 +204,15 @@
             </div>
         @endif
  --}}
+=======
+
+        {{-- @if ($guias->hasPages())
+            <div class="card-footer">
+                {{ $guias->links() }}
+            </div>
+        @endif --}}
+
+>>>>>>> origin/juana
 
     </div>
 
@@ -226,6 +255,7 @@
                             </div>
 
 
+<<<<<<< HEAD
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Repartidor Asignado (Opcional)</label>
@@ -240,6 +270,8 @@
                                 </div>
                             </div>
 
+=======
+>>>>>>> origin/juana
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Cliente Origen</label>
@@ -399,6 +431,7 @@
 @stop
 
 @push('js')
+<<<<<<< HEAD
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -412,6 +445,9 @@
             });
         });
 
+=======
+    <script>
+>>>>>>> origin/juana
         const hoy = new Date().toISOString().split('T')[0];
         document.getElementById('m_fecha_admision').setAttribute('max', hoy);
 

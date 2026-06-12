@@ -420,9 +420,15 @@ return [
             'icon'    => 'fas fa-fw fa-cogs',
             'submenu' => [
                 [
+<<<<<<< HEAD
                     'text' => 'Registrar Repartidor',
                     'url'  => 'admin/repartidores/create',
                     'icon' => 'fas fa-fw fa-motorcycle',
+=======
+                    'text' => 'Roles',
+                    'url'  => 'admin/rol',
+                    'icon' => 'fas fa-fw fa-user-shield',
+>>>>>>> origin/juana
                 ],
                 [
                     'text' => 'Tipos de Entrega',

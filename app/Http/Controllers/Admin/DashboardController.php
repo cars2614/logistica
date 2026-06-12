@@ -51,8 +51,22 @@ class DashboardController extends Controller
             ->get();
 
 
+<<<<<<< HEAD
         $ultimasGuias = \App\Models\Guia::with(['clienteOrigen', 'tipoEntrega'])
             ->orderByDesc('created_at')
+=======
+        // ── Últimas 8 guías registradas ────────────────────────────
+        $ultimasGuias = DB::table('guias')
+            ->join('clientes', 'guias.id_cliente_destino', '=', 'clientes.id')
+            ->join('tipo_entregas', 'guias.id_tipo_entrega', '=', 'tipo_entregas.id')
+            ->select(
+                'guias.id',
+                'clientes.nombre as cliente',
+                'tipo_entregas.nombre as estado',
+                'guias.created_at as fecha_admision'
+            )
+            ->orderByDesc('guias.created_at')
+>>>>>>> origin/juana
             ->limit(8)
             ->get();
 
@@ -68,4 +82,8 @@ class DashboardController extends Controller
             'ultimasGuias'
         ));
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/juana

@@ -7,11 +7,14 @@ use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\EstadoGuia;
 use App\Models\TipoEntrega;
+<<<<<<< HEAD
 use App\Models\Rol;
 use App\Models\TipoVehiculo;
 use App\Models\Vehiculo;
 use App\Models\Usuario;
 
+=======
+>>>>>>> origin/juana
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -1384,6 +1387,7 @@ class DatabaseSeeder extends Seeder
 
 
 
+<<<<<<< HEAD
         //*******************  ROL ****************** */
 
         $rol1 = new Rol();
@@ -1490,6 +1494,9 @@ class DatabaseSeeder extends Seeder
         $usuario1->created_at = "2026-02-02 01:13:24";
         $usuario1->updated_at = "2026-02-02 01:13:24";
         $usuario1->save();
+=======
+        //*******************   ****************** */
+>>>>>>> origin/juana
 
 
 

@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Guia;
 use App\Models\Cliente;
 use App\Models\TipoEntrega;
+<<<<<<< HEAD
 use App\Models\User;
+=======
+>>>>>>> origin/juana
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -28,11 +31,16 @@ class GuiaController extends Controller
         // 3. Traemos los tipos de entrega por si tu formulario los necesita
         $tipoEntregas = TipoEntrega::all();
 
+<<<<<<< HEAD
         // 4. Traemos los repartidores
         $repartidores = User::whereHas('rol', function($q) { $q->where('nombreRol', 'Repartidor'); })->get();
 
         // 5. Enviamos todas las variables juntas a la vista
         return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas', 'repartidores'));
+=======
+        // 4. Enviamos todas las variables juntas a la vista
+        return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas'));
+>>>>>>> origin/juana
     }
 
     public function store(Request $request)
@@ -53,7 +61,10 @@ class GuiaController extends Controller
             'valor_declarado'     => 'required|numeric',
 
             'observacion'         => 'nullable|string|max:255',
+<<<<<<< HEAD
             'id_repartidor'       => 'nullable|exists:users,id',
+=======
+>>>>>>> origin/juana
         ]);
 
         // 2. Creamos la guía mapeando los inputs a las columnas reales de la BD
@@ -70,7 +81,10 @@ class GuiaController extends Controller
             'precio_envio'       => $request->precio_envio,
             'valor_declarado'    => $request->valor_declarado,
             'observacion'        => $request->observacion ?? 'Ninguna',
+<<<<<<< HEAD
             'id_repartidor'      => $request->id_repartidor,
+=======
+>>>>>>> origin/juana
 
 
 
@@ -79,6 +93,7 @@ class GuiaController extends Controller
         // 3. Redireccionamos con mensaje de éxito al listado
         return redirect()->route('admin.guia.index')->with('success', 'Guía creada correctamente.');
     }
+<<<<<<< HEAD
 
     public function edit($id)
     {
@@ -156,4 +171,6 @@ class GuiaController extends Controller
 
 
 
+=======
+>>>>>>> origin/juana
 }

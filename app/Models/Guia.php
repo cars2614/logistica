@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+<<<<<<< HEAD
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guia extends Model
@@ -30,6 +31,27 @@ class Guia extends Model
     ];
 
     // Relación clave: Vincula la guía con el cliente que envía
+=======
+
+class Guia extends Model
+{
+    use HasFactory;
+
+    protected $table      = 'guias';
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'volumen', 'peso', 'precio', 'observacion',
+        'fecha_admision', 'unidades',
+        'id_cliente_origen', 'id_cliente_destino', 'id_tipo_entrega',
+    ];
+
+    public function estados()
+    {
+        return $this->hasMany(EstadoGuia::class, 'id_guia', 'id');
+    }
+
+>>>>>>> origin/juana
     public function clienteOrigen()
     {
         return $this->belongsTo(Cliente::class, 'id_cliente_origen');
@@ -44,6 +66,7 @@ class Guia extends Model
     {
         return $this->belongsTo(TipoEntrega::class, 'id_tipo_entrega');
     }
+<<<<<<< HEAD
 
     public function estados()
     {
@@ -64,4 +87,6 @@ class Guia extends Model
     {
         return $this->belongsTo(User::class, 'id_repartidor');
     }
+=======
+>>>>>>> origin/juana
 }

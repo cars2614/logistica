@@ -7,6 +7,11 @@ use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\EstadoGuia;
 use App\Models\TipoEntrega;
+use App\Models\Rol;
+use App\Models\TipoVehiculo;
+use App\Models\Vehiculo;
+use App\Models\Usuario;
+
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -1379,7 +1384,112 @@ class DatabaseSeeder extends Seeder
 
 
 
-        //*******************   ****************** */
+        //*******************  ROL ****************** */
+
+        $rol1 = new Rol();
+
+        $rol1->nombreRol = "Super Administrador";        
+        $rol1->created_at = "2026-02-02 01:13:24";
+        $rol1->updated_at = "2026-02-02 01:13:24";
+        $rol1->save();
+
+
+        $rol2 = new Rol();
+
+        $rol2->nombreRol = "Administrador";
+        $rol2->created_at = "2026-02-02 01:13:24";
+        $rol2->updated_at = "2026-02-02 01:13:24";
+        $rol2->save();
+
+        $rol3 = new Rol();
+
+        $rol3->nombreRol = "Auxiliar Administrativo";
+        $rol3->created_at = "2026-02-02 01:13:24";
+        $rol3->updated_at = "2026-02-02 01:13:24";
+        $rol3->save();
+
+        $rol4 = new Rol();
+
+        $rol4->nombreRol = "Mensajero";
+        $rol4->created_at = "2026-02-02 01:13:24";
+        $rol4->updated_at = "2026-02-02 01:13:24";
+        $rol4->save();
+
+
+
+        //******************* TIPO VEHICULO  ******************* */
+
+        $tipoVehiculo1 = new TipoVehiculo();
+
+        $tipoVehiculo1->nombre = "Carro";
+        $tipoVehiculo1->descripcion = "carro particular de 4 puertas";
+        $tipoVehiculo1->created_at = "2026-02-02 01:13:24";
+        $tipoVehiculo1->updated_at = "2026-02-02 01:13:24";
+        $tipoVehiculo1->save();
+
+        $tipoVehiculo2 = new TipoVehiculo();
+
+        $tipoVehiculo2->nombre = "Moto";
+        $tipoVehiculo2->descripcion = "Motocicleta de reparto ágil para entregas rápidas";
+        $tipoVehiculo2->created_at = "2026-02-02 01:13:24";
+        $tipoVehiculo2->updated_at = "2026-02-02 01:13:24";
+        $tipoVehiculo2->save();
+
+
+
+        $tipoVehiculo3 = new TipoVehiculo();
+
+        $tipoVehiculo3->nombre = "Camion";
+        $tipoVehiculo3->descripcion = "Vehículo de carga para entregas a larga distancia";
+        $tipoVehiculo3->created_at = "2026-02-02 01:13:24";
+        $tipoVehiculo3->updated_at = "2026-02-02 01:13:24";
+        $tipoVehiculo3->save();
+
+
+        //*******************  VEHICULO  ******************* */
+
+        $vehiculo1 = new Vehiculo();
+
+        $vehiculo1->placa = "ABC123";
+        $vehiculo1->marca = "Toyota";
+        $vehiculo1->modelo = "Corolla 2020";
+        $vehiculo1->capacidad = "500";
+        $vehiculo1->estado = "activo";
+        $vehiculo1->fecha_registro = "2026-02-02";
+        $vehiculo1->id_tipo_vehiculo = "1";       
+        $vehiculo1->created_at = "2026-02-02 01:13:24";
+        $vehiculo1->updated_at = "2026-02-02 01:13:24";
+        $vehiculo1->save();
+
+
+        $vehiculo2 = new Vehiculo();
+
+        $vehiculo2->placa = "AZZ-23H";
+        $vehiculo2->marca = "YAMAHA";
+        $vehiculo2->modelo = "XTZ 250";
+        $vehiculo2->capacidad = "100";
+        $vehiculo2->estado = "activo";
+        $vehiculo2->fecha_registro = "2026-02-02";
+        $vehiculo2->id_tipo_vehiculo = "2";
+        $vehiculo2->created_at = "2026-02-02 01:13:24";
+        $vehiculo2->updated_at = "2026-02-02 01:13:24";
+        $vehiculo2->save();
+
+
+
+        //*******************  USUARIO  ****************** */
+
+
+        $usuario1 = new Usuario();
+
+        $usuario1->nombre = "jose rodriguez";
+        $usuario1->email = "jose@example.com";
+        $usuario1->password = bcrypt("password");
+        $usuario1->id_rol = "2";
+        $usuario1->id_vehiculo = "1";
+        $usuario1->created_at = "2026-02-02 01:13:24";
+        $usuario1->updated_at = "2026-02-02 01:13:24";
+        $usuario1->save();
 
 
 

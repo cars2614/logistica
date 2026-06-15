@@ -1,44 +1,211 @@
 @extends('adminlte::page')
 
-@section('title', 'Ciudades')
+@section('title', 'Ciudades — Carga y Logística Tolima')
+
+@section('css')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .content-wrapper {
+            background-color: #0A0F1E !important;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .content-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content-wrapper::after {
+            content: "";
+            position: absolute;
+            width: 600px; height: 600px;
+            top: -100px; right: -100px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .premium-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-dashboard-container {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .dashboard-title-main {
+            font-size: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-title-main i {
+            color: #0EA5E9;
+        }
+
+        .dashboard-date-badge {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .dashboard-date-badge i {
+            color: #6366F1;
+        }
+
+        .card-custom-premium {
+            background: rgba(13, 19, 35, 0.65) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header-premium {
+            padding: 20px 24px !important;
+            background: transparent !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title-premium {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control-premium {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+            border-radius: 8px !important;
+            height: calc(2.25rem + 2px) !important;
+        }
+
+        .form-control-premium:focus {
+            border-color: #0EA5E9 !important;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+        }
+
+        .input-group-text-premium {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+            border-radius: 8px 0 0 8px !important;
+        }
+
+        .input-group-premium .form-control-premium {
+            border-radius: 0 8px 8px 0 !important;
+            border-left: none !important;
+        }
+
+        .table-premium th {
+            background-color: rgba(255, 255, 255, 0.01) !important;
+            color: #94A3B8 !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+            padding: 15px !important;
+        }
+
+        .table-premium td {
+            padding: 15px !important;
+            vertical-align: middle !important;
+            color: #E2E8F0 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+        }
+
+        .table-premium tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+        }
+
+        .badge-premium {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-premium-blue {
+            background: rgba(14, 165, 233, 0.12);
+            color: #38BDF8;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-primary-premium {
+            background: #0EA5E9 !important;
+            border: none !important;
+            color: #fff !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-weight: 600 !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-primary-premium:hover {
+            background: #0284C7 !important;
+            transform: translateY(-1px) !important;
+        }
+    </style>
+@stop
 
 @section('content_header')
-    <div class="container-fluid pt-3">
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
-            <h1 class="m-0 font-weight-bold text-secondary">
-                <i class="fas fa-city text-primary mr-2"></i>Gestión de Ciudades
-            </h1>
-            <ol class="breadcrumb m-0 bg-transparent p-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-                <li class="breadcrumb-item active">Ciudades</li>
-            </ol>
-        </div>
+    <div class="d-flex justify-content-between align-items-center header-dashboard-container">
+        <h1 class="text-white font-weight-bold dashboard-title-main m-0">
+            <i class="fas fa-city mr-2"></i>Gestión de Ciudades
+        </h1>
+        <span class="dashboard-date-badge">
+            <i class="fa fa-calendar-alt mr-1"></i> Hoy: {{ \Carbon\Carbon::now()->format('d/m/Y') }}
+        </span>
     </div>
-@endsection
+@stop
 
 @section('content')
-<div class="container-fluid pb-4">
+<div class="container-fluid pb-4 premium-container">
 
-    {{-- Alertas de sesión automáticas y estilizadas --}}
+    {{-- Alertas de sesión --}}
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.25) !important; color: #34D399;" role="alert">
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle mr-2 fa-lg"></i>
                 <div>{{ session('success') }}</div>
             </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-white">&times;</span>
+                <span aria-hidden="true" style="color: #34D399;">&times;</span>
             </button>
         </div>
     @endif
 
-    <div class="row mt-3">
+    <div class="row">
         {{-- ===================== FORMULARIO (CREAR / EDITAR) ===================== --}}
-        <div class="col-md-5 mb-4">
-            <div class="card card-outline {{ isset($ciudad) ? 'card-warning' : 'card-primary' }} shadow-sm border-0">
-                <div class="card-header bg-white py-3">
-                    <h3 class="card-title font-weight-bold text-dark mb-0">
-                        <i class="fas {{ isset($ciudad) ? 'fa-edit text-warning' : 'fa-plus-circle text-primary' }} mr-2"></i>
+        <div class="col-md-5">
+            <div class="card-custom-premium">
+                <div class="card-header-premium">
+                    <h3 class="card-title-premium">
+                        <i class="fas {{ isset($ciudad) ? 'fa-edit text-warning' : 'fa-plus-circle text-info' }} mr-2"></i>
                         {{ isset($ciudad) ? 'Editar Ciudad' : 'Nueva Ciudad' }}
                     </h3>
                 </div>
@@ -47,16 +214,16 @@
                     @csrf
                     @if(isset($ciudad)) @method('PUT') @endif
 
-                    <div class="card-body py-3">
+                    <div class="card-body p-4">
                         {{-- Campo Nombre --}}
                         <div class="form-group mb-3">
-                            <label for="nombre" class="font-weight-bold text-secondary mb-1">Nombre <span class="text-danger">*</span></label>
-                            <div class="input-group input-group-sm">
+                            <label for="nombre" class="font-weight-bold text-white mb-1">Nombre <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-building"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-building"></i></span>
                                 </div>
                                 <input type="text" name="nombre" id="nombre" 
-                                    class="form-control border-left-0 @error('nombre') is-invalid @enderror" 
+                                    class="form-control form-control-premium @error('nombre') is-invalid @enderror" 
                                     value="{{ old('nombre', $ciudad->nombre ?? '') }}" 
                                     placeholder="Ej: Bogotá, Medellín..." required>
                                 @error('nombre') 
@@ -67,13 +234,13 @@
 
                         {{-- Campo Código Postal --}}
                         <div class="form-group mb-2">
-                            <label for="codigo_postal" class="font-weight-bold text-secondary mb-1">Código Postal <span class="text-danger">*</span></label>
-                            <div class="input-group input-group-sm">
+                            <label for="codigo_postal" class="font-weight-bold text-white mb-1">Código Postal <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-mail-bulk"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-mail-bulk"></i></span>
                                 </div>
                                 <input type="text" name="codigo_postal" id="codigo_postal" 
-                                    class="form-control border-left-0 @error('codigo_postal') is-invalid @enderror" 
+                                    class="form-control form-control-premium @error('codigo_postal') is-invalid @enderror" 
                                     value="{{ old('codigo_postal', $ciudad->codigo_postal ?? '') }}" 
                                     placeholder="Ej: 110111" required>
                                 @error('codigo_postal') 
@@ -83,12 +250,12 @@
                         </div>
                     </div>
 
-                    <div class="card-footer bg-light border-top-0 d-flex flex-column p-3" style="gap: 8px;">
-                        <button type="submit" class="btn {{ isset($ciudad) ? 'btn-warning text-dark' : 'btn-primary' }} btn-block font-weight-bold shadow-sm py-2">
+                    <div class="card-footer d-flex flex-column p-4" style="gap: 8px; background: transparent; border-top: 1px solid rgba(255,255,255,0.05);">
+                        <button type="submit" class="btn btn-primary-premium btn-block">
                             <i class="fas fa-save mr-2"></i> {{ isset($ciudad) ? 'Actualizar Ciudad' : 'Guardar Ciudad' }}
                         </button>
                         
-                        <a href="{{ route('admin.ciudad.index') }}" class="btn btn-outline-secondary btn-block m-0 font-weight-bold py-2">
+                        <a href="{{ route('admin.ciudad.index') }}" class="btn btn-outline-light btn-block m-0 font-weight-bold" style="border-radius: 8px;">
                             <i class="fas fa-undo mr-2"></i> {{ isset($ciudad) ? 'Cancelar Edición' : 'Limpiar Campos' }}
                         </a>
                     </div>
@@ -98,37 +265,37 @@
 
         {{-- ===================== TABLA DE LISTADO ===================== --}}
         <div class="col-md-7">
-            <div class="card card-outline card-primary shadow-sm border-0">
-                <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
-                    <h3 class="card-title font-weight-bold text-dark mb-0">
-                        <i class="fas fa-list text-primary mr-2"></i>Listado de Ciudades
+            <div class="card-custom-premium">
+                <div class="card-header-premium">
+                    <h3 class="card-title-premium">
+                        <i class="fas fa-list mr-2" style="color: #0EA5E9;"></i>Listado de Ciudades
                     </h3>
-                    <span class="badge badge-pill badge-primary px-3 py-2 font-weight-bold shadow-sm">
+                    <span class="badge-premium badge-premium-blue">
                         Total: {{ $ciudades->count() }}
                     </span>
                 </div>
                 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="bg-light border-bottom text-secondary">
+                        <table class="table table-hover table-premium mb-0">
+                            <thead>
                                 <tr>
-                                    <th width="12%" class="text-center font-weight-bold border-0">#</th>
-                                    <th width="48%" class="font-weight-bold border-0">Nombre</th>
-                                    <th width="25%" class="font-weight-bold border-0">Cod. Postal</th>
-                                    <th width="15%" class="text-center font-weight-bold border-0">Acciones</th>
+                                    <th width="12%" class="text-center">#</th>
+                                    <th width="48%">Nombre</th>
+                                    <th width="25%">Cod. Postal</th>
+                                    <th width="15%" class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($ciudades as $item)
-                                    <tr class="align-middle">
-                                        <td class="text-center align-middle font-weight-bold text-muted">{{ $loop->iteration }}</td>
-                                        <td class="align-middle text-dark font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
-                                            <i class="fas fa-map-marker-alt text-muted mr-2" style="opacity: 0.6;"></i>{{ $item->nombre }}
+                                    <tr>
+                                        <td class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">{{ $loop->iteration }}</td>
+                                        <td class="align-middle text-white font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
+                                            <i class="fas fa-map-marker-alt mr-2" style="color: #0EA5E9; opacity: 0.8;"></i>{{ $item->nombre }}
                                         </td>
                                         <td class="align-middle">
-                                            <span class="badge badge-light border px-2 py-1 text-secondary font-weight-bold" style="font-size: 0.8rem;">
-                                                <i class="fas fa-hashtag text-muted mr-1" style="font-size: 0.7rem;"></i>{{ $item->codigo_postal }}
+                                            <span class="badge-premium badge-premium-blue">
+                                                <i class="fas fa-hashtag mr-1" style="font-size: 0.7rem;"></i>{{ $item->codigo_postal }}
                                             </span>
                                         </td>
                                         <td class="text-center align-middle">
@@ -155,8 +322,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted py-5 bg-white">
-                                            <i class="fas fa-folder-open fa-3x mb-3 text-muted" style="opacity: 0.5;"></i>
+                                        <td colspan="4" class="text-center text-muted py-5" style="background: transparent;">
+                                            <i class="fas fa-folder-open fa-3x mb-3 text-muted" style="opacity: 0.3;"></i>
                                             <p class="mb-0 font-weight-bold">No hay ciudades registradas en el sistema.</p>
                                         </td>
                                     </tr>
@@ -171,35 +338,10 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    /* Transición suave para filas */
-    .table-hover tbody tr {
-        transition: background-color 0.2s ease;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.02) !important;
-    }
-    
-    /* Efecto unificado para los inputs con prefijos */
-    .input-group-text {
-        border-right: none !important;
-    }
-    .form-control {
-        border-left: none !important;
-    }
-    .form-control:focus {
-        border-color: #ced4da !important;
-        box-shadow: none !important;
-    }
-</style>
-@endsection
-
-@push('js')
+@section('js')
 <script>
-    // Desvanecer alertas de éxito automáticamente en 4 segundos
-    setTimeout(function () {
+    setTimeout(function() {
         $('.alert-dismissible').fadeOut('slow');
     }, 4000);
 </script>
-@endpush
+@stop

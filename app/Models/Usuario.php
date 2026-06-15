@@ -1,10 +1,3 @@
 <?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Usuario extends Model
-{
-    //
-}
+// Este archivo fue marcado para su eliminación durante la refactorización a Spatie.
+// Puede ser eliminado del disco de forma segura.

@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Guia;
 use App\Models\Cliente;
 use App\Models\TipoEntrega;
-<<<<<<< HEAD
 use App\Models\User;
-=======
->>>>>>> origin/juana
+use App\Models\EstadoGuia;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -19,11 +17,7 @@ class GuiaController extends Controller
     public function index()
     {
         // 1. Carga las guías con paginación
-        /* $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->paginate(10); */
-
         $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->get();
-
-        /* $guias = Guia::with(['clienteOrigen', 'clienteDestino'])->get(); */
  
         // 2. Traemos todos los clientes de la BD para el formulario modal
         $clientes = Cliente::all();
@@ -31,16 +25,11 @@ class GuiaController extends Controller
         // 3. Traemos los tipos de entrega por si tu formulario los necesita
         $tipoEntregas = TipoEntrega::all();
 
-<<<<<<< HEAD
         // 4. Traemos los repartidores
-        $repartidores = User::whereHas('rol', function($q) { $q->where('nombreRol', 'Repartidor'); })->get();
+        $repartidores = User::role('Repartidor')->get();
 
         // 5. Enviamos todas las variables juntas a la vista
         return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas', 'repartidores'));
-=======
-        // 4. Enviamos todas las variables juntas a la vista
-        return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas'));
->>>>>>> origin/juana
     }
 
     public function store(Request $request)
@@ -61,10 +50,7 @@ class GuiaController extends Controller
             'valor_declarado'     => 'required|numeric',
 
             'observacion'         => 'nullable|string|max:255',
-<<<<<<< HEAD
             'id_repartidor'       => 'nullable|exists:users,id',
-=======
->>>>>>> origin/juana
         ]);
 
         // 2. Creamos la guía mapeando los inputs a las columnas reales de la BD
@@ -81,19 +67,12 @@ class GuiaController extends Controller
             'precio_envio'       => $request->precio_envio,
             'valor_declarado'    => $request->valor_declarado,
             'observacion'        => $request->observacion ?? 'Ninguna',
-<<<<<<< HEAD
             'id_repartidor'      => $request->id_repartidor,
-=======
->>>>>>> origin/juana
-
-
-
         ]);
 
         // 3. Redireccionamos con mensaje de éxito al listado
         return redirect()->route('admin.guia.index')->with('success', 'Guía creada correctamente.');
     }
-<<<<<<< HEAD
 
     public function edit($id)
     {
@@ -104,10 +83,10 @@ class GuiaController extends Controller
         $clientes = Cliente::all();
 
         // 3. Traemos TODOS los tipos de entrega para el select correspondiente
-        $tipoEntregas = TipoEntrega::all(); // Cambia 'TipoEntrega' por el nombre real de tu modelo
+        $tipoEntregas = TipoEntrega::all();
 
         // 4. Traemos los repartidores
-        $repartidores = User::whereHas('rol', function($q) { $q->where('nombreRol', 'Repartidor'); })->get();
+        $repartidores = User::role('Repartidor')->get();
 
         return view('admin.guia.edit', compact('guia', 'clientes', 'tipoEntregas', 'repartidores'));
     }
@@ -164,13 +143,29 @@ class GuiaController extends Controller
             ->with('success', 'Guía actualizada correctamente.');
     }
 
+    public function actualizarEstado(Request $request, $id)
+    {
+        $guia = Guia::findOrFail($id);
 
+        $request->validate([
+            'estado' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:255',
+        ]);
 
+        try {
+            DB::transaction(function () use ($request, $guia) {
+                EstadoGuia::create([
+                    'id_guia' => $guia->id,
+                    'estado' => $request->estado,
+                    'descripcion' => $request->descripcion,
+                    'id_usuario' => auth()->id(),
+                    'fecha_estado' => now(),
+                ]);
+            });
 
-
-
-
-
-=======
->>>>>>> origin/juana
+            return redirect()->back()->with('success', 'Estado actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error al actualizar el estado: ' . $e->getMessage());
+        }
+    }
 }

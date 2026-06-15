@@ -13,34 +13,22 @@ class EstadoGuia extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-<<<<<<< HEAD
         'fecha_estado',
         'estado',
         'descripcion',
         'id_guia',
         'id_usuario',
-=======
-        'fecha_estado', 'estado', 'descripcion',
-        'id_guia', 'guia_id',
-        'latitud', 'longitud',
->>>>>>> origin/juana
+        'latitud',
+        'longitud',
     ];
 
     public function guia()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(Guia::class, 'id_guia', 'id_guias');
-=======
         return $this->belongsTo(Guia::class, 'id_guia', 'id');
->>>>>>> origin/juana
     }
 
     public function usuario()
     {
-<<<<<<< HEAD
         return $this->belongsTo(User::class, 'id_usuario');
-=======
-        return $this->belongsTo(Usuario::class, 'id_usuario');
->>>>>>> origin/juana
     }
 }

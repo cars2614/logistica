@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Carga y Logística Tolima',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => '<span class="brand-text-container" style="display: flex; flex-direction: column; line-height: 1.2; text-align: left; margin-left: 5px;"><span class="brand-title" style="color: #ffffff; font-family: \'Inter\', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase;">Carga y Logística</span><span class="brand-subtitle" style="color: rgba(255, 255, 255, 0.4); font-family: \'Inter\', sans-serif; font-weight: 500; font-size: 9px; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 1px;">Tolima</span></span>',
+    'logo_img' => 'images/logo-carga.png',
+    'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'Carga y Logística Tolima Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -113,11 +113,11 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'images/logo-carga.png',
+            'alt' => 'Carga y Logística Tolima',
             'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'width' => 80,
+            'height' => 80,
         ],
     ],
 
@@ -198,7 +198,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -291,7 +291,7 @@ return [
             [
                 'type'     => 'css',
                 'asset'    => true,
-                'location' => 'css/resposive.css',
+                'location' => 'css/responsive.css',
             ],
         ],
         'js' => [],
@@ -402,11 +402,6 @@ return [
                     'url'  => 'admin/planilla',
                     'icon' => 'fas fa-fw fa-file-alt',
                 ],
-                [
-                    'text' => 'Estados de Guía',
-                    'url'  => 'admin/estado-guia',
-                    'icon' => 'fas fa-fw fa-clipboard-list',
-                ],
             ],
         ],
 
@@ -420,15 +415,14 @@ return [
             'icon'    => 'fas fa-fw fa-cogs',
             'submenu' => [
                 [
-<<<<<<< HEAD
                     'text' => 'Registrar Repartidor',
                     'url'  => 'admin/repartidores/create',
                     'icon' => 'fas fa-fw fa-motorcycle',
-=======
+                ],
+                [
                     'text' => 'Roles',
                     'url'  => 'admin/rol',
                     'icon' => 'fas fa-fw fa-user-shield',
->>>>>>> origin/juana
                 ],
                 [
                     'text' => 'Tipos de Entrega',

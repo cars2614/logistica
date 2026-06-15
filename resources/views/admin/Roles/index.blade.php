@@ -102,7 +102,7 @@
                             @forelse($roles as $index => $rol)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $rol->nombreRol }}</td>
+                                    <td>{{ $rol->name }}</td>
                                     <td>
                                         {{-- Editar --}}
                                         <a href="{{ route('admin.rol.edit', $rol->id) }}"

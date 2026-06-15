@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE FIXES — Carga y Logística Tolima
+   ═══════════════════════════════════════════════ */
+
+/* ── Tablas en móvil ── */
+@media (max-width: 768px) {
+
+    /* Hacer las tablas scrolleables horizontalmente */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Reducir padding de celdas en móvil */
+    .table td,
+    .table th {
+        padding: 6px 8px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    /* Botones de acción más pequeños */
+    .btn-xs {
+        padding: 2px 6px;
+        font-size: 11px;
+    }
+
+    /* Card header en móvil — apilar título y botón */
+    .card-header.d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    /* Card header en móvil — botón ancho completo */
+    .card-header .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* KPI cards en móvil — 2 columnas */
+    .small-box .inner h3 {
+        font-size: 24px;
+    }
+
+    /* Modales en móvil */
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .modal-body .row .col-md-6,
+    .modal-body .row .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Sidebar oculto por defecto en móvil */
+    .main-sidebar {
+        z-index: 1050;
+    }
+
+    /* Header navbar en móvil */
+    .main-header .navbar {
+        padding: 8px 16px;
+    }
+
+    /* Contenido principal con padding reducido */
+    .content-wrapper {
+        padding: 10px !important;
+    }
+
+    .content {
+        padding: 0 !important;
+    }
+
+    /* Gráficas en móvil — ancho completo */
+    .col-md-5,
+    .col-md-7,
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 16px;
+    }
+
+    /* Formularios en móvil */
+    .form-group label {
+        font-size: 13px;
+    }
+
+    .form-control {
+        font-size: 14px;
+    }
+
+    /* Paginación en móvil */
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .page-link {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    /* Alertas en móvil */
+    .alert {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+}
+
+/* ── Tablet (768px - 1024px) ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .table td,
+    .table th {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .modal-dialog.modal-lg {
+        max-width: 90%;
+    }
+
+    .content-wrapper {
+        padding: 15px !important;
+    }
+}
+
+/* ── Mejoras generales ── */
+
+/* Scroll suave en tablas */
+.table-responsive::-webkit-scrollbar {
+    height: 4px;
+}
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 4px;
+}
+
+/* Botones de acción con mejor spacing */
+.btn-xs + .btn-xs {
+    margin-left: 4px;
+}
+
+/* Evitar que el texto de celdas se corte feo */
+.table td {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Cards con sombra más suave */
+.card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* ═══════════════════════════════════════════════
+   ESTILOS PREMIUM GLOBALES DE MODO OSCURO (NAVBAR & SIDEBAR)
+   ═══════════════════════════════════════════════ */
+
+/* 1. Barra superior (Navbar) */
+.main-header.navbar {
+    background-color: rgba(10, 15, 30, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+.navbar-light, .navbar-white {
+    background-color: transparent !important;
+}
+.main-header.navbar .nav-link,
+.main-header.navbar .nav-link i,
+.main-header.navbar .navbar-nav .nav-item,
+.main-header.navbar span,
+.main-header.navbar a {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500;
+}
+.main-header.navbar .nav-link i,
+.main-header.navbar i[class*="fa-"] {
+    font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", "Font Awesome 5 Brands" !important;
+    font-weight: 900 !important;
+}
+.main-header.navbar .nav-link:hover,
+.main-header.navbar .nav-link:hover i {
+    color: #0EA5E9 !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px;
+}
+.main-header.navbar .dropdown-menu {
+    background-color: #131A2E !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.main-header.navbar .dropdown-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+.main-header.navbar .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #fff !important;
+}
+
+/* 2. Menú Lateral (Sidebar) - Forzado Completo del Color Oscuro */
+.main-sidebar,
+.main-sidebar .sidebar,
+.sidebar-dark-primary,
+.sidebar-dark-primary .sidebar {
+    background-color: #070B16 !important;
+    font-family: 'Inter', sans-serif !important;
+}
+.main-sidebar {
+    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Forzar fuentes en textos de la barra lateral */
+.main-sidebar .nav-link,
+.main-sidebar .brand-text,
+.main-sidebar .brand-title,
+.main-sidebar .brand-subtitle,
+.main-sidebar span,
+.main-sidebar p,
+.main-sidebar a {
+    font-family: 'Inter', sans-serif !important;
+}
+
+.brand-link {
+    background: #070B16 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 14px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    height: auto !important;
+}
+.brand-link .brand-image {
+    max-height: 40px !important;
+    width: 40px !important;
+    object-fit: contain !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    float: none !important;
+    border-radius: 0 !important;
+}
+.brand-link:hover {
+    text-decoration: none !important;
+}
+
+/* Color activo del link del menú lateral */
+.main-sidebar .nav-sidebar .nav-link.active {
+    background-color: #0EA5E9 !important;
+    color: #fff !important;
+}
+.main-sidebar .nav-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: #0EA5E9 !important;
+}
+.main-sidebar .user-panel {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.main-sidebar .brand-text-container {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+    margin-left: 5px;
+}

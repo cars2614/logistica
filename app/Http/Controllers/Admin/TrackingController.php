@@ -10,6 +10,10 @@ use Carbon\Carbon;
 
 class TrackingController extends Controller
 {
+    public function index()
+    {
+        return view('dashboard');
+    }
     // Lista oficial de estados y detalles de Carga y Logística Tolima
     private array $estadosDelSistema = [
         'En Bodega'  => ['Recibido en Oficina', 'Clasificado', 'Listo para Despacho'],

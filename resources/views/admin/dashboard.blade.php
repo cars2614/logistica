@@ -254,8 +254,6 @@
         font-size: 12px; font-weight: 500;
         background: rgba(14, 165, 233, 0.12); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.25);
     }
-<<<<<<< HEAD
-
     /* ── RESPONSIVE PARA DISPOSITIVOS MÓVILES (CELULARES) ── */
     @media (max-width: 576px) {
         .header-dashboard-container {
@@ -300,19 +298,13 @@
             padding-right: 8px;
         }
     }
-=======
->>>>>>> origin/juana
 </style>
 
 <div class="premium-dashboard">
     
     {{-- ── FILA 1: KPIs Estilo App Móvil ──────────────────── --}}
     <div class="row">
-<<<<<<< HEAD
         <div class="col-lg-3 col-sm-6 col-6">
-=======
-        <div class="col-lg-3 col-sm-6 col-12">
->>>>>>> origin/juana
             <div class="kpi-card-premium kpi-dark">
                 <div class="kpi-orb"></div>
                 <div class="kpi-icon-box"><i class="fas fa-file-alt" style="color: #0EA5E9;"></i></div>
@@ -324,11 +316,7 @@
             </div>
         </div>
 
-<<<<<<< HEAD
         <div class="col-lg-3 col-sm-6 col-6">
-=======
-        <div class="col-lg-3 col-sm-6 col-12">
->>>>>>> origin/juana
             <div class="kpi-card-premium kpi-green">
                 <div class="kpi-orb"></div>
                 <div class="kpi-icon-box"><i class="fas fa-users" style="color: #10B981;"></i></div>
@@ -340,11 +328,7 @@
             </div>
         </div>
 
-<<<<<<< HEAD
         <div class="col-lg-3 col-sm-6 col-6">
-=======
-        <div class="col-lg-3 col-sm-6 col-12">
->>>>>>> origin/juana
             <div class="kpi-card-premium kpi-purple">
                 <div class="kpi-orb"></div>
                 <div class="kpi-icon-box"><i class="fas fa-truck" style="color: #A78BFA;"></i></div>
@@ -356,11 +340,7 @@
             </div>
         </div>
 
-<<<<<<< HEAD
         <div class="col-lg-3 col-sm-6 col-6">
-=======
-        <div class="col-lg-3 col-sm-6 col-12">
->>>>>>> origin/juana
             <div class="kpi-card-premium kpi-orange">
                 <div class="kpi-orb"></div>
                 <div class="kpi-icon-box"><i class="fas fa-route" style="color: #F59E0B;"></i></div>
@@ -466,7 +446,6 @@
                             @forelse($ultimasGuias as $guia)
                                 <tr>
                                     <td><span style="color: rgba(255,255,255,0.3);">#{{ $guia->id }}</span></td>
-<<<<<<< HEAD
                                     <td><strong class="text-white">GUIA-{{ str_pad($guia->id, 5, '0', STR_PAD_LEFT) }}</strong></td>
                                     <td>{{ $guia->clienteOrigen->nombre ?? 'Sin Cliente' }}</td>
                                     <td>
@@ -475,15 +454,6 @@
                                         </span>
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($guia->created_at)->format('d/m/Y') }}</td>
-=======
-                                    <td>{{ $guia->clienteOrigen->nombre ?? 'Sin Cliente' }}</td>
-                                    <td>
-                                        <span class="badge-status-premium">
-                                            <i class="fas fa-circle mr-1" style="font-size: 7px; vertical-align: middle;"></i> {{ $guia->estado ?? 'Registrada' }}
-                                        </span>
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($guia->fecha_admision)->format('d/m/Y') }}</td>
->>>>>>> origin/juana
                                 </tr>
                             @empty
                                 <tr>

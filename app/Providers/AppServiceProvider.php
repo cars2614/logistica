@@ -2,12 +2,8 @@
 
 namespace App\Providers;
 
-<<<<<<< HEAD
 use App\Models\Guia;
 use App\Observers\GuiaObserver;
-
-=======
->>>>>>> origin/juana
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,10 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-<<<<<<< HEAD
         Guia::observe(GuiaObserver::class);
-=======
-        //
->>>>>>> origin/juana
     }
 }

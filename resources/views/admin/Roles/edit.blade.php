@@ -40,14 +40,14 @@
 
                         {{-- Nombre --}}
                         <div class="form-group">
-                            <label for="nombre">Nombre <span class="text-danger">*</span></label>
+                            <label for="nombreRol">Nombre <span class="text-danger">*</span></label>
                             <input type="text"
-                                   name="nombre"
-                                   id="nombre"
-                                   class="form-control @error('nombre') is-invalid @enderror"
+                                   name="nombreRol"
+                                   id="nombreRol"
+                                   class="form-control @error('nombreRol') is-invalid @enderror"
                                    placeholder="Ej: Administrador"
-                                   value="{{ old('nombre', $rol->nombre) }}">
-                            @error('nombre')
+                                   value="{{ old('nombreRol', $rol->name) }}">
+                            @error('nombreRol')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>

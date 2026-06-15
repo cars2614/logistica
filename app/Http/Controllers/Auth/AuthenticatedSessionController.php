@@ -28,15 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-<<<<<<< HEAD
         $user = Auth::user();
-        if ($user->rol && $user->rol->nombreRol === 'Repartidor') {
+        if ($user->hasRole('Administrador')) {
+            return redirect()->intended(route('admin.dashboard'));
+        } elseif ($user->hasRole('Repartidor')) {
             return redirect()->intended(route('repartidor.dashboard'));
         }
 
-=======
->>>>>>> origin/juana
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended(route('tracking.index'));
     }
 
     /**

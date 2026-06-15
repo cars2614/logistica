@@ -16,12 +16,10 @@ class CheckAdminRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Verificar si el usuario está autenticado y tiene rol
-        if (Auth::check() && Auth::user()->rol) {
-            $nombreRol = Auth::user()->rol->nombreRol;
-            
+        // Verificar si el usuario está autenticado y tiene permisos
+        if (Auth::check()) {
             // Permitir solo a los administradores
-            if (in_array($nombreRol, ['Administrador', 'Super Administrador'])) {
+            if (Auth::user()->hasRole('Administrador')) {
                 return $next($request);
             }
         }

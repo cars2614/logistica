@@ -44,8 +44,10 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        $user->assignRole('Cliente');
+        
         Auth::login($user);
 
-        return redirect(route('admin.dashboard'));
+        return redirect(route('tracking.index'));
     }
 }

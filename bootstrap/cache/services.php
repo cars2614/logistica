@@ -27,12 +27,15 @@
     23 => 'JeroenNoten\\LaravelAdminLte\\AdminLteServiceProvider',
     24 => 'Laravel\\Breeze\\BreezeServiceProvider',
     25 => 'Laravel\\Pail\\PailServiceProvider',
-    26 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    27 => 'Carbon\\Laravel\\ServiceProvider',
-    28 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    29 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    30 => 'Spatie\\Permission\\PermissionServiceProvider',
-    31 => 'App\\Providers\\AppServiceProvider',
+    26 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+    27 => 'Laravel\\Reverb\\ReverbServiceProvider',
+    28 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    29 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    30 => 'Carbon\\Laravel\\ServiceProvider',
+    31 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    32 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    33 => 'Spatie\\Permission\\PermissionServiceProvider',
+    34 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -48,11 +51,13 @@
     9 => 'Illuminate\\View\\ViewServiceProvider',
     10 => 'JeroenNoten\\LaravelAdminLte\\AdminLteServiceProvider',
     11 => 'Laravel\\Pail\\PailServiceProvider',
-    12 => 'Carbon\\Laravel\\ServiceProvider',
-    13 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    14 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    15 => 'Spatie\\Permission\\PermissionServiceProvider',
-    16 => 'App\\Providers\\AppServiceProvider',
+    12 => 'Laravel\\Reverb\\ReverbServiceProvider',
+    13 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    14 => 'Carbon\\Laravel\\ServiceProvider',
+    15 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    16 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    17 => 'Spatie\\Permission\\PermissionServiceProvider',
+    18 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (
@@ -214,6 +219,8 @@
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Illuminate\\Contracts\\Validation\\UncompromisedVerifier' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Laravel\\Breeze\\Console\\InstallCommand' => 'Laravel\\Breeze\\BreezeServiceProvider',
+    'Laravel\\Reverb\\ApplicationManager' => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+    'Laravel\\Reverb\\Contracts\\ApplicationProvider' => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
   'when' => 
@@ -258,6 +265,9 @@
     array (
     ),
     'Laravel\\Breeze\\BreezeServiceProvider' => 
+    array (
+    ),
+    'Laravel\\Reverb\\ApplicationManagerServiceProvider' => 
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 

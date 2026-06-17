@@ -438,7 +438,7 @@ return [
 
         [
             'text'  => 'Gestión de Repartidores',
-            'route' => 'admin.repartidor.index',
+            'route' => 'admin.repartidor.create',
             'icon'  => 'fas fa-fw fa-motorcycle',
         ],
 

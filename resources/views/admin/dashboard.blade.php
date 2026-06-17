@@ -3,303 +3,41 @@
 @section('title', 'Dashboard — Carga y Logística Tolima')
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center header-dashboard-container">
-        <h1 class="text-white font-weight-bold dashboard-title-main">
-            <i class="fas fa-tachometer-alt mr-2"></i>Panel de Control
-        </h1>
-        <span class="dashboard-date-badge">
-            <i class="fa fa-calendar-alt mr-1"></i> Hoy: {{ \Carbon\Carbon::now()->format('d/m/Y') }}
-        </span>
+    <div class="d-flex justify-content-between align-items-center header-dashboard-container flex-wrap">
+        <div>
+            <h1 class="text-white font-weight-bold dashboard-title-main m-0">
+                <i class="fas fa-tachometer-alt mr-2"></i>Panel de Control
+            </h1>
+            <span class="dashboard-date-badge d-block mt-1">
+                <i class="fa fa-calendar-alt mr-1"></i> Hoy: {{ \Carbon\Carbon::now()->format('d/m/Y') }}
+            </span>
+        </div>
+        
+        <div class="mt-3 mt-sm-0 text-right">
+            <a href="{{ route('admin.guia.index') }}" class="btn btn-info btn-sm mr-2 shadow-sm" style="border-radius: 8px; font-weight: 600; padding: 6px 14px;">
+                <i class="fas fa-list mr-1"></i> Ir a Guías
+            </a>
+            <a href="{{ route('admin.vehiculo.index') }}" class="btn btn-outline-light btn-sm shadow-sm" style="border-radius: 8px; font-weight: 600; padding: 6px 14px;">
+                <i class="fas fa-truck mr-1"></i> Flota
+            </a>
+        </div>
+    </div>
+
+    {{-- Filtros de Fecha Rápidos --}}
+    <div class="mt-3">
+        <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex gap-2">
+            <button type="submit" name="periodo" value="hoy" class="btn btn-sm {{ $filtroActual == 'hoy' ? 'btn-primary' : 'btn-outline-secondary text-white' }}" style="border-radius: 20px;">Hoy</button>
+            <button type="submit" name="periodo" value="esta_semana" class="btn btn-sm {{ $filtroActual == 'esta_semana' ? 'btn-primary' : 'btn-outline-secondary text-white' }} ml-2" style="border-radius: 20px;">Esta Semana</button>
+            <button type="submit" name="periodo" value="este_mes" class="btn btn-sm {{ $filtroActual == 'este_mes' ? 'btn-primary' : 'btn-outline-secondary text-white' }} ml-2" style="border-radius: 20px;">Este Mes</button>
+            <button type="submit" name="periodo" value="ano_actual" class="btn btn-sm {{ $filtroActual == 'ano_actual' ? 'btn-primary' : 'btn-outline-secondary text-white' }} ml-2" style="border-radius: 20px;">Este Año</button>
+            <button type="submit" name="periodo" value="todo" class="btn btn-sm {{ $filtroActual == 'todo' ? 'btn-primary' : 'btn-outline-secondary text-white' }} ml-2" style="border-radius: 20px;">Histórico Total</button>
+        </form>
     </div>
 @endsection
 
 @section('content')
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    /* ── BARRA DE NAVEGACIÓN SUPERIOR (NAVBAR) TOTALMENTE INTEGRADA ── */
-    .main-header.navbar {
-        background-color: rgba(10, 15, 30, 0.8) !important; /* Fondo translúcido oscuro */
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; /* Línea divisoria técnica sutil */
-    }
-
-    /* Forzar la desaparición de cualquier fondo residual blanco de AdminLTE */
-    .navbar-light, .navbar-white {
-        background-color: transparent !important;
-    }
-
-    /* Ajuste de todos los iconos y textos de la barra superior a blanco/gris claro */
-    .main-header.navbar .nav-link,
-    .main-header.navbar .nav-link i,
-    .main-header.navbar .navbar-nav .nav-item,
-    .main-header.navbar span,
-    .main-header.navbar a {
-        color: rgba(255, 255, 255, 0.8) !important;
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-    }
-
-    /* ¡CORRECCIÓN CRÍTICA! Evita que la fuente Inter destruya los iconos de FontAwesome */
-    .main-header.navbar .nav-link i,
-    .main-header.navbar i[class*="fa-"] {
-        font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", "Font Awesome 5 Brands" !important;
-        font-weight: 900 !important;
-    }
-
-    /* Efecto Hover en los botones de la barra superior */
-    .main-header.navbar .nav-link:hover,
-    .main-header.navbar .nav-link:hover i {
-        color: #0EA5E9 !important; /* Destello azul de marca */
-        background-color: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 8px;
-    }
-
-    /* Corrección del dropdown del menú de usuario */
-    .main-header.navbar .dropdown-menu {
-        background-color: #131A2E !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    }
-    .main-header.navbar .dropdown-item {
-        color: rgba(255, 255, 255, 0.8) !important;
-    }
-    .main-header.navbar .dropdown-item:hover {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #fff !important;
-    }
-
-    /* ── BASE GENERAL Y CONTENEDOR GLOBAL DEL DASHBOARD ── */
-    .content-wrapper {
-        background-color: #0A0F1E !important; /* Azul oscuro profundo corporativo */
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    /* Cuadrícula sutil técnica de fondo */
-    .content-wrapper::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-        background-size: 35px 35px;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    /* Brillo ambiental de fondo azul/morado */
-    .content-wrapper::after {
-        content: "";
-        position: absolute;
-        width: 700px; height: 700px;
-        top: -150px; right: -100px;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .premium-dashboard {
-        font-family: 'Inter', sans-serif;
-        position: relative;
-        z-index: 2;
-        padding: 5px;
-    }
-
-    .header-dashboard-container {
-        margin-bottom: 20px; 
-        padding: 10px 15px; 
-        position: relative; 
-        z-index: 5;
-    }
-    .dashboard-title-main {
-        font-family: 'Inter', sans-serif; 
-        font-size: 24px; 
-        letter-spacing: -0.02em;
-    }
-    .dashboard-title-main i {
-        color: #0EA5E9;
-    }
-    .dashboard-date-badge {
-        font-family: 'Inter', sans-serif; 
-        font-size: 14px; 
-        color: rgba(255,255,255,0.5);
-    }
-    .dashboard-date-badge i {
-        color: #6366F1;
-    }
-    
-    /* ── UNIFICACIÓN DE MENÚ LATERAL (SIDEBAR) ── */
-    .main-sidebar {
-        background-color: #070B16 !important; 
-        border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
-    }
-    .brand-link {
-        background: #070B16 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        padding: 14px 12px !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        height: auto !important;
-    }
-    .brand-link .brand-image-container {
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; background: transparent !important; box-shadow: none !important; padding: 0;
-    }
-    .brand-link .brand-text-container { display: flex; flex-direction: column; line-height: 1.2; }
-    .brand-link .brand-title {
-        color: #ffffff !important; font-family: 'Inter', sans-serif !important;
-        font-weight: 700 !important; font-size: 13px !important; letter-spacing: 0.3px !important; text-transform: uppercase;
-    }
-    .brand-link .brand-subtitle {
-        color: rgba(255, 255, 255, 0.4) !important; font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important; font-size: 9px !important; letter-spacing: 0.8px !important; text-transform: uppercase; margin-top: 1px;
-    }
-    .brand-link .brand-text, .brand-link .brand-image { display: none !important; }
-
-    /* ── TARJETAS DE INDICADORES (KPIS) ── */
-    .kpi-card-premium {
-        border-radius: 16px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
-        transition: transform 0.25s ease, border-color 0.25s ease;
-    }
-    .kpi-card-premium:hover {
-        transform: translateY(-4px);
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .kpi-dark { background: linear-gradient(135deg, #131A2E 0%, #0D1322 100%); }
-    .kpi-green { background: linear-gradient(135deg, #063C2E 0%, #03241B 100%); }
-    .kpi-purple { background: linear-gradient(135deg, #321663 0%, #1D0B3A 100%); }
-    .kpi-orange { background: linear-gradient(135deg, #5C200B 0%, #361103 100%); }
-    
-    .kpi-orb {
-        position: absolute;
-        width: 140px; height: 140px;
-        border-radius: 50%;
-        bottom: -45px; right: -35px;
-        pointer-events: none;
-    }
-    .kpi-dark .kpi-orb { background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, transparent 65%); }
-    .kpi-green .kpi-orb { background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 65%); }
-    .kpi-purple .kpi-orb { background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 65%); }
-    .kpi-orange .kpi-orb { background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 65%); }
-
-    .kpi-icon-box {
-        width: 44px; height: 44px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.06);
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 16px; color: #fff; font-size: 18px;
-    }
-    .kpi-val { color: #fff; font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-    .kpi-label { color: rgba(255, 255, 255, 0.45); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 8px; }
-    
-    .kpi-footer-link {
-        display: inline-flex; align-items: center; gap: 5px;
-        color: rgba(255, 255, 255, 0.5); font-size: 12px; font-weight: 500;
-        margin-top: 18px; transition: color 0.2s ease;
-    }
-    .kpi-footer-link:hover { color: #38BDF8; text-decoration: none; }
-
-    /* ── TARJETAS CONTENEDORAS DE GRÁFICAS Y TABLAS ── */
-    .card-custom-premium {
-        background: rgba(13, 19, 35, 0.65) !important; 
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        margin-bottom: 24px;
-        overflow: hidden;
-    }
-    .card-header-premium {
-        padding: 20px 24px;
-        background: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .card-title-premium {
-        font-size: 15px; font-weight: 600;
-        color: #ffffff; margin: 0;
-        display: flex; align-items: center; gap: 8px;
-    }
-    .card-body-premium { padding: 24px; }
-
-    /* ── TABLA DE DATOS MODO OSCURO ── */
-    .table-premium th {
-        background-color: rgba(255, 255, 255, 0.01);
-        color: #94A3B8; font-size: 12px; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.5px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-        padding: 15px;
-    }
-    .table-premium td {
-        padding: 15px; vertical-align: middle;
-        color: #E2E8F0; font-size: 14px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-    .table-premium tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.02);
-    }
-    .badge-status-premium {
-        padding: 5px 12px; border-radius: 6px;
-        font-size: 12px; font-weight: 500;
-        background: rgba(14, 165, 233, 0.12); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.25);
-    }
-
-    /* ── RESPONSIVE PARA DISPOSITIVOS MÓVILES (CELULARES) ── */
-    @media (max-width: 576px) {
-        .header-dashboard-container {
-            flex-direction: column;
-            align-items: flex-start !important;
-            gap: 8px;
-            padding: 10px 5px;
-        }
-        .dashboard-title-main {
-            font-size: 20px;
-        }
-        .kpi-card-premium {
-            padding: 16px;
-            margin-bottom: 16px;
-            border-radius: 12px;
-        }
-        .kpi-val {
-            font-size: 24px;
-        }
-        .kpi-label {
-            font-size: 10px;
-            margin-top: 4px;
-        }
-        .kpi-icon-box {
-            width: 36px;
-            height: 36px;
-            font-size: 14px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-        }
-        .kpi-footer-link {
-            margin-top: 12px;
-            font-size: 11px;
-        }
-        /* Ajustar espaciado de columnas en móvil para reducir el margen del row */
-        .premium-dashboard .row {
-            margin-left: -8px;
-            margin-right: -8px;
-        }
-        .premium-dashboard [class*="col-"] {
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-    }
-</style>
+<!-- El CSS fue movido a public/css/responsive.css para mejor rendimiento (Cache Busting) -->
+<link rel="stylesheet" href="{{ asset('css/responsive.css') }}?v={{ time() }}">
 
 <div class="premium-dashboard">
     

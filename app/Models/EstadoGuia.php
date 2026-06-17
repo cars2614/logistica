@@ -9,7 +9,8 @@ class EstadoGuia extends Model
 {
     use HasFactory;
 
-    protected $table      = 'estado_guias';
+    protected $table = 'estado_guias';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [
@@ -18,11 +19,13 @@ class EstadoGuia extends Model
         'descripcion',
         'id_guia',
         'id_usuario',
+        'latitud',
+        'longitud',
     ];
 
     public function guia()
     {
-        return $this->belongsTo(Guia::class, 'id_guia', 'id_guias');
+        return $this->belongsTo(Guia::class, 'id_guia', 'id');
     }
 
     public function usuario()

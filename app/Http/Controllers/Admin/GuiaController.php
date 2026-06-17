@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
-use App\Models\Guia;
+use App\Http\Requests\StoreGuiaRequest;
+use App\Http\Requests\UpdateGuiaRequest;
 use App\Models\Cliente;
+use App\Models\Guia;
 use App\Models\TipoEntrega;
 use App\Models\User;
-
-use Illuminate\Support\Facades\DB;
+use App\Services\LogisticaService;
 use Illuminate\Http\Request;
 
 class GuiaController extends Controller
 {
+    protected $logisticaService;
+
+    public function __construct(LogisticaService $logisticaService)
+    {
+        $this->logisticaService = $logisticaService;
+    }
+
     public function index()
     {
         // 1. Carga las guías con paginación
-        /* $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->paginate(10); */
+        $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega', 'repartidor', 'estadoActual'])->get();
 
-        $guias = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega'])->get();
-
-        /* $guias = Guia::with(['clienteOrigen', 'clienteDestino'])->get(); */
- 
         // 2. Traemos todos los clientes de la BD para el formulario modal
         $clientes = Cliente::all();
 
@@ -29,52 +34,33 @@ class GuiaController extends Controller
         $tipoEntregas = TipoEntrega::all();
 
         // 4. Traemos los repartidores
-        $repartidores = User::whereHas('rol', function($q) { $q->where('nombreRol', 'Repartidor'); })->get();
+        $repartidores = User::role(RoleEnum::REPARTIDOR->value)->get();
 
         // 5. Enviamos todas las variables juntas a la vista
         return view('admin.guia.index', compact('guias', 'clientes', 'tipoEntregas', 'repartidores'));
     }
 
-    public function store(Request $request)
+    public function store(StoreGuiaRequest $request)
     {
-        // 1. Validamos los datos tal como vienen del formulario en la pantalla
-        $request->validate([
+        // 1. Validamos los datos tal como vienen del formulario en la pantalla a través de StoreGuiaRequest
 
-            'id_tipo_entrega'     => 'required|numeric',
-            'id_cliente_origen'   => 'required|exists:clientes,id',
-            'id_cliente_destino'  => 'required|exists:clientes,id',
-            'unidades'            => 'required|integer|min:1',
-            'peso'                => 'required|numeric',
-
-            'largo'               => 'required|numeric',
-            'ancho'               => 'required|numeric',
-            'alto'                => 'required|numeric',
-            'precio_envio'        => 'required|numeric',
-            'valor_declarado'     => 'required|numeric',
-
-            'observacion'         => 'nullable|string|max:255',
-            'id_repartidor'       => 'nullable|exists:users,id',
-        ]);
-
-        // 2. Creamos la guía mapeando los inputs a las columnas reales de la BD
-        Guia::create([
-
-            'id_tipo_entrega'    => $request->id_tipo_entrega,
-            'id_cliente_origen'  => $request->id_cliente_origen,
+        // 2. Creamos la guía mapeando los inputs validados a las columnas reales de la BD
+        $guia = new Guia([
+            'id_tipo_entrega' => $request->id_tipo_entrega,
+            'id_cliente_origen' => $request->id_cliente_origen,
             'id_cliente_destino' => $request->id_cliente_destino,
-            'unidades'           => $request->unidades,
-            'peso'               => $request->peso,
-            'largo'              => $request->largo,
-            'ancho'              => $request->ancho,
-            'alto'               => $request->alto,
-            'precio_envio'       => $request->precio_envio,
-            'valor_declarado'    => $request->valor_declarado,
-            'observacion'        => $request->observacion ?? 'Ninguna',
-            'id_repartidor'      => $request->id_repartidor,
-
-
-
+            'unidades' => $request->unidades,
+            'peso' => $request->peso,
+            'largo' => $request->largo,
+            'ancho' => $request->ancho,
+            'alto' => $request->alto,
+            'precio_envio' => $request->precio_envio,
+            'valor_declarado' => $request->valor_declarado,
+            'observacion' => $request->observacion ?? 'Ninguna',
         ]);
+        $guia->id_repartidor = $request->id_repartidor;
+        $guia->estado_actual = 'Bodega'; // Estado por defecto
+        $guia->save();
 
         // 3. Redireccionamos con mensaje de éxito al listado
         return redirect()->route('admin.guia.index')->with('success', 'Guía creada correctamente.');
@@ -89,71 +75,59 @@ class GuiaController extends Controller
         $clientes = Cliente::all();
 
         // 3. Traemos TODOS los tipos de entrega para el select correspondiente
-        $tipoEntregas = TipoEntrega::all(); // Cambia 'TipoEntrega' por el nombre real de tu modelo
+        $tipoEntregas = TipoEntrega::all();
 
         // 4. Traemos los repartidores
-        $repartidores = User::whereHas('rol', function($q) { $q->where('nombreRol', 'Repartidor'); })->get();
+        $repartidores = User::role(RoleEnum::REPARTIDOR->value)->get();
 
         return view('admin.guia.edit', compact('guia', 'clientes', 'tipoEntregas', 'repartidores'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateGuiaRequest $request, $id)
     {
         $guia = Guia::findOrFail($id);
 
-        $request->validate([
-            'id_tipo_entrega'      => 'required|numeric',
-            'id_cliente_origen'   => 'required|exists:clientes,id',
-            'id_cliente_destino'  => 'required|exists:clientes,id',
-            'unidades'            => 'required|integer|min:1',
-            'peso'                => 'required|numeric',
-            'largo'               => 'required|numeric',
-            'ancho'               => 'required|numeric',
-            'alto'                => 'required|numeric',
-            'precio_envio'        => 'required|numeric',
-            'valor_declarado'     => 'required|numeric',
-            'observacion'         => 'nullable|string|max:255',
-            'id_repartidor'       => 'nullable|exists:users,id',
-            
-        ], [
-            'id_tipo_entrega.required'    => 'El tipo de entrega es obligatorio.',
-            'id_cliente_origen.required'   => 'El cliente de origen es obligatorio.',
-            'id_cliente_destino.required'  => 'El cliente de destino es obligatorio.',
-            'unidades.required'            => 'Las unidades son obligatorias.',
-            'peso.required'                => 'El peso es obligatorio.',
-            'largo.required'               => 'El largo es obligatorio.',
-            'ancho.required'               => 'El ancho es obligatorio.',
-            'alto.required'                => 'El alto es obligatorio.',
-            'precio_envio.required'        => 'El precio de envío es obligatorio.',
-            'valor_declarado.required'     => 'El valor declarado es obligatorio.',
-            
-        ]);
-
         $guia->update([
-            'id_tipo_entrega'    => $request->id_tipo_entrega,
-            'id_cliente_origen'  => $request->id_cliente_origen,
+            'id_tipo_entrega' => $request->id_tipo_entrega,
+            'id_cliente_origen' => $request->id_cliente_origen,
             'id_cliente_destino' => $request->id_cliente_destino,
-            'unidades'           => $request->unidades,
-            'peso'               => $request->peso,
-            'largo'              => $request->largo,
-            'ancho'              => $request->ancho,
-            'alto'               => $request->alto,
-            'precio_envio'       => $request->precio_envio,
-            'valor_declarado'    => $request->valor_declarado,
-            'observacion'        => $request->observacion ?? '',
-            'id_repartidor'      => $request->id_repartidor,
-           
+            'unidades' => $request->unidades,
+            'peso' => $request->peso,
+            'largo' => $request->largo,
+            'ancho' => $request->ancho,
+            'alto' => $request->alto,
+            'precio_envio' => $request->precio_envio,
+            'valor_declarado' => $request->valor_declarado,
+            'observacion' => $request->observacion ?? '',
+            'id_repartidor' => $request->id_repartidor,
         ]);
 
         return redirect()->route('admin.guia.index')
             ->with('success', 'Guía actualizada correctamente.');
     }
 
+    public function destroy($id)
+    {
+        $guia = Guia::findOrFail($id);
+        $guia->delete(); // SoftDelete — no elimina de la BD
 
+        return redirect()->route('admin.guia.index')
+            ->with('success', 'Guía eliminada correctamente.');
+    }
 
+    public function actualizarEstado(Request $request, $id)
+    {
+        $request->validate([
+            'estado' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:255',
+        ]);
 
+        try {
+            $this->logisticaService->cambiarEstadoGuia($id, $request->estado, $request->descripcion);
 
-
-
-
+            return redirect()->back()->with('success', 'Estado actualizado y auditado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error al actualizar el estado: '.$e->getMessage());
+        }
+    }
 }

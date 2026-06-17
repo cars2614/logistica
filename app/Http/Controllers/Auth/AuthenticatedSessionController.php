@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -29,11 +30,13 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        if ($user->rol && $user->rol->nombreRol === 'Repartidor') {
+        if ($user->hasRole(RoleEnum::ADMINISTRADOR->value)) {
+            return redirect()->intended(route('admin.dashboard'));
+        } elseif ($user->hasRole(RoleEnum::REPARTIDOR->value)) {
             return redirect()->intended(route('repartidor.dashboard'));
         }
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended(route('tracking.index'));
     }
 
     /**
@@ -47,7 +50,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        
         return redirect('/');
     }
 }

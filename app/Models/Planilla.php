@@ -16,8 +16,8 @@ class Planilla extends Model
     protected $fillable = [
         'numero_planilla', // <-- Línea clave obligatoria
         'id_ciudad',
-        'id_usuario',
         'id_ruta',
+        'vehiculo_id',
         'piezas',
         'kilos',
     ];
@@ -40,5 +40,10 @@ class Planilla extends Model
     public function guias()
     {
         return $this->belongsToMany(Guia::class, 'detalles_planillas', 'id_planilla', 'id_guia');
+    }
+
+    public function vehiculo()
+    {
+        return $this->belongsTo(Vehiculo::class, 'vehiculo_id');
     }
 }

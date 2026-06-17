@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -17,22 +16,22 @@ class StoreUserRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users', // Note: change 'users' to 'usuarios' if that's the real DB table used by Laravel
-            'password' => 'required|string|min:8',
+            'name' => ['required', 'string', 'max:255', "regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.']+$/"],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'El nombre es obligatorio.',
+            'name.required' => 'El nombre completo es obligatorio.',
+            'name.regex' => 'El nombre solo debe contener letras, espacios, puntos y apóstrofes.',
+            'name.max' => 'El nombre no puede superar los 255 caracteres.',
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'Debe ingresar un correo válido.',
             'email.unique' => 'Este correo ya está registrado.',

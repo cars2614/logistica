@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guia;
 use App\Models\EstadoGuia;
+use App\Models\Guia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,23 +15,24 @@ class RepartidorController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         // Obtener las guías asignadas directamente al repartidor
         // Cargamos las relaciones y filtramos aquellas cuyo último estado sea "Entregado" o "Novedad/Devolución"
         $guias = Guia::where('id_repartidor', $user->id)
-            ->with(['clienteDestino', 'estados' => function($query) {
+            ->with(['clienteDestino', 'estados' => function ($query) {
                 $query->orderBy('id', 'desc');
             }])
             ->get()
-            ->filter(function($guia) {
+            ->filter(function ($guia) {
                 $estadoActual = $guia->estadoActual ? $guia->estadoActual->estado : 'Bodega/Asignado';
-                return !in_array($estadoActual, ['Entregado', 'Novedad/Devolución']);
+
+                return ! in_array($estadoActual, ['Entregado', 'Novedad/Devolución']);
             });
 
         // Ordenamos las guías por dirección del destino o por ID
         // Como clienteDestino es una relación, podemos ordenarlo después de obtener la colección o hacer un join.
         // Haremos sortBy en la colección para mayor simplicidad.
-        $guias = $guias->sortBy(function($guia) {
+        $guias = $guias->sortBy(function ($guia) {
             return $guia->clienteDestino->direccion ?? '';
         });
 
@@ -66,6 +67,6 @@ class RepartidorController extends Controller
             ]);
         }
 
-        return redirect()->route('repartidor.dashboard')->with('success', 'Estado actualizado correctamente a ' . $nuevoEstado);
+        return redirect()->route('repartidor.dashboard')->with('success', 'Estado actualizado correctamente a '.$nuevoEstado);
     }
 }

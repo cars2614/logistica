@@ -1,15 +1,25 @@
 <?php
 
-// app/Http/Controllers/TrackingController.php
+namespace App\Http\Controllers;
+
 use App\Models\Guia;
 use App\Models\UbicacionGuia;
+use Illuminate\Http\Request;
 
 class TrackingController extends Controller
 {
+    // Dashboard principal para el tracking
+    public function index()
+    {
+        // Obtener las guías del cliente autenticado (si aplica)
+        // Por ahora redirigimos al home o mostramos un buscador genérico
+        return view('dashboard'); // O la vista que prefieras para el cliente
+    }
+
     // Vista del mapa para el cliente
     public function show($guiaId)
     {
-        $guia = Guia::with(['ultimaUbicacion', 'estado_guias'])->findOrFail($guiaId);
+        $guia = Guia::with(['ultimaUbicacion', 'estados'])->findOrFail($guiaId);
         return view('tracking.show', compact('guia'));
     }
 

@@ -43,6 +43,17 @@ Route::get('/instalar-bd', function () {
     return 'La base de datos ya estaba instalada. <a href="/login">Ir al Login</a>';
 });
 
+// Ruta rápida para arreglar la contraseña del administrador
+Route::get('/fix-pass', function () {
+    $user = \App\Models\User::where('email', 'sistemascarlosramirez@gmail.com')->first();
+    if ($user) {
+        $user->password = \Illuminate\Support\Facades\Hash::make('12345678');
+        $user->save();
+        return 'Contraseña actualizada a 12345678 exitosamente. <a href="/login">Ir al Login</a>';
+    }
+    return 'Usuario no encontrado.';
+});
+
 // 3. Rutas de Repartidor — Protegidas por autenticación y optimizadas
 Route::middleware(['auth'])->prefix('repartidor')->name('repartidor.')->group(function () {
     Route::get('/dashboard', [RepartidorController::class, 'index'])->name('dashboard'); 

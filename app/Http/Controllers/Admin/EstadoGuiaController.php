@@ -13,7 +13,7 @@ class EstadoGuiaController extends Controller
     public function index()
     {
         $estadoGuias = EstadoGuia::with('guia')->orderBy('id', 'desc')->paginate(10);
-        $guias       = Guia::orderBy('num_guias')->get();
+        $guias       = Guia::orderBy('id')->get();
 
         return view('admin.estado_guia.index', compact('estadoGuias', 'guias'));
     }
@@ -49,7 +49,7 @@ class EstadoGuiaController extends Controller
     public function edit($id)
     {
         $estadoGuia = EstadoGuia::findOrFail($id);
-        $guias      = Guia::orderBy('num_guias')->get();
+        $guias      = Guia::orderBy('id')->get();
 
         return view('admin.estado_guia.edit', compact('estadoGuia', 'guias'));
     }

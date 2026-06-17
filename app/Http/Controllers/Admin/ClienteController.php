@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreClienteRequest;
+use App\Http\Requests\UpdateClienteRequest;
 use App\Models\Ciudad;
 use App\Models\Cliente;
-use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
@@ -13,41 +14,18 @@ class ClienteController extends Controller
     {
         $clientes = Cliente::orderBy('created_at', 'desc')->get();
         $ciudades = Ciudad::orderBy('nombre', 'asc')->get();
+
         return view('admin.cliente.index', compact('clientes', 'ciudades'));
     }
 
-    public function store(Request $request)
+    public function store(StoreClienteRequest $request)
     {
-        $request->validate([
-            'cedula'      => 'required|string|max:20|unique:clientes,cedula',
-            'nombre'      => 'required|string|max:100',
-            'telefono'    => 'required|string|max:20',
-            'correo'      => 'required|email|max:100|unique:clientes,correo',
-            'direccion'   => 'required|string|max:200',
-            'descripcion' => 'nullable|string|max:500',
-            'id_ciudad'   => 'required|exists:ciudades,id',
-        ], [
-            'cedula.required'    => 'La cédula es obligatoria.',
-            'cedula.unique'      => 'Esta cédula ya está registrada.',
-            'cedula.max'         => 'La cédula no puede superar 20 caracteres.',
-            'nombre.required'    => 'El nombre es obligatorio.',
-            'telefono.required'  => 'El teléfono es obligatorio.',
-            'correo.required'    => 'El correo es obligatorio.',
-            'correo.email'       => 'El correo no tiene un formato válido.',
-            'correo.unique'      => 'Este correo ya está registrado.',
-            'direccion.required' => 'La dirección es obligatoria.',
-            'id_ciudad.required' => 'La ciudad es obligatoria.',
-        ]);
+        $data = $request->validated();
+        if (! isset($data['descripcion'])) {
+            $data['descripcion'] = '';
+        }
 
-        Cliente::create([
-            'cedula'      => $request->cedula,
-            'nombre'      => $request->nombre,
-            'telefono'    => $request->telefono,
-            'correo'      => $request->correo,
-            'direccion'   => $request->direccion,
-            'descripcion' => $request->descripcion ?? '',
-            'id_ciudad'   => $request->id_ciudad,
-        ]);
+        Cliente::create($data);
 
         return redirect()->route('admin.cliente.index')
             ->with('success', 'Cliente creado correctamente.');
@@ -56,40 +34,18 @@ class ClienteController extends Controller
     public function edit(Cliente $cliente)
     {
         $ciudades = Ciudad::orderBy('nombre', 'asc')->get();
+
         return view('admin.cliente.edit', compact('cliente', 'ciudades'));
     }
 
-    public function update(Request $request, Cliente $cliente)
+    public function update(UpdateClienteRequest $request, Cliente $cliente)
     {
-        $request->validate([
-            'cedula'      => 'required|string|max:20|unique:clientes,cedula,' . $cliente->id,
-            'nombre'      => 'required|string|max:100',
-            'telefono'    => 'required|string|max:20',
-            'correo'      => 'required|email|max:100|unique:clientes,correo,' . $cliente->id,
-            'direccion'   => 'required|string|max:200',
-            'descripcion' => 'nullable|string|max:500',
-            'id_ciudad'   => 'required|exists:ciudades,id',
-        ], [
-            'cedula.required'    => 'La cédula es obligatoria.',
-            'cedula.unique'      => 'Esta cédula ya está registrada.',
-            'nombre.required'    => 'El nombre es obligatorio.',
-            'telefono.required'  => 'El teléfono es obligatorio.',
-            'correo.required'    => 'El correo es obligatorio.',
-            'correo.email'       => 'El correo no tiene un formato válido.',
-            'correo.unique'      => 'Este correo ya está registrado.',
-            'direccion.required' => 'La dirección es obligatoria.',
-            'id_ciudad.required' => 'La ciudad es obligatoria.',
-        ]);
+        $data = $request->validated();
+        if (! isset($data['descripcion'])) {
+            $data['descripcion'] = '';
+        }
 
-        $cliente->update([
-            'cedula'      => $request->cedula,
-            'nombre'      => $request->nombre,
-            'telefono'    => $request->telefono,
-            'correo'      => $request->correo,
-            'direccion'   => $request->direccion,
-            'descripcion' => $request->descripcion ?? '',
-            'id_ciudad'   => $request->id_ciudad,
-        ]);
+        $cliente->update($data);
 
         return redirect()->route('admin.cliente.index')
             ->with('success', 'Cliente actualizado correctamente.');
@@ -98,6 +54,7 @@ class ClienteController extends Controller
     public function destroy(Cliente $cliente)
     {
         $cliente->delete();
+
         return redirect()->route('admin.cliente.index')
             ->with('success', 'Cliente eliminado correctamente.');
     }

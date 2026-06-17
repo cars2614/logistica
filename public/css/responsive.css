@@ -356,3 +356,564 @@
 .main-sidebar .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
     background: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* ═══════════════════════════════════════════════
+   VALIDACIÓN — Estilos de Inputs y Alertas
+   ═══════════════════════════════════════════════ */
+
+/* Forzar mayúsculas visual en campos de placa vehicular */
+input[name="placa"] {
+    text-transform: uppercase;
+}
+
+/* Feedback de validación con estilo AdminLTE */
+.invalid-feedback {
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+/* Alertas globales de validación */
+.alert-validation-errors {
+    border-left: 4px solid #dc3545;
+    background-color: #f8d7da;
+    border-radius: 4px;
+}
+
+.alert-validation-errors ul {
+    margin-bottom: 0;
+    padding-left: 1.2em;
+}
+
+/* ═══════════════════════════════════════════════
+   SISTEMA PREMIUM DARK (VARIABLES & GLOBAL CSS)
+   ═══════════════════════════════════════════════ */
+:root {
+    --bg-premium-dark: #0A0F1E;
+    --card-bg-pc: rgba(13, 19, 35, 0.65);
+    --card-bg-mobile: rgba(13, 19, 35, 0.95);
+    --border-glow: rgba(14, 165, 233, 0.2);
+    --cyan-gradient: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+}
+
+body {
+    font-family: 'Inter', sans-serif !important;
+    background-color: var(--bg-premium-dark) !important;
+    -webkit-font-smoothing: antialiased;
+    color: #E2E8F0 !important;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, span {
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Custom Scrollbars Globales */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0A0F1E;
+}
+::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #0EA5E9;
+}
+
+/* Tarjeta Premium (Mobile-First) */
+.card-custom-premium {
+    background: var(--card-bg-mobile);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #fff;
+}
+.card-header-premium {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.card-title-premium {
+    font-size: 16px; font-weight: 600; color: #ffffff; margin: 0;
+}
+.card-body-premium { padding: 20px; }
+
+/* Efectos de escritorio (Glassmorphism Completo) */
+@media (min-width: 768px) {
+    .card-custom-premium {
+        background: var(--card-bg-pc) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+    
+    .card-custom-premium:hover {
+        border-color: rgba(14, 165, 233, 0.4) !important;
+        box-shadow: 0 0 15px var(--border-glow) !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════
+   TABLAS OSCURAS PREMIUM Y CARD-SWITCHING
+   ═══════════════════════════════════════════════ */
+.table-dark-premium {
+    width: 100%;
+    color: #E2E8F0;
+    margin-bottom: 0;
+}
+.table-dark-premium th {
+    background: rgba(255, 255, 255, 0.03);
+    border-top: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #94A3B8;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 12px 15px;
+}
+.table-dark-premium td {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+.table-dark-premium tbody tr {
+    transition: background-color 0.2s;
+}
+.table-dark-premium tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Transformación de Tabla a Tarjetas en Móvil */
+@media (max-width: 767px) {
+    .table-responsive-cards table {
+        min-width: 0 !important;
+        width: 100% !important;
+        display: block;
+    }
+    .table-responsive-cards table thead {
+        display: none;
+    }
+    .table-responsive-cards table tbody, 
+    .table-responsive-cards table tr {
+        display: block; width: 100%;
+    }
+    .table-responsive-cards table tr {
+        background: rgba(30, 41, 59, 0.7); 
+        margin-bottom: 15px;
+        border-radius: 8px; 
+        padding: 10px; 
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .table-responsive-cards table td {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 5px;
+        text-align: right !important; 
+        padding: 12px 10px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+        font-size: 14px; 
+        min-height: 40px; 
+        word-break: break-word !important;
+    }
+    .table-responsive-cards table td::before {
+        content: attr(data-label); 
+        margin-right: auto !important; /* Empuja todo el contenido a la derecha */
+        text-align: left !important; 
+        font-weight: 600 !important; 
+        color: #0ea5e9 !important; 
+        font-size: 13px !important;
+        flex: 0 0 40% !important;
+        max-width: 40% !important;
+    }
+    .table-responsive-cards table td:first-child { border-top: none !important; }
+    
+    /* Asegurar que el contenido dentro del td no rompa el flex */
+    .table-responsive-cards table td > * {
+        max-width: 100%;
+    }
+
+    /* Arreglar cabeceras de tarjetas con múltiples botones en móvil */
+    .card-header .btn {
+        margin-bottom: 8px;
+        display: block;
+        width: 100%;
+        white-space: normal !important;
+        height: auto;
+    }
+    .card-header > div, .card-header-premium > div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* Modales Fullscreen en Móvil */
+@media (max-width: 576px) {
+    .modal-fullscreen-md-down .modal-dialog {
+        margin: 0; width: 100%; max-width: none; height: 100%;
+    }
+    .modal-fullscreen-md-down .modal-content {
+        height: 100%; border-radius: 0; background-color: var(--bg-premium-dark) !important;
+    }
+    .modal-fullscreen-md-down .modal-body {
+        overflow-y: auto;
+    }
+}
+
+/* 3. Menú de Usuario (Logout Button) Premium */
+.main-header.navbar .dropdown-menu {
+    border-radius: 12px !important;
+    padding: 8px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    background-color: #131A2E !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.main-header.navbar .dropdown-menu .btn,
+.main-header.navbar .dropdown-menu .btn-default,
+.main-header.navbar .dropdown-menu .btn-flat {
+    background: rgba(14, 165, 233, 0.1) !important;
+    color: #38BDF8 !important;
+    border: 1px solid rgba(14, 165, 233, 0.2) !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    box-shadow: none !important;
+}
+.main-header.navbar .dropdown-menu .btn:hover {
+    background: rgba(14, 165, 233, 0.2) !important;
+    color: #fff !important;
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.3) !important;
+}
+.main-header.navbar .dropdown-menu .btn i {
+    color: inherit !important;
+    margin-right: 0 !important;
+}
+.main-header.navbar .dropdown-menu .dropdown-divider {
+    display: none !important;
+}
+
+/* User Header (Nombre y Rol) */
+.main-header.navbar .dropdown-menu .user-header {
+    height: auto !important;
+    padding: 15px !important;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent !important;
+}
+.main-header.navbar .dropdown-menu .user-header p {
+    color: #E2E8F0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    text-shadow: none !important;
+}
+.main-header.navbar .dropdown-menu .user-header small {
+    display: block;
+    color: #38BDF8 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    margin-top: 5px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── BARRA DE NAVEGACIÓN SUPERIOR (NAVBAR) TOTALMENTE INTEGRADA ── */
+.main-header.navbar {
+    background-color: rgba(10, 15, 30, 0.8) !important; /* Fondo translúcido oscuro */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; /* Línea divisoria técnica sutil */
+}
+
+/* Forzar la desaparición de cualquier fondo residual blanco de AdminLTE */
+.navbar-light, .navbar-white {
+    background-color: transparent !important;
+}
+
+/* Ajuste de todos los iconos y textos de la barra superior a blanco/gris claro */
+.main-header.navbar .nav-link,
+.main-header.navbar .nav-link i,
+.main-header.navbar .navbar-nav .nav-item,
+.main-header.navbar span,
+.main-header.navbar a {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+/* ¡CORRECCIÓN CRÍTICA! Evita que la fuente Inter destruya los iconos de FontAwesome */
+.main-header.navbar .nav-link i,
+.main-header.navbar i[class*="fa-"] {
+    font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", "Font Awesome 5 Brands" !important;
+    font-weight: 900 !important;
+}
+
+/* Efecto Hover en los botones de la barra superior */
+.main-header.navbar .nav-link:hover,
+.main-header.navbar .nav-link:hover i {
+    color: #0EA5E9 !important; /* Destello azul de marca */
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px;
+}
+
+/* Corrección del dropdown del menú de usuario */
+.main-header.navbar .dropdown-menu {
+    background-color: #131A2E !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.main-header.navbar .dropdown-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+.main-header.navbar .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #fff !important;
+}
+
+/* ── BASE GENERAL Y CONTENEDOR GLOBAL DEL DASHBOARD ── */
+.content-wrapper {
+    background-color: #0A0F1E !important; /* Azul oscuro profundo corporativo */
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Cuadrícula sutil técnica de fondo */
+.content-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 35px 35px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Brillo ambiental de fondo azul/morado */
+.content-wrapper::after {
+    content: "";
+    position: absolute;
+    width: 700px; height: 700px;
+    top: -150px; right: -100px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.premium-dashboard {
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    z-index: 2;
+    padding: 5px;
+}
+
+.header-dashboard-container {
+    margin-bottom: 20px; 
+    padding: 10px 15px; 
+    position: relative; 
+    z-index: 5;
+}
+.dashboard-title-main {
+    font-family: 'Inter', sans-serif; 
+    font-size: 24px; 
+    letter-spacing: -0.02em;
+}
+.dashboard-title-main i {
+    color: #0EA5E9;
+}
+.dashboard-date-badge {
+    font-family: 'Inter', sans-serif; 
+    font-size: 14px; 
+    color: rgba(255,255,255,0.5);
+}
+.dashboard-date-badge i {
+    color: #6366F1;
+}
+
+/* ── UNIFICACIÓN DE MENÚ LATERAL (SIDEBAR) ── */
+.main-sidebar {
+    background-color: #070B16 !important; 
+    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+.brand-link {
+    background: #070B16 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 14px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    height: auto !important;
+}
+.brand-link .brand-image-container {
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; background: transparent !important; box-shadow: none !important; padding: 0;
+}
+.brand-link .brand-text-container { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-link .brand-title {
+    color: #ffffff !important; font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important; font-size: 13px !important; letter-spacing: 0.3px !important; text-transform: uppercase;
+}
+.brand-link .brand-subtitle {
+    color: rgba(255, 255, 255, 0.4) !important; font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important; font-size: 9px !important; letter-spacing: 0.8px !important; text-transform: uppercase; margin-top: 1px;
+}
+.brand-link .brand-text, .brand-link .brand-image { display: none !important; }
+
+/* ── TARJETAS DE INDICADORES (KPIS) ── */
+.kpi-card-premium {
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.kpi-card-premium:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.kpi-dark { background: linear-gradient(135deg, #131A2E 0%, #0D1322 100%); }
+.kpi-green { background: linear-gradient(135deg, #063C2E 0%, #03241B 100%); }
+.kpi-purple { background: linear-gradient(135deg, #321663 0%, #1D0B3A 100%); }
+.kpi-orange { background: linear-gradient(135deg, #5C200B 0%, #361103 100%); }
+
+.kpi-orb {
+    position: absolute;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    bottom: -45px; right: -35px;
+    pointer-events: none;
+}
+.kpi-dark .kpi-orb { background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, transparent 65%); }
+.kpi-green .kpi-orb { background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 65%); }
+.kpi-purple .kpi-orb { background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 65%); }
+.kpi-orange .kpi-orb { background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 65%); }
+
+.kpi-icon-box {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; color: #fff; font-size: 18px;
+}
+.kpi-val { color: #fff; font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.kpi-label { color: rgba(255, 255, 255, 0.45); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 8px; }
+
+.kpi-footer-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: rgba(255, 255, 255, 0.5); font-size: 12px; font-weight: 500;
+    margin-top: 18px; transition: color 0.2s ease;
+}
+.kpi-footer-link:hover { color: #38BDF8; text-decoration: none; }
+
+/* ── TARJETAS CONTENEDORAS DE GRÁFICAS Y TABLAS ── */
+.card-custom-premium {
+    background: rgba(13, 19, 35, 0.65) !important; 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+@media (max-width: 768px) {
+    .card-custom-premium {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        background: rgba(13, 19, 35, 0.9) !important;
+    }
+}
+.card-header-premium {
+    padding: 20px 24px;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; align-items: center; justify-content: space-between;
+}
+.card-title-premium {
+    font-size: 15px; font-weight: 600;
+    color: #ffffff; margin: 0;
+    display: flex; align-items: center; gap: 8px;
+}
+.card-body-premium { padding: 24px; }
+
+/* ── TABLA DE DATOS MODO OSCURO ── */
+.table-premium th {
+    background-color: rgba(255, 255, 255, 0.01);
+    color: #94A3B8; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    padding: 15px;
+}
+.table-premium td {
+    padding: 15px; vertical-align: middle;
+    color: #E2E8F0; font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.table-premium tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+.badge-status-premium {
+    padding: 5px 12px; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    background: rgba(14, 165, 233, 0.12); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.25);
+}
+/* ── RESPONSIVE PARA DISPOSITIVOS MÓVILES (CELULARES) ── */
+@media (max-width: 576px) {
+    .header-dashboard-container {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 8px;
+        padding: 10px 5px;
+    }
+    .dashboard-title-main {
+        font-size: 20px;
+    }
+    .kpi-card-premium {
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 12px;
+    }
+    .kpi-val {
+        font-size: 24px;
+    }
+    .kpi-label {
+        font-size: 10px;
+        margin-top: 4px;
+    }
+    .kpi-icon-box {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+    }
+    .kpi-footer-link {
+        margin-top: 12px;
+        font-size: 11px;
+    }
+    /* Ajustar espaciado de columnas en móvil para reducir el margen del row */
+    .premium-dashboard .row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+    .premium-dashboard [class*="col-"] {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}

@@ -75,6 +75,13 @@
             overflow: hidden;
             margin-bottom: 24px;
         }
+        @media (max-width: 768px) {
+            .card-custom-premium {
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                background: rgba(13, 19, 35, 0.9) !important;
+            }
+        }
 
         .card-header-premium {
             padding: 20px 24px !important;
@@ -234,9 +241,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text input-group-text-premium"><i class="fas fa-id-card"></i></span>
                                     </div>
-                                    <input type="number" name="cedula" id="cedula"
+                                    <input type="text" name="cedula" id="cedula"
                                         class="form-control form-control-premium @error('cedula') is-invalid @enderror"
-                                        placeholder="Ej: 123456789" value="{{ old('cedula', $cliente->cedula ?? '') }}" required>
+                                        placeholder="Ej: 123456789" value="{{ old('cedula', $cliente->cedula ?? '') }}"
+                                        pattern="[0-9]+" maxlength="20" title="Solo números" required>
                                     @error('cedula')
                                         <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                     @enderror
@@ -252,7 +260,8 @@
                                     </div>
                                     <input type="text" name="nombre" id="nombre"
                                         class="form-control form-control-premium @error('nombre') is-invalid @enderror"
-                                        placeholder="Ej: Juan Pérez" value="{{ old('nombre', $cliente->nombre ?? '') }}" required>
+                                        placeholder="Ej: Juan Pérez" value="{{ old('nombre', $cliente->nombre ?? '') }}"
+                                        pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" maxlength="100" title="Solo letras y espacios" required>
                                     @error('nombre')
                                         <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                     @enderror
@@ -266,9 +275,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text input-group-text-premium"><i class="fas fa-phone"></i></span>
                                     </div>
-                                    <input type="text" name="telefono" id="telefono"
+                                    <input type="tel" name="telefono" id="telefono"
                                         class="form-control form-control-premium @error('telefono') is-invalid @enderror"
-                                        placeholder="Ej: 3001234567" value="{{ old('telefono', $cliente->telefono ?? '') }}" required>
+                                        placeholder="Ej: 3001234567" value="{{ old('telefono', $cliente->telefono ?? '') }}"
+                                        pattern="[0-9]+" maxlength="20" title="Solo números" required>
                                     @error('telefono')
                                         <span class="invalid-feedback"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</span>
                                     @enderror
@@ -366,7 +376,7 @@
                 </div>
 
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-cards">
                         <table class="table table-hover table-premium mb-0">
                             <thead>
                                 <tr>
@@ -381,18 +391,18 @@
                             <tbody>
                                 @forelse($clientes as $index => $item)
                                     <tr>
-                                        <td class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">{{ $index + 1 }}</td>
-                                        <td class="align-middle text-white font-weight-bold">{{ $item->cedula }}</td>
-                                        <td class="align-middle text-white font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
+                                        <td data-label="#" class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">{{ $index + 1 }}</td>
+                                        <td data-label="Cédula" class="align-middle text-white font-weight-bold">{{ $item->cedula }}</td>
+                                        <td data-label="Nombre" class="align-middle text-white font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
                                             {{ $item->nombre }}
                                         </td>
-                                        <td class="align-middle">
+                                        <td data-label="Contacto" class="align-middle">
                                             <div class="d-flex flex-column" style="gap: 1px; font-size: 0.85rem;">
                                                 <span class="text-white font-weight-bold"><i class="fas fa-phone text-muted mr-1" style="font-size: 0.75rem;"></i>{{ $item->telefono }}</span>
                                                 <span class="text-muted text-truncate" style="font-size: 0.8rem; max-width: 160px;" title="{{ $item->correo }}">{{ $item->correo }}</span>
                                             </div>
                                         </td>
-                                        <td class="align-middle">
+                                        <td data-label="Ubicación" class="align-middle">
                                             <div class="d-flex flex-column" style="gap: 1px; font-size: 0.85rem;">
                                                 <span class="text-white text-truncate" style="max-width: 160px;" title="{{ $item->direccion }}">
                                                     <i class="fas fa-map-marker-alt mr-1" style="color: #EF4444; opacity: 0.7; font-size: 0.75rem;"></i>{{ $item->direccion }}
@@ -402,7 +412,7 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td class="text-center align-middle">
+                                        <td data-label="Acciones" class="text-center align-middle">
                                             <div class="d-inline-flex" style="gap: 6px;">
                                                 {{-- Editar --}}
                                                 <a href="{{ route('admin.cliente.edit', $item->id) }}"

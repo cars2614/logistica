@@ -11,18 +11,14 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
 
-class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithBatchInserts, WithChunkReading
+class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithBatchInserts, WithChunkReading, ShouldQueue
 {
     protected $planilla;
     protected $ciudadId;
     protected $tipoEntregaId;
-    protected $totales = [
-        'guias_creadas' => 0,
-        'piezas' => 0,
-        'kilos' => 0,
-    ];
 
     public function __construct($planilla)
     {
@@ -80,10 +76,9 @@ class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithB
             // 4. Vincular Guía a la Planilla (Pivot)
             $this->planilla->guias()->attach($guia->id);
 
-            // 5. Actualizar Totales Locales
-            $this->totales['guias_creadas']++;
-            $this->totales['piezas'] += $row['piezas'];
-            $this->totales['kilos'] += $row['peso'];
+            // 5. Actualizar Totales en Base de Datos (Seguro para Jobs en segundo plano)
+            $this->planilla->increment('piezas', $row['piezas']);
+            $this->planilla->increment('kilos', $row['peso']);
         }
     }
 
@@ -111,13 +106,5 @@ class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithB
     public function chunkSize(): int
     {
         return 100;
-    }
-
-    /**
-     * Devuelve los totales calculados para actualizar la Planilla
-     */
-    public function getTotales()
-    {
-        return $this->totales;
     }
 }

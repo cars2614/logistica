@@ -55,7 +55,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('tipo_vehiculo_id')
+                                @error('id_tipo_vehiculo')
                                     <div class="invalid-feedback"><i
                                             class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</div>
                                 @enderror
@@ -180,29 +180,11 @@
 
 @push('js')
     <script>
-        // Placa: mayúsculas automáticas y limpia caracteres no permitidos al pegar
-        document.getElementById('placa').addEventListener('input', function() {
-            this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
-        });
-
-        // Marca: solo letras y tildes
-        document.getElementById('marca').addEventListener('input', function() {
-            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
-        });
-
-        // Modelo: letras y números
-        document.getElementById('modelo').addEventListener('input', function() {
-            this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
-        });
-
-        // Capacidad: solo enteros positivos
-        document.getElementById('capacidad').addEventListener('input', function() {
-            this.value = this.value.replace(/\D/g, '');
-            if (parseInt(this.value) < 1) this.value = '';
-        });
-
         // Fecha: no permite fechas futuras
         const fechaEdit = document.getElementById('fecha_registro');
         fechaEdit.setAttribute('max', new Date().toISOString().split('T')[0]);
+
+        // Nota: Los validadores de placa, marca, modelo y capacidad
+        // son manejados globalmente por LogisticaValidator en page.blade.php
     </script>
 @endpush

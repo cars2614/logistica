@@ -9,7 +9,8 @@ class EstadoGuia extends Model
 {
     use HasFactory;
 
-    protected $table      = 'estado_guias';
+    protected $table = 'estado_guias';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [

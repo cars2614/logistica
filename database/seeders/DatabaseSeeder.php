@@ -7,7 +7,8 @@ use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\EstadoGuia;
 use App\Models\TipoEntrega;
-use App\Models\Rol;
+use App\Enums\RoleEnum;
+use Spatie\Permission\Models\Role;
 use App\Models\TipoVehiculo;
 use App\Models\Vehiculo;
 use App\Models\Usuario;
@@ -1385,9 +1386,9 @@ class DatabaseSeeder extends Seeder
 
         //*******************  ROLES (SPATIE) ****************** */
 
-        \Spatie\Permission\Models\Role::create(['name' => 'Administrador']);
-        \Spatie\Permission\Models\Role::create(['name' => 'Repartidor']);
-        \Spatie\Permission\Models\Role::create(['name' => 'Cliente']);
+        foreach (RoleEnum::cases() as $role) {
+            Role::firstOrCreate(['name' => $role->value]);
+        }
 
 
 
@@ -1459,7 +1460,7 @@ class DatabaseSeeder extends Seeder
             'email' => "jose@example.com",
             'password' => bcrypt("password"),
         ]);
-        $usuario1->assignRole('Repartidor');
+        $usuario1->assignRole(RoleEnum::REPARTIDOR->value);
 
 
 
@@ -1472,7 +1473,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
         ]);
-        $admin->assignRole('Administrador');
+        $admin->assignRole(RoleEnum::ADMINISTRADOR->value);
         //************************************* */
 
 

@@ -276,7 +276,7 @@
                 </div>
                 
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-cards">
                         <table class="table table-hover table-premium mb-0">
                             <thead>
                                 <tr>
@@ -289,16 +289,16 @@
                             <tbody>
                                 @forelse($ciudades as $item)
                                     <tr>
-                                        <td class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">{{ $loop->iteration }}</td>
-                                        <td class="align-middle text-white font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
+                                        <td data-label="#" class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">{{ $loop->iteration }}</td>
+                                        <td data-label="Nombre" class="align-middle text-white font-weight-bold text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
                                             <i class="fas fa-map-marker-alt mr-2" style="color: #0EA5E9; opacity: 0.8;"></i>{{ $item->nombre }}
                                         </td>
-                                        <td class="align-middle">
+                                        <td data-label="Cod. Postal" class="align-middle">
                                             <span class="badge-premium badge-premium-blue">
                                                 <i class="fas fa-hashtag mr-1" style="font-size: 0.7rem;"></i>{{ $item->codigo_postal }}
                                             </span>
                                         </td>
-                                        <td class="text-center align-middle">
+                                        <td data-label="Acciones" class="text-center align-middle">
                                             <div class="d-inline-flex" style="gap: 6px;">
                                                 {{-- Editar --}}
                                                 <a href="{{ route('admin.ciudad.edit', $item->id) }}" 
@@ -308,12 +308,11 @@
                                                 </a>
 
                                                 {{-- Eliminar --}}
-                                                <form action="{{ route('admin.ciudad.destroy', $item->id) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('admin.ciudad.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar esta ciudad?')">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" 
                                                             class="btn btn-sm btn-danger shadow-sm d-flex align-items-center justify-content-center" 
-                                                            title="Eliminar" style="width: 32px; height: 32px; border-radius: 6px;"
-                                                            onclick="return confirm('¿Estás seguro de eliminar esta ciudad?')">
+                                                            title="Eliminar" style="width: 32px; height: 32px; border-radius: 6px;">
                                                         <i class="fas fa-trash fa-sm"></i>
                                                     </button>
                                                 </form>

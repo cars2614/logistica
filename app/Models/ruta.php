@@ -10,17 +10,21 @@ class Ruta extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table      = 'rutas';
+    protected $table = 'rutas';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [
-    'zona',
-    'guia',
-    'direccion',
-    'sector',
-    'ciudad',
-    'descripcion', // Déjalo si ya venía de antes
-];
+        'zona',
+        'guia',
+        'direccion',
+        'sector',
+        'ciudad',
+        'descripcion',
+        'latitud',
+        'longitud',
+        'color_hex',
+    ];
 
     /**
      * Una ruta tiene muchas planillas.
@@ -28,6 +32,6 @@ class Ruta extends Model
      */
     public function planillas()
     {
-        return $this->hasMany(Planilla::class, 'ruta_id', 'id');
+        return $this->hasMany(Planilla::class, 'id_ruta', 'id');
     }
 }

@@ -77,6 +77,13 @@
             overflow: hidden;
             margin-top: 15px;
         }
+        @media (max-width: 768px) {
+            .card-custom-premium {
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                background: rgba(13, 19, 35, 0.9) !important;
+            }
+        }
 
         .card-header-premium {
             padding: 20px 24px !important;
@@ -205,6 +212,43 @@
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
             color: #fff !important;
         }
+
+        /* Scrollbar horizontal visible y estilizada */
+        .table-responsive {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-responsive::-webkit-scrollbar {
+            height: 10px;
+        }
+        .table-responsive::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        .table-premium {
+            min-width: 1300px;
+        }
+        #scrollTop::-webkit-scrollbar {
+            height: 10px;
+        }
+        #scrollTop::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 5px;
+        }
+        #scrollTop::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 5px;
+        }
+        #scrollTop::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
     </style>
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -262,7 +306,11 @@
             </button>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            {{-- Scrollbar superior --}}
+            <div id="scrollTop" style="overflow-x: auto; overflow-y: hidden;">
+                <div id="scrollTopInner" style="height: 1px;"></div>
+            </div>
+            <div class="table-responsive table-responsive-cards" id="scrollBottom">
                 <table class="table table-hover table-premium mb-0">
                     <thead>
                         <tr>
@@ -284,7 +332,7 @@
                     <tbody>
                         @forelse($guias as $guia)
                             @php
-                                $estadoActual = $guia->estados->sortByDesc('id')->first();
+                                $estadoActual = $guia->estadoActual;
                                 $nombreEstado = $estadoActual->estado ?? 'Registrada';
 
                                 $badgeClass = match(strtolower($nombreEstado)) {
@@ -296,23 +344,23 @@
                                 };
                             @endphp
                             <tr>
-                                <td>{{ \Carbon\Carbon::parse($guia->created_at)->format('d/m/Y') }}</td>
-                                <td><strong class="text-white">GUIA-{{ str_pad($guia->id, 5, '0', STR_PAD_LEFT) }}</strong></td>
-                                <td>{{ $guia->tipoEntrega->nombre ?? '—' }}</td>
-                                <td class="text-white font-weight-bold">{{ $guia->clienteOrigen->nombre ?? '—' }}</td>
-                                <td class="text-white font-weight-bold">{{ $guia->clienteDestino->nombre ?? '—' }}</td>
-                                <td class="text-center font-weight-bold text-white">{{ $guia->unidades }}</td>
-                                <td class="text-center text-white">{{ $guia->peso }} kg</td>
-                                <td class="text-center text-muted">{{ $guia->largo }}×{{ $guia->ancho }}×{{ $guia->alto }} m</td>
-                                <td class="text-white">${{ number_format($guia->precio_envio, 0, ',', '.') }}</td>
-                                <td class="text-white">${{ number_format($guia->valor_declarado, 0, ',', '.') }}</td>
-                                <td>{{ $guia->repartidor->name ?? 'Sin asignar' }}</td>
-                                <td>
+                                <td data-label="Fecha Admisión">{{ \Carbon\Carbon::parse($guia->created_at)->format('d/m/Y') }}</td>
+                                <td data-label="N° Guía"><strong class="text-white">GUIA-{{ str_pad($guia->id, 5, '0', STR_PAD_LEFT) }}</strong></td>
+                                <td data-label="Tipo Entrega">{{ $guia->tipoEntrega->nombre ?? '—' }}</td>
+                                <td data-label="Cliente Origen" class="text-white font-weight-bold">{{ $guia->clienteOrigen->nombre ?? '—' }}</td>
+                                <td data-label="Cliente Destino" class="text-white font-weight-bold">{{ $guia->clienteDestino->nombre ?? '—' }}</td>
+                                <td data-label="Unidades" class="text-center font-weight-bold text-white">{{ $guia->unidades }}</td>
+                                <td data-label="Peso" class="text-center text-white">{{ $guia->peso }} kg</td>
+                                <td data-label="Volumen (L×A×A)" class="text-center text-muted">{{ $guia->largo }}×{{ $guia->ancho }}×{{ $guia->alto }} m</td>
+                                <td data-label="Precio Envío" class="text-white">${{ number_format($guia->precio_envio, 0, ',', '.') }}</td>
+                                <td data-label="Valor Declarado" class="text-white">${{ number_format($guia->valor_declarado, 0, ',', '.') }}</td>
+                                <td data-label="Repartidor">{{ $guia->repartidor->name ?? 'Sin asignar' }}</td>
+                                <td data-label="Estado Actual">
                                     <span class="badge-estado-premium {{ $badgeClass }}">
                                         {{ $nombreEstado }}
                                     </span>
                                 </td>
-                                <td class="text-center">
+                                <td data-label="Acciones" class="text-center" style="white-space: nowrap;">
                                     <button type="button" class="btn btn-success btn-xs btn-estado mr-1" title="Actualizar Estado"
                                         data-id="{{ $guia->id }}"
                                         data-toggle="modal" data-target="#modalEstado" style="border-radius: 4px;">
@@ -322,9 +370,16 @@
                                         title="Editar" style="border-radius: 4px; color: #111;">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{{ route('tracking.show', $guia->id) }}" class="btn btn-info btn-xs" title="Ver Tracking" style="border-radius: 4px;">
+                                    <a href="{{ route('tracking.show', $guia->id) }}" class="btn btn-info btn-xs mr-1" title="Ver Tracking" style="border-radius: 4px;">
                                         <i class="fas fa-satellite-dish"></i>
                                     </a>
+                                    <form action="{{ route('admin.guia.destroy', $guia->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-xs" title="Eliminar" style="border-radius: 4px;" onclick="return confirm('¿Está seguro de eliminar esta guía? (Se puede recuperar)')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
@@ -340,10 +395,11 @@
             </div>
         </div>
     </div>
+</div>
 
     {{-- Modal Crear Guía --}}
     <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-md-down" role="document">
             <div class="modal-content modal-content-premium">
                 <div class="modal-header modal-header-premium">
                     <h5 class="modal-title" id="modalCrearLabel">
@@ -360,7 +416,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Tipo de Entrega <span class="text-danger">*</span></label>
-                                <select name="id_tipo_entrega" class="form-control form-control-premium" required>
+                                <select name="id_tipo_entrega" class="form-control form-control-premium @error('id_tipo_entrega') is-invalid @enderror" required>
                                     <option value="">Seleccione...</option>
                                     @foreach ($tipoEntregas as $tipo)
                                         <option value="{{ $tipo->id }}" {{ old('id_tipo_entrega') == $tipo->id ? 'selected' : '' }}>
@@ -368,11 +424,14 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('id_tipo_entrega')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Repartidor Asignado (Opcional)</label>
-                                <select name="id_repartidor" class="form-control select2" style="width: 100%;">
+                                <select name="id_repartidor" class="form-control select2 @error('id_repartidor') is-invalid @enderror" style="width: 100%;">
                                     <option value="">Sin asignar...</option>
                                     @foreach ($repartidores as $repartidor)
                                         <option value="{{ $repartidor->id }}" {{ old('id_repartidor') == $repartidor->id ? 'selected' : '' }}>
@@ -380,11 +439,14 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('id_repartidor')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Cliente Origen <span class="text-danger">*</span></label>
-                                <select name="id_cliente_origen" class="form-control form-control-premium select2-field" required>
+                                <select name="id_cliente_origen" class="form-control form-control-premium select2-field @error('id_cliente_origen') is-invalid @enderror" required>
                                     <option value="">Seleccione...</option>
                                     @foreach ($clientes as $cliente)
                                         <option value="{{ $cliente->id }}" {{ old('id_cliente_origen') == $cliente->id ? 'selected' : '' }}>
@@ -392,11 +454,14 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('id_cliente_origen')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Cliente Destino <span class="text-danger">*</span></label>
-                                <select name="id_cliente_destino" class="form-control form-control-premium select2-field" required>
+                                <select name="id_cliente_destino" class="form-control form-control-premium select2-field @error('id_cliente_destino') is-invalid @enderror" required>
                                     <option value="">Seleccione...</option>
                                     @foreach ($clientes as $cliente)
                                         <option value="{{ $cliente->id }}" {{ old('id_cliente_destino') == $cliente->id ? 'selected' : '' }}>
@@ -404,46 +469,73 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('id_cliente_destino')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Unidades <span class="text-danger">*</span></label>
-                                <input type="number" name="unidades" id="m_unidades" class="form-control form-control-premium" value="{{ old('unidades', 1) }}" min="1" required>
+                                <input type="number" name="unidades" id="m_unidades" class="form-control form-control-premium @error('unidades') is-invalid @enderror" value="{{ old('unidades', 1) }}" min="1" required>
+                                @error('unidades')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Peso (Kg) <span class="text-danger">*</span></label>
-                                <input type="number" name="peso" class="form-control form-control-premium" value="{{ old('peso', 1) }}" step="0.01" min="0.01" required>
+                                <input type="number" name="peso" class="form-control form-control-premium @error('peso') is-invalid @enderror" value="{{ old('peso', 1) }}" step="0.01" min="0.01" required>
+                                @error('peso')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label class="text-white">Largo (m) <span class="text-danger">*</span></label>
-                                <input type="number" name="largo" class="form-control form-control-premium" value="{{ old('largo', 0.1) }}" step="0.01" min="0.01" required>
+                                <input type="number" name="largo" class="form-control form-control-premium @error('largo') is-invalid @enderror" value="{{ old('largo', 0.1) }}" step="0.01" min="0.01" required>
+                                @error('largo')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label class="text-white">Ancho (m) <span class="text-danger">*</span></label>
-                                <input type="number" name="ancho" class="form-control form-control-premium" value="{{ old('ancho', 0.1) }}" step="0.01" min="0.01" required>
+                                <input type="number" name="ancho" class="form-control form-control-premium @error('ancho') is-invalid @enderror" value="{{ old('ancho', 0.1) }}" step="0.01" min="0.01" required>
+                                @error('ancho')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label class="text-white">Alto (m) <span class="text-danger">*</span></label>
-                                <input type="number" name="alto" class="form-control form-control-premium" value="{{ old('alto', 0.1) }}" step="0.01" min="0.01" required>
+                                <input type="number" name="alto" class="form-control form-control-premium @error('alto') is-invalid @enderror" value="{{ old('alto', 0.1) }}" step="0.01" min="0.01" required>
+                                @error('alto')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Precio Envío <span class="text-danger">*</span></label>
-                                <input type="number" name="precio_envio" class="form-control form-control-premium" value="{{ old('precio_envio', 9800) }}" step="0.01" min="0" required>
+                                <input type="number" name="precio_envio" class="form-control form-control-premium @error('precio_envio') is-invalid @enderror" value="{{ old('precio_envio', 9800) }}" step="0.01" min="0" required>
+                                @error('precio_envio')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Valor Declarado <span class="text-danger">*</span></label>
-                                <input type="number" name="valor_declarado" class="form-control form-control-premium" value="{{ old('valor_declarado', 20000) }}" step="0.01" min="0" required>
+                                <input type="number" name="valor_declarado" class="form-control form-control-premium @error('valor_declarado') is-invalid @enderror" value="{{ old('valor_declarado', 20000) }}" step="0.01" min="0" required>
+                                @error('valor_declarado')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-md-12 form-group">
                                 <label class="text-white">Observación</label>
-                                <textarea name="observacion" rows="2" class="form-control form-control-premium" style="height: auto !important;">{{ old('observacion') }}</textarea>
+                                <textarea name="observacion" rows="2" class="form-control form-control-premium @error('observacion') is-invalid @enderror" style="height: auto !important;">{{ old('observacion') }}</textarea>
+                                @error('observacion')
+                                    <span class="error invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -452,7 +544,7 @@
                         <button type="button" class="btn btn-outline-light font-weight-bold" style="border-radius: 8px;" data-dismiss="modal">
                             <i class="fas fa-times mr-1"></i> Cancelar
                         </button>
-                        <button type="submit" class="btn btn-primary-premium">
+                        <button type="submit" class="btn text-white font-weight-bold shadow-sm" style="background: #0EA5E9 !important; border: none; border-radius: 8px; padding: 8px 20px;">
                             <i class="fas fa-save mr-1"></i> Guardar
                         </button>
                     </div>
@@ -463,7 +555,7 @@
 
     {{-- Modal Actualizar Estado --}}
     <div class="modal fade" id="modalEstado" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down" role="document">
             <div class="modal-content modal-content-premium">
                 <div class="modal-header modal-header-premium">
                     <h5 class="modal-title"><i class="fas fa-truck-loading mr-2" style="color: #10B981;"></i>Actualizar Estado</h5>
@@ -497,7 +589,6 @@
         </div>
     </div>
 
-</div>
 @stop
 
 @section('js')
@@ -548,5 +639,29 @@
         setTimeout(function() {
             $('.alert-dismissible').fadeOut('slow');
         }, 4000);
+
+        // Sincronizar scrollbar superior con la tabla
+        $(document).ready(function() {
+            var $top = $('#scrollTop');
+            var $bottom = $('#scrollBottom');
+            var $inner = $('#scrollTopInner');
+
+            // Igualar el ancho interno al de la tabla
+            $inner.width($bottom[0].scrollWidth);
+
+            // Aplicar mismos estilos de scrollbar al div superior
+            $top.css({
+                'scrollbar-width': 'thin',
+                'scrollbar-color': 'rgba(99,102,241,0.4) rgba(255,255,255,0.03)'
+            });
+
+            var syncing = false;
+            $top.on('scroll', function() {
+                if (!syncing) { syncing = true; $bottom.scrollLeft($top.scrollLeft()); syncing = false; }
+            });
+            $bottom.on('scroll', function() {
+                if (!syncing) { syncing = true; $top.scrollLeft($bottom.scrollLeft()); syncing = false; }
+            });
+        });
     </script>
 @stop

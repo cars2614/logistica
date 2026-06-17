@@ -7,11 +7,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TipoEntregaController;
 use App\Http\Controllers\Admin\CiudadController;
 use App\Http\Controllers\Admin\ClienteController;
-use App\Http\Controllers\Admin\RolController;
+
 use App\Http\Controllers\Admin\TipovehiculoController;
 use App\Http\Controllers\Admin\VehiculoController;
 use App\Http\Controllers\Admin\GuiaController;
-use App\Http\Controllers\Admin\EstadoGuiaController;
 use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
 use App\Http\Controllers\Admin\TrackingController;
@@ -54,9 +53,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->parameters(['cliente' => 'cliente'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-    Route::resource('rol', RolController::class)
-        ->parameters(['rol' => 'rol'])
-        ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
 
     Route::resource('tipo-vehiculo', TipovehiculoController::class)
         ->parameters(['tipo-vehiculo' => 'tipoVehiculo'])
@@ -80,12 +77,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->parameters(['planilla' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
+    Route::get('ruta/geodata', [RutaController::class, 'getGeoData'])->name('ruta.geodata');
     Route::resource('ruta', RutaController::class)
         ->parameters(['ruta' => 'id'])
         ->only(['index', 'store', 'edit', 'update', 'destroy']);
 
     Route::get('/repartidores/create', [RepartidorManagementController::class, 'create'])->name('repartidor.create');
     Route::post('/repartidores', [RepartidorManagementController::class, 'store'])->name('repartidor.store');
+    Route::put('/repartidores/{id}', [RepartidorManagementController::class, 'update'])->name('repartidor.update');
+    Route::put('/repartidores/{id}/vehicle', [RepartidorManagementController::class, 'assignVehicle'])->name('repartidor.vehicle');
     
     // Ruta protegida para que solo administradores reseteen contraseñas
     Route::put('/repartidores/{id}/password', [RepartidorManagementController::class, 'updatePassword'])->name('repartidor.password');

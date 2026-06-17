@@ -77,6 +77,13 @@
             overflow: hidden;
             margin-top: 15px;
         }
+        @media (max-width: 768px) {
+            .card-custom-premium {
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                background: rgba(13, 19, 35, 0.9) !important;
+            }
+        }
 
         .card-header-premium {
             padding: 20px 24px !important;
@@ -271,11 +278,14 @@
                         <button class="btn btn-sm font-weight-bold shadow-sm px-3 text-white" data-toggle="modal" data-target="#modalImportarPlanilla" style="background: #0EA5E9; border: none; border-radius: 8px;">
                             <i class="fas fa-upload mr-1"></i> Importar Guías (Excel)
                         </button>
+                        <button class="btn btn-sm font-weight-bold shadow-sm px-3 text-white" data-toggle="modal" data-target="#modal-crear-planilla" style="background: #6366F1; border: none; border-radius: 8px;">
+                            <i class="fas fa-plus-circle mr-1"></i> Nueva Planilla
+                        </button>
                     </div>
                 </div>
 
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive table-responsive-cards">
                         <table class="table table-hover table-premium mb-0">
                             <thead>
                                 <tr>
@@ -290,22 +300,22 @@
                             <tbody>
                                 @forelse ($planillas as $planilla)
                                     <tr>
-                                        <td class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">#{{ $planilla->id }}</td>
-                                        <td class="align-middle">
+                                        <td data-label="# ID" class="text-center align-middle font-weight-bold" style="color: rgba(255,255,255,0.3);">#{{ $planilla->id }}</td>
+                                        <td data-label="N° Planilla" class="align-middle">
                                             <span class="badge-premium badge-premium-success">
                                                 {{ $planilla->numero_planilla ?? 'Sin número' }}
                                             </span>
                                         </td>
-                                        <td class="align-middle text-white font-weight-bold">
+                                        <td data-label="Ruta de Destino" class="align-middle text-white font-weight-bold">
                                             {{ $planilla->ruta->nombre ?? 'Ruta #'.$planilla->id_ruta }}
                                         </td>
-                                        <td class="text-center align-middle text-white font-weight-bold">
+                                        <td data-label="Piezas" class="text-center align-middle text-white font-weight-bold">
                                             {{ $planilla->piezas }}
                                         </td>
-                                        <td class="text-center align-middle text-white font-weight-bold">
+                                        <td data-label="Kilos" class="text-center align-middle text-white font-weight-bold">
                                             {{ $planilla->kilos }} kg
                                         </td>
-                                        <td class="text-center align-middle">
+                                        <td data-label="Acciones" class="text-center align-middle">
                                             <a href="{{ route('admin.planilla.edit', $planilla->id) }}" class="btn btn-sm btn-info shadow-sm mr-1" title="Ver Guías" style="border-radius: 6px;">
                                                 <i class="fas fa-eye"></i>
                                             </a>
@@ -341,9 +351,79 @@
     </div>
 </div>
 
+{{-- Modal Crear Planilla Manual --}}
+<div class="modal fade" id="modal-crear-planilla" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down" role="document">
+        <div class="modal-content modal-content-premium">
+            <form action="{{ route('admin.planilla.store') }}" method="POST">
+                @csrf
+                <div class="modal-header modal-header-premium">
+                    <h5 class="modal-title font-weight-bold mb-0">
+                        <i class="fas fa-plus-circle mr-2" style="color: #6366F1;"></i>Nueva Planilla Manual
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-body-premium">
+                    <div class="row">
+                        <div class="col-md-12 form-group mb-3">
+                            <label class="font-weight-bold text-white mb-1">Ruta de Distribución <span class="text-danger">*</span></label>
+                            <select name="ruta_id" class="form-control form-control-premium @error('ruta_id') is-invalid @enderror" required>
+                                <option value="">-- Seleccionar ruta --</option>
+                                @foreach($rutas as $ruta)
+                                    <option value="{{ $ruta->id }}" {{ old('ruta_id') == $ruta->id ? 'selected' : '' }}>{{ $ruta->nombre ?? 'Ruta #'.$ruta->id }}</option>
+                                @endforeach
+                            </select>
+                            @error('ruta_id')
+                                <span class="error invalid-feedback d-block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-12 form-group mb-3">
+                            <label class="font-weight-bold text-white mb-1">Vehículo Asignado <span class="text-danger">*</span></label>
+                            <select name="vehiculo_id" class="form-control form-control-premium @error('vehiculo_id') is-invalid @enderror" required>
+                                <option value="">-- Seleccionar vehículo --</option>
+                                @foreach($vehiculos as $vehiculo)
+                                    <option value="{{ $vehiculo->id }}" {{ old('vehiculo_id') == $vehiculo->id ? 'selected' : '' }}>{{ $vehiculo->placa }} — Capacidad: {{ $vehiculo->capacidad }} kg</option>
+                                @endforeach
+                            </select>
+                            @error('vehiculo_id')
+                                <span class="error invalid-feedback d-block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label class="font-weight-bold text-white mb-1">Piezas Totales <span class="text-danger">*</span></label>
+                            <input type="number" name="piezas" class="form-control form-control-premium @error('piezas') is-invalid @enderror" value="{{ old('piezas', 1) }}" min="1" required>
+                            @error('piezas')
+                                <span class="error invalid-feedback d-block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label class="font-weight-bold text-white mb-1">Peso Total (KG) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="number" step="0.1" name="kilos" class="form-control form-control-premium @error('kilos') is-invalid @enderror" value="{{ old('kilos') }}" placeholder="0.0" min="0.1" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #94A3B8;">KG</span>
+                                </div>
+                            </div>
+                            @error('kilos')
+                                <span class="error invalid-feedback d-block" style="display: block !important;">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-premium">
+                    <button type="button" class="btn btn-outline-light font-weight-bold" style="border-radius: 8px;" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn font-weight-bold text-white px-4" style="background: #6366F1; border: none; border-radius: 8px;"><i class="fas fa-save mr-1"></i> Guardar Planilla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {{-- Modal Importar Planilla (Excel) --}}
 <div class="modal fade" id="modalImportarPlanilla" tabindex="-1" role="dialog" aria-labelledby="modalImportarPlanillaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down" role="document">
         <div class="modal-content modal-content-premium">
             <form action="{{ route('admin.planilla.importar') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -378,7 +458,7 @@
                 </div>
                 <div class="modal-footer modal-footer-premium">
                     <button type="button" class="btn btn-outline-light font-weight-bold" style="border-radius: 8px;" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary-premium"><i class="fas fa-cogs mr-1"></i> Procesar Excel</button>
+                    <button type="submit" class="btn font-weight-bold text-white px-4" style="background: #0EA5E9; border: none; border-radius: 8px;"><i class="fas fa-cogs mr-1"></i> Procesar Excel</button>
                 </div>
             </form>
         </div>

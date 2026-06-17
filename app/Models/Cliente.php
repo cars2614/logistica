@@ -9,7 +9,7 @@ class Cliente extends Model
 {
     use SoftDeletes;
 
-    protected $fillable =[
+    protected $fillable = [
         'nombre',
         'cedula',
         'telefono',

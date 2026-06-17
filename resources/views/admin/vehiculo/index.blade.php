@@ -4,116 +4,343 @@
 
 @section('title', 'Vehículos')
 
+@section('css')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .content-wrapper {
+            background-color: #0A0F1E !important;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .content-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content-wrapper::after {
+            content: "";
+            position: absolute;
+            width: 600px; height: 600px;
+            top: -100px; right: -100px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .premium-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-dashboard-container {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .dashboard-title-main {
+            font-size: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-title-main i {
+            color: #0EA5E9;
+        }
+
+        .dashboard-date-badge {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .dashboard-date-badge i {
+            color: #6366F1;
+        }
+
+        .card-custom-premium {
+            background: rgba(13, 19, 35, 0.65) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        @media (max-width: 768px) {
+            .card-custom-premium {
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                background: rgba(13, 19, 35, 0.9) !important;
+            }
+        }
+
+        .card-header-premium {
+            padding: 20px 24px !important;
+            background: transparent !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title-premium {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-premium th {
+            background-color: rgba(255, 255, 255, 0.01) !important;
+            color: #94A3B8 !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+            padding: 12px 15px !important;
+        }
+
+        .table-premium td {
+            padding: 12px 15px !important;
+            vertical-align: middle !important;
+            color: #E2E8F0 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+            font-size: 13px !important;
+        }
+
+        .table-premium tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+        }
+
+        /* Badge status styled */
+        .badge-estado-premium {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-premium-success { background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-premium-info { background: rgba(14, 165, 233, 0.12); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.2); }
+        .badge-premium-warning { background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-premium-danger { background: rgba(239, 68, 68, 0.12); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .badge-premium-secondary { background: rgba(148, 163, 184, 0.12); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.2); }
+
+        /* Modals Premium */
+        .modal-content-premium {
+            background-color: #131A2E !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .modal-header-premium {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+            background: transparent !important;
+            color: #fff !important;
+            padding: 20px 24px !important;
+        }
+
+        .modal-body-premium {
+            padding: 24px !important;
+        }
+
+        .modal-footer-premium {
+            border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+            background: transparent !important;
+            padding: 16px 24px !important;
+        }
+
+        .form-control-premium {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+            border-radius: 8px !important;
+            height: calc(2.25rem + 2px) !important;
+        }
+
+        .form-control-premium:focus {
+            border-color: #0EA5E9 !important;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+        }
+
+        .form-control-premium option {
+            background-color: #131A2E !important;
+            color: #fff !important;
+        }
+
+        /* Select2 Premium style overrides */
+        .select2-container--bootstrap4 .select2-selection--single {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+            border-radius: 8px !important;
+            height: calc(2.25rem + 2px) !important;
+        }
+        .select2-container--bootstrap4 .select2-selection__rendered {
+            color: #fff !important;
+        }
+        .select2-dropdown {
+            background-color: #131A2E !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        .select2-results__option {
+            color: #fff !important;
+        }
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: #0EA5E9 !important;
+        }
+        .select2-search__field {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+        }
+
+        /* Scrollbar horizontal visible y estilizada */
+        .table-responsive {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-responsive::-webkit-scrollbar {
+            height: 10px;
+        }
+        .table-responsive::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        .table-premium {
+            min-width: 1300px;
+        }
+        #scrollTop::-webkit-scrollbar {
+            height: 10px;
+        }
+        #scrollTop::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 5px;
+        }
+        #scrollTop::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 5px;
+        }
+        #scrollTop::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+    </style>
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+@stop
+
 @section('content_header')
-    <div class="container-fluid pt-3">
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
-            <h1 class="m-0 font-weight-bold text-secondary">
-                <i class="fas fa-car text-primary mr-2"></i>Vehículos
-            </h1>
-            <ol class="breadcrumb m-0 bg-transparent p-0">
-                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-                <li class="breadcrumb-item active">Vehículos</li>
-            </ol>
-        </div>
+    <div class="d-flex justify-content-between align-items-center header-dashboard-container">
+        <h1 class="text-white font-weight-bold dashboard-title-main m-0">
+            <i class="fas fa-car mr-2"></i>Gestión de Vehículos
+        </h1>
+        <span class="dashboard-date-badge">
+            <i class="fa fa-calendar-alt mr-1"></i> Hoy: {{ \Carbon\Carbon::now()->format('d/m/Y') }}
+        </span>
     </div>
 @stop
 
 @section('content')
-<div class="container-fluid pb-4">
+<div class="container-fluid pb-4 premium-container">
 
-    {{-- Alertas Premium --}}
+    {{-- Alertas del Sistema --}}
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-check-circle mr-2 fa-lg"></i>
-                <div>{{ session('success') }}</div>
-            </div>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-white">&times;</span>
-            </button>
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.25) !important; color: #34D399;" role="alert">
+            <i class="fas fa-check-circle mr-1"></i> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     @endif
 
     @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-exclamation-circle mr-2 fa-lg"></i>
-                <div>{{ session('error') }}</div>
-            </div>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-white">&times;</span>
-            </button>
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.25) !important; color: #F87171;" role="alert">
+            <i class="fas fa-exclamation-circle mr-1"></i> {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-exclamation-triangle mr-2 fa-lg"></i>
-                <div>
-                    <strong class="d-block mb-1">Por favor corrige los siguientes errores:</strong>
-                    <ul class="mb-0 pl-3">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-white">&times;</span>
-            </button>
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.25) !important; color: #F87171;" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
     @endif
 
-    <div class="row mt-3">
-        <div class="col-12">
-            <div class="card card-outline card-primary shadow-sm border-0">
-                <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
-                    <h3 class="card-title font-weight-bold text-dark mb-0">
-                        <i class="fas fa-list text-primary mr-2"></i>Listado de Vehículos
-                    </h3>
-                    <div class="card-tools d-flex align-items-center" style="gap: 10px;">
-                        <span class="badge badge-pill badge-primary px-3 py-2 font-weight-bold shadow-sm">
-                            Total: {{ $vehiculos->total() }}
-                        </span>
-                        <button class="btn btn-primary btn-sm font-weight-bold shadow-sm px-3" data-toggle="modal" data-target="#modalCrear">
-                            <i class="fas fa-plus mr-1"></i> Nuevo Vehículo
-                        </button>
-                    </div>
-                </div>
+    {{-- Tabla Principal --}}
+    <div class="card-custom-premium">
+        <div class="card-header-premium">
+            <h3 class="card-title-premium">
+                <i class="fas fa-car" style="color: #6366F1;"></i> Vehículos Registrados
+            </h3>
+            <div class="card-tools d-flex align-items-center" style="gap: 12px;">
+                <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3); padding: 6px 12px; border-radius: 6px;">
+                    Total: {{ $vehiculos->total() }}
+                </span>
+                <button class="btn btn-primary btn-sm font-weight-bold" data-toggle="modal" data-target="#modalCrear" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); border: none; border-radius: 6px; padding: 6px 16px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                    <i class="fas fa-plus mr-1"></i> Nuevo Vehículo
+                </button>
+            </div>
+        </div>
 
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="bg-light border-bottom text-secondary">
-                                <tr>
-                                    <th width="5%" class="text-center font-weight-bold border-0">#</th>
-                                    <th width="12%" class="font-weight-bold border-0">Placa</th>
-                                    <th width="15%" class="font-weight-bold border-0">Marca</th>
-                                    <th width="15%" class="font-weight-bold border-0">Modelo</th>
-                                    <th width="15%" class="font-weight-bold border-0">Tipo</th>
-                                    <th width="12%" class="font-weight-bold border-0">Capacidad</th>
-                                    <th width="12%" class="font-weight-bold border-0">Estado</th>
-                                    <th width="14%" class="font-weight-bold border-0">Fecha Registro</th>
-                                    <th width="10%" class="text-center font-weight-bold border-0">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+        <div class="card-body p-0">
+            <div class="table-responsive table-responsive-cards" id="scrollTop">
+                <table class="table table-premium mb-0">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="text-center">#</th>
+                            <th width="12%">Placa</th>
+                            <th width="15%">Marca</th>
+                            <th width="15%">Modelo</th>
+                            <th width="15%">Tipo</th>
+                            <th width="12%">Capacidad</th>
+                            <th width="12%">Estado</th>
+                            <th width="14%">Fecha Registro</th>
+                            <th width="10%" class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                                 @forelse ($vehiculos as $index => $vehiculo)
-                                    <tr class="align-middle">
-                                        <td class="text-center align-middle font-weight-bold text-muted">
-                                            {{ $vehiculos->firstItem() + $index }}
-                                        </td>
-                                        <td class="align-middle">
-                                            <span class="badge badge-plate px-2 py-1 shadow-sm font-weight-bold text-uppercase">
+                                    <tr>
+                                        <td data-label="#" class="text-center text-muted">{{ $vehiculos->firstItem() + $index }}</td>
+                                        <td data-label="Placa">
+                                            <span class="badge" style="background: rgba(255,255,255,0.05); color: #E2E8F0; border: 1px solid rgba(255,255,255,0.1); padding: 5px 10px; font-family: monospace; font-size: 13px;">
                                                 {{ $vehiculo->placa }}
                                             </span>
                                         </td>
-                                        <td class="align-middle text-dark font-weight-bold text-uppercase" style="font-size: 0.85rem;">{{ $vehiculo->marca }}</td>
-                                        <td class="align-middle text-secondary" style="font-size: 0.85rem;">{{ $vehiculo->modelo }}</td>
+                                        <td data-label="Marca" style="color: #F8FAFC; font-weight: 500;">{{ $vehiculo->marca }}</td>
+                                        <td data-label="Modelo" style="color: #CBD5E1;">{{ $vehiculo->modelo }}</td>
                                         
                                         {{-- Celda con Iconos Dinámicos según el Tipo de Vehículo --}}
-                                        <td class="align-middle text-secondary" style="font-size: 0.85rem;">
+                                        <td data-label="Tipo">
                                             @php
                                                 $nombreTipo = strtolower($vehiculo->tipoVehiculo->nombre ?? '');
                                                 $icono = 'fas fa-car'; 
@@ -128,28 +355,28 @@
                                                     $icono = 'fas fa-bus';
                                                 }
                                             @endphp
-                                            <i class="{{ $icono }} text-primary mr-2" style="opacity: 0.8;"></i>
-                                            <strong>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</strong>
+                                            <i class="{{ $icono }}" style="color: #38BDF8; margin-right: 6px;"></i>
+                                            <span style="color: #94A3B8;">{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</span>
                                         </td>
 
-                                        <td class="align-middle font-weight-bold text-dark" style="font-size: 0.85rem;">{{ number_format($vehiculo->capacidad) }} kg</td>
-                                        <td class="align-middle">
+                                        <td data-label="Capacidad" style="color: #E2E8F0; font-weight: 500;">{{ number_format($vehiculo->capacidad) }} kg</td>
+                                        <td data-label="Estado">
                                             @if($vehiculo->estado === 'activo')
-                                                <span class="badge badge-pill badge-success px-2 py-1" style="font-size: 0.75rem; font-weight: 700;">ACTIVO</span>
+                                                <span class="badge-estado-premium badge-premium-success">ACTIVO</span>
                                             @elseif($vehiculo->estado === 'inactivo')
-                                                <span class="badge badge-pill badge-secondary px-2 py-1" style="font-size: 0.75rem; font-weight: 700;">INACTIVO</span>
+                                                <span class="badge-estado-premium badge-premium-secondary">INACTIVO</span>
                                             @else
-                                                <span class="badge badge-pill badge-warning px-2 py-1 text-dark" style="font-size: 0.75rem; font-weight: 700;">MANTENIMIENTO</span>
+                                                <span class="badge-estado-premium badge-premium-warning">MANTENIMIENTO</span>
                                             @endif
                                         </td>
-                                        <td class="align-middle text-muted" style="font-size: 0.85rem;">
+                                        <td data-label="Fecha Registro" style="color: #94A3B8;">
                                             {{ \Carbon\Carbon::parse($vehiculo->fecha_registro)->format('d/m/Y') }}
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <div class="d-inline-flex" style="gap: 6px;">
+                                        <td data-label="Acciones" class="text-center">
+                                            <div class="d-inline-flex" style="gap: 8px;">
                                                 <a href="{{ route('admin.vehiculo.edit', $vehiculo->id) }}"
-                                                   class="btn btn-sm btn-info shadow-sm d-flex align-items-center justify-content-center" 
-                                                   title="Editar" style="width: 32px; height: 32px; border-radius: 6px;">
+                                                   class="btn btn-sm" 
+                                                   title="Editar" style="background: rgba(14, 165, 233, 0.1); color: #38BDF8; border: 1px solid rgba(14, 165, 233, 0.2); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s;">
                                                     <i class="fas fa-pen fa-sm"></i>
                                                 </a>
                                                 
@@ -159,9 +386,9 @@
                                                     @method('DELETE')
                                                     <button
                                                         type="button"
-                                                        class="btn btn-sm btn-danger shadow-sm d-flex align-items-center justify-content-center btn-eliminar"
+                                                        class="btn btn-sm btn-eliminar"
                                                         title="Eliminar"
-                                                        style="width: 32px; height: 32px; border-radius: 6px;"
+                                                        style="background: rgba(239, 68, 68, 0.1); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.2); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s;"
                                                         data-placa="{{ $vehiculo->placa }}"
                                                     >
                                                         <i class="fas fa-trash fa-sm"></i>
@@ -172,8 +399,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center text-muted py-5 bg-white">
-                                            <i class="fas fa-folder-open fa-3x mb-3 text-muted" style="opacity: 0.5;"></i>
+                                        <td colspan="9" class="text-center py-5" style="color: #94A3B8;">
+                                            <i class="fas fa-car fa-3x mb-3" style="opacity: 0.3;"></i>
                                             <p class="mb-0 font-weight-bold">No hay vehículos registrados.</p>
                                         </td>
                                     </tr>
@@ -184,32 +411,31 @@
                 </div>
 
                 @if($vehiculos->hasPages())
-                    <div class="card-footer bg-white border-top py-3">
+                    <div class="card-footer" style="background: transparent !important; border-top: 1px solid rgba(255, 255, 255, 0.05) !important; padding: 15px 24px;">
                         <div class="d-flex justify-content-center">
                             {{ $vehiculos->links() }}
                         </div>
                     </div>
                 @endif
             </div>
-        </div>
-    </div>
+
 </div>
 
 {{-- Modal Crear --}}
 <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content border-0 shadow-lg">
+        <div class="modal-content modal-content-premium">
             <form action="{{ route('admin.vehiculo.store') }}" method="POST">
                 @csrf
-                <div class="modal-header bg-primary text-white py-3">
+                <div class="modal-header modal-header-premium">
                     <h5 class="modal-title font-weight-bold mb-0" id="modalCrearLabel">
-                        <i class="fas fa-plus-circle mr-2"></i>Nuevo Vehículo
+                        <i class="fas fa-car mr-2 text-primary"></i>Nuevo Vehículo
                     </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.8; text-shadow: none;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body modal-body-premium">
                     <div class="row">
 
                         {{-- Placa --}}
@@ -223,7 +449,7 @@
                                     type="text"
                                     name="placa"
                                     id="m_placa"
-                                    class="form-control border-left-0 text-uppercase font-weight-bold @error('placa') is-invalid @enderror"
+                                    class="form-control-premium text-uppercase font-weight-bold @error('placa') is-invalid @enderror"
                                     value="{{ old('placa') }}"
                                     placeholder="Ej: ABC-123"
                                     maxlength="10"
@@ -247,7 +473,7 @@
                                 <select
                                     name="id_tipo_vehiculo"
                                     id="m_tipo_vehiculo_id"
-                                    class="form-control border-left-0 @error('id_tipo_vehiculo') is-invalid @enderror"
+                                    class="form-control-premium @error('id_tipo_vehiculo') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
@@ -274,7 +500,7 @@
                                     type="text"
                                     name="marca"
                                     id="m_marca"
-                                    class="form-control border-left-0 @error('marca') is-invalid @enderror"
+                                    class="form-control-premium @error('marca') is-invalid @enderror"
                                     value="{{ old('marca') }}"
                                     placeholder="Ej: Chevrolet"
                                     maxlength="100"
@@ -297,7 +523,7 @@
                                     type="text"
                                     name="modelo"
                                     id="m_modelo"
-                                    class="form-control border-left-0 @error('modelo') is-invalid @enderror"
+                                    class="form-control-premium @error('modelo') is-invalid @enderror"
                                     value="{{ old('modelo') }}"
                                     placeholder="Ej: NHR 2022"
                                     maxlength="100"
@@ -320,7 +546,7 @@
                                     type="number"
                                     name="capacidad"
                                     id="m_capacidad"
-                                    class="form-control border-left-0 @error('capacidad') is-invalid @enderror"
+                                    class="form-control-premium @error('capacidad') is-invalid @enderror"
                                     value="{{ old('capacidad') }}"
                                     placeholder="Ej: 5000"
                                     min="1"
@@ -342,7 +568,7 @@
                                 <select
                                     name="estado"
                                     id="m_estado"
-                                    class="form-control border-left-0 @error('estado') is-invalid @enderror"
+                                    class="form-control-premium @error('estado') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
@@ -367,7 +593,7 @@
                                     type="date"
                                     name="fecha_registro"
                                     id="m_fecha_registro"
-                                    class="form-control border-left-0 @error('fecha_registro') is-invalid @enderror"
+                                    class="form-control-premium @error('fecha_registro') is-invalid @enderror"
                                     value="{{ old('fecha_registro') }}"
                                     required
                                 >
@@ -379,9 +605,10 @@
 
                     </div>
                 </div>
-                <div class="modal-footer bg-light border-top-0 py-3">
-                    <button type="button" class="btn btn-outline-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary font-weight-bold">Guardar Vehículo</button>
+                </div>
+                <div class="modal-footer modal-footer-premium">
+                    <button type="button" class="btn text-white" data-dismiss="modal" style="background: rgba(255,255,255,0.1); border: none;">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); border: none;">Guardar Vehículo</button>
                 </div>
             </form>
         </div>
@@ -391,44 +618,27 @@
 {{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-danger text-white py-3">
-                <h5 class="modal-title font-weight-bold mb-0">Confirmar eliminación</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+        <div class="modal-content modal-content-premium">
+            <div class="modal-header modal-header-premium" style="border-bottom: 1px solid rgba(239, 68, 68, 0.2) !important;">
+                <h5 class="modal-title font-weight-bold mb-0 text-danger"><i class="fas fa-exclamation-triangle mr-2"></i> Confirmar eliminación</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" style="opacity: 0.8; text-shadow: none;"><span>&times;</span></button>
             </div>
-            <div class="modal-body p-4">
-                <p class="text-dark mb-2">¿Está seguro que desea eliminar el vehículo con placa <strong id="placaEliminar" class="text-danger"></strong>?</p>
+            <div class="modal-body modal-body-premium">
+                <p class="text-white mb-2">¿Está seguro que desea eliminar el vehículo con placa <strong id="placaEliminar" class="text-danger"></strong>?</p>
             </div>
-            <div class="modal-footer bg-light py-3">
-                <button type="button" class="btn btn-outline-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger font-weight-bold" id="btnConfirmarEliminar">Eliminar Registro</button>
+            <div class="modal-footer modal-footer-premium">
+                <button type="button" class="btn text-white" data-dismiss="modal" style="background: rgba(255,255,255,0.1); border: none;">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); border: none;">Eliminar Registro</button>
             </div>
         </div>
     </div>
 </div>
 @stop
 
-@section('css')
-<style>
-    .table-hover tbody tr:hover { background-color: rgba(0, 123, 255, 0.02) !important; }
-    .input-group-text { border-right: none !important; }
-    .form-control { border-left: none !important; }
-    .badge-plate {
-        background-color: #f9f9f9; color: #2c3e50; border: 2px solid #bdc3c7;
-        font-family: 'Courier New', Courier, monospace; letter-spacing: 1px;
-        font-size: 0.9rem; border-radius: 4px;
-    }
-</style>
-@stop
-
 @section('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('m_fecha_registro').setAttribute('max', hoy);
-
-    document.getElementById('m_placa').addEventListener('input', function () {
-        this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
-    });
 
     let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function (btn) {

@@ -53,6 +53,18 @@ class PlanillaController extends Controller
             ->with('success', 'Planilla creada correctamente.');
     }
 
+    public function edit($id)
+    {
+        $planilla = Planilla::with([
+            'ruta',
+            'guias.clienteOrigen',
+            'guias.clienteDestino',
+            'guias.estados'
+        ])->findOrFail($id);
+
+        return view('admin.planillas.edit', compact('planilla'));
+    }
+
     public function destroy($id)
     {
         $planilla = Planilla::findOrFail($id);

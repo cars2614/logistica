@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCiudadRequest;
-use App\Http\Requests\UpdateCiudadRequest;
 use App\Models\Ciudad;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -18,8 +17,8 @@ class CiudadController extends Controller
     {
         // Usamos latest() que es un shortcut de orderBy('created_at', 'desc') o por ID
         $ciudades = Ciudad::latest('id')->get();
-
-        // Ajustamos la ruta de la vista a 'admin.ciudad.index'
+        
+        // Ajustamos la ruta de la vista a 'admin.ciudad.index' 
         // asumiendo que sigues la estructura de carpetas de tu controlador.
         return view('admin.Ciudad.index', compact('ciudades'));
     }
@@ -27,9 +26,17 @@ class CiudadController extends Controller
     /**
      * Almacena una nueva ciudad.
      */
-    public function store(StoreCiudadRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        Ciudad::create($request->validated());
+        $validated = $request->validate([
+            'nombre'        => 'required|string|max:255',
+            'codigo_postal' => 'required|string|max:20',
+        ], [
+            'nombre.required'        => 'El nombre es obligatorio.',
+            'codigo_postal.required' => 'El código postal es obligatorio.',
+        ]);
+
+        Ciudad::create($validated);
 
         return redirect()->route('admin.ciudad.index')
             ->with('success', 'Ciudad creada correctamente.');
@@ -42,17 +49,24 @@ class CiudadController extends Controller
     {
         // Pasamos el objeto $ciudad directamente gracias al Binding de Laravel
         $ciudades = Ciudad::latest('id')->get();
-
         return view('admin.Ciudad.index', compact('ciudad', 'ciudades'));
-
+        
     }
 
     /**
      * Actualiza la ciudad en la base de datos.
      */
-    public function update(UpdateCiudadRequest $request, Ciudad $ciudad): RedirectResponse
+    public function update(Request $request, Ciudad $ciudad): RedirectResponse
     {
-        $ciudad->update($request->validated());
+        $validated = $request->validate([
+            'nombre'        => 'required|string|max:255',
+            'codigo_postal' => 'required|string|max:20',
+        ], [
+            'nombre.required'        => 'El nombre es obligatorio.',
+            'codigo_postal.required' => 'El código postal es obligatorio.',
+        ]);
+
+        $ciudad->update($validated);
 
         return redirect()->route('admin.ciudad.index')
             ->with('success', 'Ciudad actualizada correctamente.');

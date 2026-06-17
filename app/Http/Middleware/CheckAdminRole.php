@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Enums\RoleEnum;
 
 class CheckAdminRole
 {
@@ -17,10 +16,12 @@ class CheckAdminRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Verificar si el usuario está autenticado y tiene permisos
-        if (Auth::check()) {
+        // Verificar si el usuario está autenticado y tiene rol
+        if (Auth::check() && Auth::user()->rol) {
+            $nombreRol = Auth::user()->rol->nombreRol;
+            
             // Permitir solo a los administradores
-            if (Auth::user()->hasRole(RoleEnum::ADMINISTRADOR->value)) {
+            if (in_array($nombreRol, ['Administrador', 'Super Administrador'])) {
                 return $next($request);
             }
         }

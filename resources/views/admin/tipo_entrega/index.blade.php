@@ -156,7 +156,7 @@
                 </div>
 
                 <div class="card-body p-0">
-                    <div class="table-responsive table-responsive-cards">
+                    <div class="table-responsive">
                         <table class="table table-premium-mod table-hover mb-0">
                             <thead>
                                 <tr>
@@ -170,25 +170,25 @@
                             <tbody>
                                 @forelse ($tipoEntregas as $item)
                                     <tr>
-                                        <td data-label="#" class="text-center font-weight-bold" style="color: rgba(255, 255, 255, 0.35);">
+                                        <td class="text-center font-weight-bold" style="color: rgba(255, 255, 255, 0.35);">
                                             {{ $item->id }}
                                         </td>
-                                        <td data-label="Nombre">
+                                        <td>
                                             <strong class="text-white text-uppercase" style="font-size: 0.88rem; letter-spacing: 0.2px;">
                                                 <i class="fas fa-shipping-fast mr-2" style="color: #10B981; opacity: 0.8; font-size: 0.85rem;"></i>{{ $item->nombre }}
                                             </strong>
                                         </td>
-                                        <td data-label="Descripción">
+                                        <td>
                                             <span style="color: rgba(255, 255, 255, 0.65); font-size: 0.85rem;" title="{{ $item->descripcion }}">
                                                 {{ Str::limit($item->descripcion, 50) }}
                                             </span>
                                         </td>
-                                        <td data-label="Estado" class="text-center">
+                                        <td class="text-center">
                                             <span class="badge badge-pill px-2 py-1 font-weight-bold {{ str_contains($item->estado_badge, 'success') ? 'badge-premium-active' : 'badge-premium-inactive' }}">
                                                 {{ $item->estado_label }}
                                             </span>
                                         </td>
-                                        <td data-label="Acciones" class="text-center">
+                                        <td class="text-center">
                                             <div class="d-inline-flex" style="gap: 6px;">
                                                 {{-- Botón Editar Reactivo --}}
                                                 <button type="button" 

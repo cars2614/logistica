@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -45,10 +44,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $user->assignRole(RoleEnum::CLIENTE->value);
-
         Auth::login($user);
 
-        return redirect(route('tracking.index'));
+        return redirect(route('admin.dashboard'));
     }
 }

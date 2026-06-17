@@ -3,98 +3,127 @@
 @section('title', 'Editar Ruta')
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center header-dashboard-container">
-        <h1 class="text-white font-weight-bold dashboard-title-main">
-            <i class="fas fa-edit mr-2" style="color: #F59E0B;"></i>Editar Ruta <span style="color: rgba(255,255,255,0.4);">#{{ $ruta->id }}</span>
-        </h1>
-        <a href="{{ route('admin.ruta.index') }}" class="btn btn-outline-secondary rounded-lg text-white" style="border-color: rgba(255,255,255,0.2);">
-            <i class="fas fa-arrow-left mr-1"></i> Volver al listado
-        </a>
-    </div>
+    <h1>Editar Ruta <small class="text-muted">#{{ $ruta->id }}</small></h1>
 @stop
 
 @section('content')
 
-<div class="card card-custom-premium">
-    <div class="card-header-premium">
-        <h3 class="card-title-premium">
-            <i class="fas fa-map-marked-alt mr-2" style="color: #10B981;"></i>Datos de Cobertura y Georeferenciación
+@if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><i class="fas fa-exclamation-triangle mr-1"></i> Corrige los siguientes errores:</strong>
+        <ul class="mb-0 mt-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+@endif
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-edit mr-1"></i> Modificar datos de la Ruta
         </h3>
     </div>
 
-    <form action="{{ route('admin.ruta.update', $ruta->id) }}" method="POST" autocomplete="off" id="formEditRuta">
+    <form action="{{ route('admin.ruta.update', $ruta->id) }}" method="POST"
+          autocomplete="off" id="formEditRuta" novalidate>
         @csrf
         @method('PUT')
 
-        <div class="card-body-premium">
+        <div class="card-body">
             <div class="row">
-                
-                {{-- Formulario Lado Izquierdo --}}
-                <div class="col-md-5">
-                    <div class="alert premium-alert mb-4">
-                        <i class="fas fa-info-circle mr-2" style="color: #0EA5E9;"></i> Arrastra el pin en el mapa para actualizar las coordenadas exactas de la ruta.
-                    </div>
 
+                {{-- Zona --}}
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label class="premium-label">Zona de Cobertura <span class="text-danger">*</span></label>
-                        <input type="text" name="zona" id="zona" class="form-control premium-input @error('zona') is-invalid @enderror" value="{{ old('zona', $ruta->zona) }}" required>
-                        @error('zona') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="premium-label">Guía Maestra <span class="text-danger">*</span></label>
-                        <input type="text" name="guia" id="guia" class="form-control premium-input @error('guia') is-invalid @enderror" value="{{ old('guia', $ruta->guia) }}" required>
-                        @error('guia') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="premium-label">Dirección <span class="text-danger">*</span></label>
-                        <input type="text" name="direccion" id="direccion" class="form-control premium-input @error('direccion') is-invalid @enderror" value="{{ old('direccion', $ruta->direccion) }}" required>
-                        @error('direccion') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="premium-label">Sector <span class="text-danger">*</span></label>
-                                <input type="text" name="sector" id="sector" class="form-control premium-input @error('sector') is-invalid @enderror" value="{{ old('sector', $ruta->sector) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="premium-label">Ciudad <span class="text-danger">*</span></label>
-                                <input type="text" name="ciudad" id="ciudad" class="form-control premium-input @error('ciudad') is-invalid @enderror" value="{{ old('ciudad', $ruta->ciudad) }}" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="premium-label">Latitud</label>
-                                <input type="text" name="latitud" id="latitud_input" class="form-control premium-input" value="{{ old('latitud', $ruta->latitud) }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="premium-label">Longitud</label>
-                                <input type="text" name="longitud" id="longitud_input" class="form-control premium-input" value="{{ old('longitud', $ruta->longitud) }}" readonly>
-                            </div>
+                        <label for="zona"><i class="fas fa-map mr-1 text-muted"></i> Zona <span class="text-danger">*</span></label>
+                        <input type="text" name="zona" id="zona"
+                               class="form-control @error('zona') is-invalid @enderror"
+                               value="{{ old('zona', $ruta->zona) }}"
+                               maxlength="255"
+                               placeholder="Ej: Norte, Sur, Centro..."
+                               required>
+                        <div class="invalid-feedback">
+                            @error('zona') {{ $message }} @else Ingresa una zona válida (solo letras). @enderror
                         </div>
                     </div>
                 </div>
 
-                {{-- Mapa Lado Derecho --}}
-                <div class="col-md-7">
-                    <div id="edit-map" class="map-container" style="height: 100%; min-height: 450px;"></div>
+                {{-- Guía --}}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="guia"><i class="fas fa-file-alt mr-1 text-muted"></i> Guía <span class="text-danger">*</span></label>
+                        <input type="text" name="guia" id="guia"
+                               class="form-control @error('guia') is-invalid @enderror"
+                               value="{{ old('guia', $ruta->guia) }}"
+                               maxlength="255"
+                               placeholder="Número o código de guía"
+                               required>
+                        <div class="invalid-feedback">
+                            @error('guia') {{ $message }} @else Este campo es obligatorio. @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Dirección --}}
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="direccion"><i class="fas fa-map-marker-alt mr-1 text-muted"></i> Dirección <span class="text-danger">*</span></label>
+                        <input type="text" name="direccion" id="direccion"
+                               class="form-control @error('direccion') is-invalid @enderror"
+                               value="{{ old('direccion', $ruta->direccion) }}"
+                               maxlength="255"
+                               placeholder="Dirección completa de la ruta"
+                               required>
+                        <div class="invalid-feedback">
+                            @error('direccion') {{ $message }} @else Ingresa una dirección válida. @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Sector --}}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sector"><i class="fas fa-compass mr-1 text-muted"></i> Sector <span class="text-danger">*</span></label>
+                        <input type="text" name="sector" id="sector"
+                               class="form-control @error('sector') is-invalid @enderror"
+                               value="{{ old('sector', $ruta->sector) }}"
+                               maxlength="255"
+                               placeholder="Sector o barrio"
+                               required>
+                        <div class="invalid-feedback">
+                            @error('sector') {{ $message }} @else Ingresa un sector válido (solo letras). @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Ciudad --}}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ciudad"><i class="fas fa-city mr-1 text-muted"></i> Ciudad <span class="text-danger">*</span></label>
+                        <input type="text" name="ciudad" id="ciudad"
+                               class="form-control @error('ciudad') is-invalid @enderror"
+                               value="{{ old('ciudad', $ruta->ciudad) }}"
+                               maxlength="255"
+                               placeholder="Ciudad de destino"
+                               required>
+                        <div class="invalid-feedback">
+                            @error('ciudad') {{ $message }} @else Solo se permiten letras y espacios. @enderror
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        <div class="card-footer-premium text-right">
-            <button type="submit" class="btn premium-btn-submit" id="btnActualizar">
-                <i class="fas fa-sync-alt mr-1"></i> Actualizar Ruta Georeferenciada
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <a href="{{ route('admin.ruta.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i> Volver al listado
+            </a>
+            <button type="submit" class="btn btn-warning" id="btnActualizar">
+                <i class="fas fa-save mr-1"></i> Actualizar Ruta
             </button>
         </div>
 
@@ -103,93 +132,130 @@
 
 @stop
 
-@section('css')
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@push('js')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-        .content-wrapper { background-color: #0A0F1E !important; font-family: 'Inter', sans-serif; }
-        .header-dashboard-container { margin-bottom: 20px; padding: 10px 15px; position: relative; z-index: 5; }
-        .dashboard-title-main { font-size: 24px; letter-spacing: -0.02em; }
+    const form = document.getElementById('formEditRuta');
 
-        .card-custom-premium {
-            background: rgba(13, 19, 35, 0.65) !important; 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); color: #fff;
-        }
-        .card-header-premium { padding: 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .card-title-premium { font-size: 16px; font-weight: 600; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px; }
-        .card-body-premium { padding: 24px; }
-        .card-footer-premium { padding: 20px 24px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: transparent; }
-        
-        .map-container {
-            width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1E293B; z-index: 1;
-        }
+    // ── Reglas por campo ───────────────────────────────────────────────────
+    // soloLetras: zona, sector, ciudad  → bloquea dígitos en keypress
+    // alfanumerico: guia               → letras, números, guiones
+    // direccion: letras, números, #, -, espacios
 
-        .premium-alert { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #E2E8F0; }
-        .premium-label { color: #94A3B8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .premium-input {
-            background-color: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            color: #fff !important; border-radius: 8px;
-        }
-        .premium-input:focus { border-color: #0EA5E9 !important; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important; }
-        
-        .premium-btn-submit {
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            border: 1px solid #D97706; color: #fff; border-radius: 8px; font-weight: 600; padding: 10px 24px; transition: all 0.3s;
-        }
-        .premium-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); color: #fff; }
-        
-        .leaflet-layer, .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-control-attribution { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
-    </style>
-@stop
+    const soloLetrasReg   = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+    const direccionReg    = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s#\-\.\/,]+$/;
+    const guiaReg         = /^[a-zA-Z0-9\-_]+$/;
 
-@section('js')
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            
-            // Si la ruta tiene coordenadas previas las usamos, sino, Ibagué por defecto
-            let lat = {{ $ruta->latitud ?? '4.4389' }};
-            let lng = {{ $ruta->longitud ?? '-75.2322' }};
-            const mapColor = '{{ $ruta->color_hex ?? '#0EA5E9' }}';
+    const rules = {
+        zona:      { regex: soloLetrasReg,  msg: 'Solo se permiten letras y espacios.',           blockDigits: true  },
+        sector:    { regex: soloLetrasReg,  msg: 'Solo se permiten letras y espacios.',           blockDigits: true  },
+        ciudad:    { regex: soloLetrasReg,  msg: 'Solo se permiten letras y espacios.',           blockDigits: true  },
+        guia:      { regex: guiaReg,        msg: 'Solo letras, números, guiones y guiones bajos.', blockDigits: false },
+        direccion: { regex: direccionReg,   msg: 'Caracteres no válidos en la dirección.',        blockDigits: false },
+    };
 
-            const editMap = L.map('edit-map').setView([lat, lng], 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(editMap);
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function setValid(el)        { el.classList.add('is-valid'); el.classList.remove('is-invalid'); }
+    function setInvalid(el, msg) {
+        el.classList.add('is-invalid'); el.classList.remove('is-valid');
+        const fb = el.parentElement.querySelector('.invalid-feedback');
+        if (fb && msg) fb.textContent = msg;
+    }
+    function clearState(el)      { el.classList.remove('is-valid', 'is-invalid'); }
 
-            // Icono Customizado
-            const markerHtml = `<div style="background-color: ${mapColor}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #131A2E; box-shadow: 0 0 15px ${mapColor};"></div>`;
-            const customIcon = L.divIcon({
-                className: 'custom-div-icon',
-                html: markerHtml,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
+    function showToast(type, message) {
+        const existing = document.getElementById('_toast');
+        if (existing) existing.remove();
+        const colors = { warning: '#ffc107', danger: '#dc3545' };
+        const icons  = { warning: 'fa-exclamation-triangle', danger: 'fa-times-circle' };
+        const t = document.createElement('div');
+        t.id = '_toast';
+        t.style.cssText = `position:fixed;bottom:20px;right:20px;z-index:9999;
+            background:${colors[type]};color:#212529;padding:12px 18px;border-radius:8px;
+            box-shadow:0 4px 12px rgba(0,0,0,.2);display:flex;align-items:center;
+            gap:10px;font-size:.9rem;max-width:340px;animation:_slideIn .3s ease;`;
+        t.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+        document.body.appendChild(t);
+        setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .5s'; }, 3500);
+        setTimeout(() => t.remove(), 4000);
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `@keyframes _slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}`;
+    document.head.appendChild(style);
+
+    // ── Bloquear dígitos en keypress (zona, sector, ciudad) ───────────────
+    Object.entries(rules).forEach(([id, rule]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (rule.blockDigits) {
+            el.addEventListener('keypress', function (e) {
+                if (/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                    showToast('warning', `El campo "${el.previousElementSibling.textContent.trim()}" no admite números.`);
+                }
             });
+        }
 
-            // Añadir pin arrastrable
-            const marker = L.marker([lat, lng], { icon: customIcon, draggable: true }).addTo(editMap);
-
-            // Actualizar inputs en el arrastre
-            marker.on('dragend', function (e) {
-                const position = marker.getLatLng();
-                $('#latitud_input').val(position.lat.toFixed(8));
-                $('#longitud_input').val(position.lng.toFixed(8));
-            });
-
-            // Evitar problemas de recuadro gris
-            setTimeout(() => {
-                editMap.invalidateSize();
-            }, 200);
-
-            // Evitar múltiples envíos
-            $('#formEditRuta').on('submit', function() {
-                $('#btnActualizar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Actualizando...');
-            });
+        // Limpiar caracteres inválidos al pegar (paste)
+        el.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const clean  = rule.blockDigits
+                ? pasted.replace(/[0-9]/g, '')
+                : pasted;
+            document.execCommand('insertText', false, clean);
         });
-    </script>
-@stop
+
+        // Validar en blur
+        el.addEventListener('blur', () => validateField(el));
+        // Validar en input (después de escribir)
+        el.addEventListener('input', () => {
+            if (el.classList.contains('is-invalid') || el.classList.contains('is-valid')) {
+                validateField(el);
+            }
+        });
+    });
+
+    // ── Validar campo individual ───────────────────────────────────────────
+    function validateField(el) {
+        const rule = rules[el.id];
+        const val  = el.value.trim();
+
+        if (!val) {
+            setInvalid(el, 'Este campo es obligatorio.');
+            return false;
+        }
+        if (rule && !rule.regex.test(val)) {
+            setInvalid(el, rule.msg);
+            return false;
+        }
+        setValid(el);
+        return true;
+    }
+
+    // ── Validación al enviar ───────────────────────────────────────────────
+    const btn = document.getElementById('btnActualizar');
+
+    form.addEventListener('submit', function (e) {
+        const ids   = ['zona', 'guia', 'direccion', 'sector', 'ciudad'];
+        const allOk = ids.map(id => validateField(document.getElementById(id))).every(Boolean);
+
+        if (!allOk) {
+            e.preventDefault();
+            e.stopPropagation();
+            const first = form.querySelector('.is-invalid');
+            if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); first.focus(); }
+            showToast('warning', 'Corrige los campos marcados antes de continuar.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Guardando...';
+    });
+
+});
+</script>
+@endpush

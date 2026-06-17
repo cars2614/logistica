@@ -12,4 +12,5 @@ php artisan serve => Levanta servidor virtual.
 git config --global user.name "juana221"
 
 Clave Git => juanavalentina2828
+
 git config --global user.email "senajuana43@gmail.com"

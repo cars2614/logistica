@@ -29,7 +29,7 @@
                 <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close"
                     style="opacity: 0.5;">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                    </< /button>
             </div>
         @endif
 
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="card-body p-0">
-                        <div class="table-responsive table-responsive-cards">
+                        <div class="table-responsive">
                             <table class="table table-premium-mod table-hover mb-0">
                                 <thead>
                                     <tr>
@@ -64,23 +64,23 @@
                                 <tbody>
                                     @forelse ($tipoVehiculos as $index => $tipoVehiculo)
                                         <tr>
-                                            <td data-label="#" class="text-center font-weight-bold"
+                                            <td class="text-center font-weight-bold"
                                                 style="color: rgba(255, 255, 255, 0.35);">
                                                 {{ $tipoVehiculos->firstItem() + $index }}
                                             </td>
-                                            <td data-label="Nombre">
+                                            <td>
                                                 <strong class="text-white text-uppercase"
                                                     style="font-size: 0.88rem; letter-spacing: 0.2px;">
                                                     <i class="fas fa-truck-moving mr-2"
                                                         style="color: #0EA5E9; opacity: 0.8; font-size: 0.85rem;"></i>{{ $tipoVehiculo->nombre }}
                                                 </strong>
                                             </td>
-                                            <td data-label="Descripción">
+                                            <td>
                                                 <span style="color: rgba(255, 255, 255, 0.65); font-size: 0.85rem;">
                                                     {{ $tipoVehiculo->descripcion ?? '—' }}
                                                 </span>
                                             </td>
-                                            <td data-label="Acciones" class="text-center">
+                                            <td class="text-center">
                                                 <div class="d-inline-flex" style="gap: 6px;">
                                                     {{-- Editar --}}
                                                     <a href="{{ route('admin.tipo-vehiculo.edit', $tipoVehiculo->id) }}"
@@ -623,8 +623,10 @@
 
 @section('js')
     <script>
-        // Nota: La validación de nombre es manejada globalmente por LogisticaValidator
-        // en page.blade.php (initAlphanumericInput para input[name="nombre"])
+        // Nombre modal: letras, números y tildes
+        document.getElementById('nombre_modal').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s]/g, '');
+        });
 
         // Contador dinámico de caracteres en descripción modal
         const descModal = document.getElementById('descripcion_modal');

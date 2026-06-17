@@ -11,10 +11,10 @@ class Guia extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'guias';
-
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id'; 
 
     protected $fillable = [
+        'id',
         'id_tipo_entrega',
         'id_cliente_origen',
         'id_cliente_destino',
@@ -50,9 +50,9 @@ class Guia extends Model
         return $this->hasMany(EstadoGuia::class, 'id_guia');
     }
 
-    public function estadoActual()
+    public function getEstadoActualAttribute()
     {
-        return $this->hasOne(EstadoGuia::class, 'id_guia')->latestOfMany();
+        return $this->estados()->orderBy('id', 'desc')->first();
     }
 
     public function planillas()

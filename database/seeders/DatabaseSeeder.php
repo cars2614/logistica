@@ -7,11 +7,11 @@ use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\EstadoGuia;
 use App\Models\TipoEntrega;
-use App\Enums\RoleEnum;
-use Spatie\Permission\Models\Role;
+use App\Models\Rol;
 use App\Models\TipoVehiculo;
 use App\Models\Vehiculo;
 use App\Models\Usuario;
+
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -1384,11 +1384,36 @@ class DatabaseSeeder extends Seeder
 
 
 
-        //*******************  ROLES (SPATIE) ****************** */
+        //*******************  ROL ****************** */
 
-        foreach (RoleEnum::cases() as $role) {
-            Role::firstOrCreate(['name' => $role->value]);
-        }
+        $rol1 = new Rol();
+
+        $rol1->nombreRol = "Super Administrador";        
+        $rol1->created_at = "2026-02-02 01:13:24";
+        $rol1->updated_at = "2026-02-02 01:13:24";
+        $rol1->save();
+
+
+        $rol2 = new Rol();
+
+        $rol2->nombreRol = "Administrador";
+        $rol2->created_at = "2026-02-02 01:13:24";
+        $rol2->updated_at = "2026-02-02 01:13:24";
+        $rol2->save();
+
+        $rol3 = new Rol();
+
+        $rol3->nombreRol = "Auxiliar Administrativo";
+        $rol3->created_at = "2026-02-02 01:13:24";
+        $rol3->updated_at = "2026-02-02 01:13:24";
+        $rol3->save();
+
+        $rol4 = new Rol();
+
+        $rol4->nombreRol = "Mensajero";
+        $rol4->created_at = "2026-02-02 01:13:24";
+        $rol4->updated_at = "2026-02-02 01:13:24";
+        $rol4->save();
 
 
 
@@ -1455,25 +1480,31 @@ class DatabaseSeeder extends Seeder
         //*******************  USUARIO  ****************** */
 
 
-        $usuario1 = User::create([
-            'name' => "jose rodriguez",
-            'email' => "jose@example.com",
-            'password' => bcrypt("password"),
+        $usuario1 = new Usuario();
+
+        $usuario1->nombre = "jose rodriguez";
+        $usuario1->email = "jose@example.com";
+        $usuario1->password = bcrypt("password");
+        $usuario1->id_rol = "2";
+        $usuario1->id_vehiculo = "1";
+        $usuario1->created_at = "2026-02-02 01:13:24";
+        $usuario1->updated_at = "2026-02-02 01:13:24";
+        $usuario1->save();
+
+
+
+
+
+
+
+        //************************************* */
+
+        // User::factory(10)->create();
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
         ]);
-        $usuario1->assignRole(RoleEnum::REPARTIDOR->value);
-
-
-
-
-
-
-
-        $admin = User::create([
-            'name' => 'Admin Sistema',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ]);
-        $admin->assignRole(RoleEnum::ADMINISTRADOR->value);
         //************************************* */
 
 

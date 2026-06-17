@@ -61,4 +61,21 @@ class PlanillaController extends Controller
         return redirect()->route('admin.planilla.index')
             ->with('success', 'Planilla eliminada correctamente.');
     }
+
+    public function importarExcel(Request $request, \App\Services\PlanillaImportService $importService)
+    {
+        $request->validate([
+            'id_ruta' => 'required',
+            'excel' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            $importService->importarYCrearPlanilla($request->id_ruta, $request->file('excel'));
+            return redirect()->route('admin.planilla.index')
+                ->with('success', 'Planilla y guías importadas correctamente desde Excel en segundo plano.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error al importar el archivo Excel: ' . $e->getMessage());
+        }
+    }
 }

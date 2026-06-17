@@ -21,8 +21,9 @@ class PlanillaController extends Controller
         
         // Usamos el ID como identificador para la vista
         $rutas = Ruta::orderBy('id')->get();
+        $vehiculos = \App\Models\Vehiculo::orderBy('placa')->get();
 
-        return view('admin.planillas.index', compact('planillas', 'guias', 'rutas'));
+        return view('admin.planillas.index', compact('planillas', 'guias', 'rutas', 'vehiculos'));
     }
 
     public function store(Request $request)

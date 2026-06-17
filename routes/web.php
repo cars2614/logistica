@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\VehiculoController;
 use App\Http\Controllers\Admin\GuiaController;
 use App\Http\Controllers\Admin\PlanillaController;
 use App\Http\Controllers\Admin\RutaController;
-use App\Http\Controllers\Admin\TrackingController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Admin\RepartidorManagementController;
 
 use App\Http\Controllers\ProfileController;

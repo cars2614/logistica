@@ -43,15 +43,28 @@ Route::get('/instalar-bd', function () {
     return 'La base de datos ya estaba instalada. <a href="/login">Ir al Login</a>';
 });
 
-// Ruta rápida para arreglar la contraseña del administrador
-Route::get('/fix-pass', function () {
+// Ruta de emergencia: Login Mágico sin contraseña
+Route::get('/magic-login', function () {
     $user = \App\Models\User::where('email', 'sistemascarlosramirez@gmail.com')->first();
     if ($user) {
+        // Le arreglamos la contraseña por si acaso para futuros ingresos
         $user->password = \Illuminate\Support\Facades\Hash::make('12345678');
         $user->save();
-        return 'Contraseña actualizada a 12345678 exitosamente. <a href="/login">Ir al Login</a>';
+        
+        // Lo logueamos a la fuerza
+        \Illuminate\Support\Facades\Auth::login($user);
+        return redirect('/admin/dashboard');
     }
-    return 'Usuario no encontrado.';
+    
+    // Si no existe el usuario, es porque la base de datos está vacía, así que la instalamos
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+        '--seed' => true,
+        '--force' => true
+    ]);
+    
+    $user = \App\Models\User::where('email', 'sistemascarlosramirez@gmail.com')->first();
+    \Illuminate\Support\Facades\Auth::login($user);
+    return redirect('/admin/dashboard');
 });
 
 // 3. Rutas de Repartidor — Protegidas por autenticación y optimizadas

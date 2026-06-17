@@ -1,9 +1,9 @@
 {{-- resources/views/admin/vehiculo/index.blade.php --}}
-
+ 
 @extends('adminlte::page')
-
+ 
 @section('title', 'Vehículos')
-
+ 
 @section('content_header')
     <div class="container-fluid pt-3">
         <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
@@ -17,10 +17,10 @@
         </div>
     </div>
 @stop
-
+ 
 @section('content')
 <div class="container-fluid pb-4">
-
+ 
     {{-- Alertas Premium --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
@@ -33,7 +33,7 @@
             </button>
         </div>
     @endif
-
+ 
     @if (session('error'))
         <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
             <div class="d-flex align-items-center">
@@ -45,7 +45,7 @@
             </button>
         </div>
     @endif
-
+ 
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mt-2" role="alert">
             <div class="d-flex align-items-center">
@@ -64,7 +64,7 @@
             </button>
         </div>
     @endif
-
+ 
     <div class="row mt-3">
         <div class="col-12">
             <div class="card card-outline card-primary shadow-sm border-0">
@@ -81,7 +81,7 @@
                         </button>
                     </div>
                 </div>
-
+ 
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
@@ -117,7 +117,7 @@
                                             @php
                                                 $nombreTipo = strtolower($vehiculo->tipoVehiculo->nombre ?? '');
                                                 $icono = 'fas fa-car'; 
-
+ 
                                                 if (str_contains($nombreTipo, 'moto')) {
                                                     $icono = 'fas fa-motorcycle';
                                                 } elseif (str_contains($nombreTipo, 'camion') || str_contains($nombreTipo, 'furgon') || str_contains($nombreTipo, 'tracto') || str_contains($nombreTipo, 'carga')) {
@@ -131,7 +131,7 @@
                                             <i class="{{ $icono }} text-primary mr-2" style="opacity: 0.8;"></i>
                                             <strong>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</strong>
                                         </td>
-
+ 
                                         <td class="align-middle font-weight-bold text-dark" style="font-size: 0.85rem;">{{ number_format($vehiculo->capacidad) }} kg</td>
                                         <td class="align-middle">
                                             @if($vehiculo->estado === 'activo')
@@ -182,7 +182,7 @@
                         </table>
                     </div>
                 </div>
-
+ 
                 @if($vehiculos->hasPages())
                     <div class="card-footer bg-white border-top py-3">
                         <div class="d-flex justify-content-center">
@@ -194,7 +194,7 @@
         </div>
     </div>
 </div>
-
+ 
 {{-- Modal Crear --}}
 <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -211,7 +211,7 @@
                 </div>
                 <div class="modal-body p-4">
                     <div class="row">
-
+ 
                         {{-- Placa --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_placa" class="font-weight-bold text-secondary mb-1">Placa <span class="text-danger">*</span></label>
@@ -236,7 +236,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Tipo de Vehículo --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_tipo_vehiculo_id" class="font-weight-bold text-secondary mb-1">Tipo de Vehículo <span class="text-danger">*</span></label>
@@ -262,7 +262,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Marca --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_marca" class="font-weight-bold text-secondary mb-1">Marca <span class="text-danger">*</span></label>
@@ -285,7 +285,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Modelo --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_modelo" class="font-weight-bold text-secondary mb-1">Modelo / Línea <span class="text-danger">*</span></label>
@@ -308,7 +308,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Capacidad --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_capacidad" class="font-weight-bold text-secondary mb-1">Capacidad (kg) <span class="text-danger">*</span></label>
@@ -331,7 +331,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Estado --}}
                         <div class="col-md-6 form-group mb-3">
                             <label for="m_estado" class="font-weight-bold text-secondary mb-1">Estado inicial <span class="text-danger">*</span></label>
@@ -355,7 +355,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                         {{-- Fecha de Registro --}}
                         <div class="col-md-6 form-group mb-0">
                             <label for="m_fecha_registro" class="font-weight-bold text-secondary mb-1">Fecha de Registro <span class="text-danger">*</span></label>
@@ -376,7 +376,7 @@
                                 @enderror
                             </div>
                         </div>
-
+ 
                     </div>
                 </div>
                 <div class="modal-footer bg-light border-top-0 py-3">
@@ -387,7 +387,7 @@
         </div>
     </div>
 </div>
-
+ 
 {{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -407,29 +407,143 @@
     </div>
 </div>
 @stop
-
+ 
 @section('css')
 <style>
-    .table-hover tbody tr:hover { background-color: rgba(0, 123, 255, 0.02) !important; }
-    .input-group-text { border-right: none !important; }
-    .form-control { border-left: none !important; }
-    .badge-plate {
-        background-color: #f9f9f9; color: #2c3e50; border: 2px solid #bdc3c7;
-        font-family: 'Courier New', Courier, monospace; letter-spacing: 1px;
-        font-size: 0.9rem; border-radius: 4px;
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+ 
+    :root {
+        --dark:   #080C14;
+        --dark2:  #0D1220;
+        --card:   #0F1628;
+        --border: rgba(59,130,246,0.12);
+        --blue:   #3B82F6;
+        --indigo: #6366F1;
+        --muted:  rgba(200,215,255,0.6);
     }
+ 
+    body, h1, h2, h3, h4, h5, h6, p, a, span, td, th, label, input, select, textarea, button, .nav-link {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    i[class*="fa-"] { font-family: "Font Awesome 5 Free","Font Awesome 6 Free" !important; font-weight: 900 !important; }
+ 
+    /* NAVBAR */
+    .main-header.navbar { background: var(--dark2) !important; border-bottom: 1px solid var(--border) !important; }
+    .navbar-light, .navbar-white { background: transparent !important; }
+    .main-header.navbar .nav-link, .main-header.navbar span, .main-header.navbar a { color: rgba(200,215,255,0.8) !important; }
+    .main-header.navbar .nav-link:hover { color: var(--blue) !important; }
+    .main-header .dropdown-menu { background: #0F1628 !important; border: 1px solid var(--border) !important; border-radius: 10px !important; }
+    .main-header .dropdown-item { color: rgba(200,215,255,0.85) !important; border-radius: 7px !important; font-size: 13px !important; }
+    .main-header .dropdown-item:hover { background: rgba(59,130,246,0.1) !important; color: #fff !important; }
+ 
+    /* SIDEBAR */
+    .main-sidebar { background: var(--dark) !important; border-right: 1px solid var(--border) !important; }
+    .brand-link { background: var(--dark) !important; border-bottom: 1px solid var(--border) !important; }
+    .brand-text { color: #fff !important; font-weight: 700 !important; }
+    .nav-sidebar .nav-header { color: rgba(99,130,200,0.6) !important; font-size: 10px !important; font-weight: 700 !important; letter-spacing: 0.12em !important; }
+    .nav-sidebar .nav-link { color: rgba(200,215,255,0.7) !important; border-radius: 8px !important; margin: 2px 8px !important; font-size: 13px !important; font-weight: 500 !important; transition: all 0.2s !important; }
+    .nav-sidebar .nav-link:hover { background: rgba(59,130,246,0.1) !important; color: #fff !important; }
+    .nav-sidebar .nav-link.active { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(99,102,241,0.15)) !important; color: #fff !important; border-left: 3px solid var(--blue) !important; font-weight: 600 !important; }
+ 
+    /* CONTENT */
+    .content-wrapper { background: var(--dark) !important; }
+    .content-header h1 { color: #fff !important; font-size: 20px !important; font-weight: 700 !important; }
+    .content-header .breadcrumb-item a { color: var(--blue) !important; }
+    .content-header .breadcrumb-item.active { color: var(--muted) !important; }
+    .border-bottom { border-color: var(--border) !important; }
+ 
+    /* CARDS */
+    .card { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 12px !important; }
+    .card-header { background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid var(--border) !important; }
+    .card-title { color: #fff !important; font-weight: 700 !important; }
+    .card-body { background: transparent !important; }
+    .card-footer { background: rgba(255,255,255,0.02) !important; border-top: 1px solid var(--border) !important; }
+ 
+    /* TEXTOS */
+    label.font-weight-bold { color: rgba(200,215,255,0.85) !important; }
+    .text-secondary { color: rgba(200,215,255,0.6) !important; }
+    .text-dark { color: #C8D7FF !important; }
+    .text-muted { color: rgba(200,215,255,0.4) !important; }
+ 
+    /* INPUTS */
+    .form-control {
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid var(--border) !important;
+        border-left: none !important;
+        color: #fff !important;
+        border-radius: 0 8px 8px 0 !important;
+    }
+    .form-control:focus { border-color: var(--blue) !important; box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important; background: rgba(59,130,246,0.05) !important; }
+    .form-control::placeholder { color: rgba(200,215,255,0.3) !important; }
+    .input-group-text {
+        background: rgba(255,255,255,0.06) !important;
+        border: 1px solid var(--border) !important;
+        border-right: none !important;
+        color: rgba(200,215,255,0.6) !important;
+        border-radius: 8px 0 0 8px !important;
+    }
+    select.form-control option { background: var(--card) !important; color: #fff !important; }
+ 
+    /* BOTONES */
+    .btn-primary { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; border: none !important; color: #fff !important; border-radius: 8px !important; font-weight: 600 !important; }
+    .btn-primary:hover { opacity: 0.9 !important; color: #fff !important; }
+    .btn-outline-secondary { border-color: var(--border) !important; color: rgba(200,215,255,0.7) !important; border-radius: 8px !important; background: transparent !important; }
+    .btn-outline-secondary:hover { background: rgba(255,255,255,0.05) !important; color: #fff !important; }
+    .btn-info { background: linear-gradient(135deg, #06B6D4, #0891B2) !important; border: none !important; }
+    .btn-danger { background: linear-gradient(135deg, #EF4444, #DC2626) !important; border: none !important; }
+ 
+    /* TABLA */
+    .table { color: #C8D7FF !important; }
+    .table thead th { background: rgba(255,255,255,0.03) !important; color: rgba(200,215,255,0.55) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.07em !important; border-bottom: 1px solid var(--border) !important; border-top: none !important; }
+    .table tbody td { border-bottom: 1px solid rgba(255,255,255,0.04) !important; vertical-align: middle !important; color: #C8D7FF !important; }
+    .table-hover tbody tr:hover { background: rgba(59,130,246,0.05) !important; }
+    .bg-light { background: rgba(255,255,255,0.03) !important; }
+ 
+    /* BADGES */
+    .badge-primary { background: rgba(59,130,246,0.15) !important; color: #60A5FA !important; border-radius: 6px !important; }
+    .badge-success { background: rgba(16,185,129,0.15) !important; color: #34D399 !important; border-radius: 6px !important; }
+    .badge-secondary { background: rgba(255,255,255,0.08) !important; color: rgba(200,215,255,0.6) !important; border-radius: 6px !important; }
+    .badge-warning { background: rgba(245,158,11,0.15) !important; color: #FCD34D !important; border-radius: 6px !important; }
+ 
+    /* PLACA */
+    .badge-plate {
+        background: rgba(255,255,255,0.06) !important;
+        color: #C8D7FF !important;
+        border: 1px solid rgba(59,130,246,0.2) !important;
+        font-family: 'Courier New', monospace !important;
+        letter-spacing: 1px; font-size: 0.85rem; border-radius: 6px;
+    }
+ 
+    /* MODAL */
+    .modal-content { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 14px !important; }
+    .modal-header.bg-primary { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; }
+    .modal-header.bg-danger { background: linear-gradient(135deg, #EF4444, #DC2626) !important; }
+    .modal-body { background: transparent !important; color: #C8D7FF !important; }
+    .modal-footer { background: rgba(255,255,255,0.02) !important; border-top: 1px solid var(--border) !important; }
+    .modal-body .text-dark { color: #C8D7FF !important; }
+ 
+    /* PAGINACIÓN */
+    .pagination .page-link { background: rgba(255,255,255,0.05) !important; border-color: var(--border) !important; color: var(--blue) !important; border-radius: 6px !important; margin: 0 2px !important; }
+    .pagination .page-item.active .page-link { background: linear-gradient(135deg, var(--blue), var(--indigo)) !important; border-color: transparent !important; color: #fff !important; }
+ 
+    /* ALERTAS */
+    .alert-success { background: rgba(16,185,129,0.1) !important; border: none !important; border-left: 4px solid #10B981 !important; color: #6EE7B7 !important; border-radius: 10px !important; }
+    .alert-danger { background: rgba(239,68,68,0.08) !important; border: none !important; border-left: 4px solid #EF4444 !important; color: #FCA5A5 !important; border-radius: 10px !important; }
+ 
+    /* FOOTER */
+    .main-footer { background: var(--dark2) !important; border-top: 1px solid var(--border) !important; color: var(--muted) !important; }
 </style>
 @stop
-
+ 
 @section('js')
 <script>
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('m_fecha_registro').setAttribute('max', hoy);
-
+ 
     document.getElementById('m_placa').addEventListener('input', function () {
         this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
     });
-
+ 
     let formEliminar = null;
     document.querySelectorAll('.btn-eliminar').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -438,17 +552,33 @@
             $('#modalEliminar').modal('show');
         });
     });
-
+ 
     document.getElementById('btnConfirmarEliminar').addEventListener('click', function () {
         if (formEliminar) formEliminar.submit();
     });
-
+ 
     @if ($errors->any())
         $(document).ready(function () { $('#modalCrear').modal('show'); });
     @endif
-
+ 
     setTimeout(function () {
         $('.alert-dismissible').fadeOut('slow');
     }, 5000);
+ 
+    // Logo sidebar
+    document.addEventListener("DOMContentLoaded", function() {
+        const brandLink = document.querySelector(".brand-link");
+        if (brandLink) {
+            brandLink.innerHTML = `
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <img src="{{ asset('images/logo-carga.png') }}" alt="Logo" style="width:38px;height:auto;object-fit:contain;">
+                    <div style="display:flex;flex-direction:column;line-height:1.2;">
+                        <span style="color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.3px;text-transform:uppercase;">Carga y Logística</span>
+                        <span style="color:rgba(255,255,255,0.4);font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:9px;letter-spacing:0.8px;text-transform:uppercase;">Tolima</span>
+                    </div>
+                </div>
+            `;
+        }
+    });
 </script>
 @stop

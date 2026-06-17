@@ -16,6 +16,7 @@ class Planilla extends Model
     protected $fillable = [
         'numero_planilla', // <-- Línea clave obligatoria
         'id_ciudad',
+        'id_usuario',
         'id_ruta',
         'vehiculo_id',
         'piezas',

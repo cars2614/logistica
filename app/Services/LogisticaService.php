@@ -44,14 +44,14 @@ class LogisticaService
     {
         return DB::transaction(function () use ($datos) {
             $planilla = new Planilla([
-                'numero_planilla' => 'PL-' . rand(1000, 9999),
+                'numero_planilla' => 'PL-' . strtoupper(uniqid()),
                 'id_ruta'         => $datos['ruta_id'],
                 'vehiculo_id'     => $datos['vehiculo_id'],
                 'piezas'          => $datos['piezas'],
                 'kilos'           => $datos['kilos'],
-                'id_ciudad'       => \App\Models\Ciudad::first()->id ?? 1,
+                'id_ciudad'       => \App\Models\Ciudad::first()?->id ?? 1,
+                'id_usuario'      => Auth::id() ?? 1,
             ]);
-            $planilla->id_usuario = Auth::id() ?? 1;
             $planilla->save();
             return $planilla;
         });

@@ -18,4 +18,19 @@ class Cliente extends Model
         'descripcion',
         'id_ciudad',
     ];
+
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class, 'id_ciudad');
+    }
+
+    public function guiasOrigen()
+    {
+        return $this->hasMany(Guia::class, 'id_cliente_origen');
+    }
+
+    public function guiasDestino()
+    {
+        return $this->hasMany(Guia::class, 'id_cliente_destino');
+    }
 }

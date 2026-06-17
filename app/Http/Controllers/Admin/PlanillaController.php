@@ -24,7 +24,7 @@ class PlanillaController extends Controller
 
     public function index()
     {
-        $planillas = Planilla::orderBy('id', 'desc')->paginate(10);
+        $planillas = Planilla::with('ruta')->orderBy('id', 'desc')->paginate(10);
 
         // Cargamos las guías junto con su cliente de origen
         $guias = Guia::with('clienteOrigen')->orderBy('id')->get();

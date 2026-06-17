@@ -11,10 +11,11 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
 
-class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithBatchInserts, WithChunkReading, ShouldQueue
+class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithBatchInserts, WithChunkReading, ShouldQueue, SkipsEmptyRows
 {
     protected $planilla;
     protected $ciudadId;
@@ -23,8 +24,8 @@ class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithB
     public function __construct($planilla)
     {
         $this->planilla = $planilla;
-        $this->ciudadId = \App\Models\Ciudad::first()->id ?? 1;
-        $this->tipoEntregaId = TipoEntrega::first()->id ?? 1;
+        $this->ciudadId = \App\Models\Ciudad::first()?->id ?? 1;
+        $this->tipoEntregaId = TipoEntrega::first()?->id ?? 1;
     }
 
     /**
@@ -32,54 +33,56 @@ class GuiasImport implements ToCollection, WithHeadingRow, WithValidation, WithB
     */
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row) {
-            
-            // 1. Gestionar Cliente Origen
-            $clienteOrigen = Cliente::firstOrCreate(
-                ['cedula' => $row['cedula_origen']],
-                [
-                    'nombre' => $row['nombre_origen'],
-                    'telefono' => $row['telefono_origen'] ?? '0000000000',
-                    'correo' => $row['correo_origen'] ?? 'sin-correo@logistica.com',
-                    'direccion' => $row['direccion_origen'] ?? 'No especificada',
-                    'id_ciudad' => $this->ciudadId,
-                ]
-            );
+        DB::transaction(function () use ($rows) {
+            foreach ($rows as $row) {
+                
+                // 1. Gestionar Cliente Origen
+                $clienteOrigen = Cliente::firstOrCreate(
+                    ['cedula' => $row['cedula_origen']],
+                    [
+                        'nombre' => $row['nombre_origen'],
+                        'telefono' => $row['telefono_origen'] ?? '0000000000',
+                        'correo' => $row['correo_origen'] ?? 'sin-correo@logistica.com',
+                        'direccion' => $row['direccion_origen'] ?? 'No especificada',
+                        'id_ciudad' => $this->ciudadId,
+                    ]
+                );
 
-            // 2. Gestionar Cliente Destino
-            $clienteDestino = Cliente::firstOrCreate(
-                ['cedula' => $row['cedula_destino']],
-                [
-                    'nombre' => $row['nombre_destino'],
-                    'telefono' => $row['telefono_destino'] ?? '0000000000',
-                    'correo' => $row['correo_destino'] ?? 'sin-correo@logistica.com',
-                    'direccion' => $row['direccion_destino'] ?? 'No especificada',
-                    'id_ciudad' => $this->ciudadId,
-                ]
-            );
+                // 2. Gestionar Cliente Destino
+                $clienteDestino = Cliente::firstOrCreate(
+                    ['cedula' => $row['cedula_destino']],
+                    [
+                        'nombre' => $row['nombre_destino'],
+                        'telefono' => $row['telefono_destino'] ?? '0000000000',
+                        'correo' => $row['correo_destino'] ?? 'sin-correo@logistica.com',
+                        'direccion' => $row['direccion_destino'] ?? 'No especificada',
+                        'id_ciudad' => $this->ciudadId,
+                    ]
+                );
 
-            // 3. Crear Guía
-            $guia = Guia::create([
-                'id_cliente_origen' => $clienteOrigen->id,
-                'id_cliente_destino' => $clienteDestino->id,
-                'id_tipo_entrega' => $this->tipoEntregaId,
-                'unidades' => $row['piezas'],
-                'peso' => $row['peso'],
-                'largo' => $row['largo'] ?? 1,
-                'ancho' => $row['ancho'] ?? 1,
-                'alto' => $row['alto'] ?? 1,
-                'precio_envio' => $row['precio_envio'] ?? 0,
-                'valor_declarado' => $row['valor_declarado'] ?? 0,
-                'observacion' => $row['observacion'] ?? null,
-            ]);
+                // 3. Crear Guía
+                $guia = Guia::create([
+                    'id_cliente_origen' => $clienteOrigen->id,
+                    'id_cliente_destino' => $clienteDestino->id,
+                    'id_tipo_entrega' => $this->tipoEntregaId,
+                    'unidades' => $row['piezas'],
+                    'peso' => $row['peso'],
+                    'largo' => $row['largo'] ?? 1,
+                    'ancho' => $row['ancho'] ?? 1,
+                    'alto' => $row['alto'] ?? 1,
+                    'precio_envio' => $row['precio_envio'] ?? 0,
+                    'valor_declarado' => $row['valor_declarado'] ?? 0,
+                    'observacion' => $row['observacion'] ?? 'Ninguna',
+                ]);
 
-            // 4. Vincular Guía a la Planilla (Pivot)
-            $this->planilla->guias()->attach($guia->id);
+                // 4. Vincular Guía a la Planilla (Pivot)
+                $this->planilla->guias()->attach($guia->id);
 
-            // 5. Actualizar Totales en Base de Datos (Seguro para Jobs en segundo plano)
-            $this->planilla->increment('piezas', $row['piezas']);
-            $this->planilla->increment('kilos', $row['peso']);
-        }
+                // 5. Actualizar Totales en Base de Datos (Seguro para Jobs en segundo plano)
+                $this->planilla->increment('piezas', $row['piezas']);
+                $this->planilla->increment('kilos', $row['peso']);
+            }
+        });
     }
 
     /**

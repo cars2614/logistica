@@ -431,7 +431,7 @@
 
                             <div class="col-md-6 form-group">
                                 <label class="text-white">Repartidor Asignado (Opcional)</label>
-                                <select name="id_repartidor" class="form-control select2 @error('id_repartidor') is-invalid @enderror" style="width: 100%;">
+                                <select name="id_repartidor" class="form-control form-control-premium select2 @error('id_repartidor') is-invalid @enderror" style="width: 100%;">
                                     <option value="">Sin asignar...</option>
                                     @foreach ($repartidores as $repartidor)
                                         <option value="{{ $repartidor->id }}" {{ old('id_repartidor') == $repartidor->id ? 'selected' : '' }}>

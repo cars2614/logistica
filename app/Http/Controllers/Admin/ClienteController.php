@@ -12,7 +12,7 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::orderBy('created_at', 'desc')->get();
+        $clientes = Cliente::with('ciudad')->orderBy('created_at', 'desc')->get();
         $ciudades = Ciudad::orderBy('nombre', 'asc')->get();
 
         return view('admin.cliente.index', compact('clientes', 'ciudades'));

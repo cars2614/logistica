@@ -18,6 +18,7 @@ class Planilla extends Model
         'id_ciudad',
         'id_ruta',
         'vehiculo_id',
+        'id_usuario',
         'piezas',
         'kilos',
     ];

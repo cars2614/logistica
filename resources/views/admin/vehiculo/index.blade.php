@@ -186,6 +186,22 @@
             color: #fff !important;
         }
 
+        .input-group-text-premium {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-right: none !important;
+            color: #0EA5E9 !important;
+            border-top-left-radius: 8px !important;
+            border-bottom-left-radius: 8px !important;
+        }
+
+        .input-group > .form-control-premium {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            flex: 1 1 auto;
+            width: 1%;
+        }
+
         /* Select2 Premium style overrides */
         .select2-container--bootstrap4 .select2-selection--single {
             background-color: rgba(255, 255, 255, 0.03) !important;
@@ -443,13 +459,13 @@
                             <label for="m_placa" class="font-weight-bold text-secondary mb-1">Placa <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-id-card"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-id-card"></i></span>
                                 </div>
                                 <input
                                     type="text"
                                     name="placa"
                                     id="m_placa"
-                                    class="form-control-premium text-uppercase font-weight-bold @error('placa') is-invalid @enderror"
+                                    class="form-control form-control-premium text-uppercase font-weight-bold @error('placa') is-invalid @enderror"
                                     value="{{ old('placa') }}"
                                     placeholder="Ej: ABC-123"
                                     maxlength="10"
@@ -468,12 +484,12 @@
                             <label for="m_tipo_vehiculo_id" class="font-weight-bold text-secondary mb-1">Tipo de Vehículo <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-truck"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-truck"></i></span>
                                 </div>
                                 <select
                                     name="id_tipo_vehiculo"
                                     id="m_tipo_vehiculo_id"
-                                    class="form-control-premium @error('id_tipo_vehiculo') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('id_tipo_vehiculo') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
@@ -494,13 +510,13 @@
                             <label for="m_marca" class="font-weight-bold text-secondary mb-1">Marca <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-copyright"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-copyright"></i></span>
                                 </div>
                                 <input
                                     type="text"
                                     name="marca"
                                     id="m_marca"
-                                    class="form-control-premium @error('marca') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('marca') is-invalid @enderror"
                                     value="{{ old('marca') }}"
                                     placeholder="Ej: Chevrolet"
                                     maxlength="100"
@@ -517,13 +533,13 @@
                             <label for="m_modelo" class="font-weight-bold text-secondary mb-1">Modelo / Línea <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-car-side"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-car-side"></i></span>
                                 </div>
                                 <input
                                     type="text"
                                     name="modelo"
                                     id="m_modelo"
-                                    class="form-control-premium @error('modelo') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('modelo') is-invalid @enderror"
                                     value="{{ old('modelo') }}"
                                     placeholder="Ej: NHR 2022"
                                     maxlength="100"
@@ -540,13 +556,13 @@
                             <label for="m_capacidad" class="font-weight-bold text-secondary mb-1">Capacidad (kg) <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-weight-hanging"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-weight-hanging"></i></span>
                                 </div>
                                 <input
                                     type="number"
                                     name="capacidad"
                                     id="m_capacidad"
-                                    class="form-control-premium @error('capacidad') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('capacidad') is-invalid @enderror"
                                     value="{{ old('capacidad') }}"
                                     placeholder="Ej: 5000"
                                     min="1"
@@ -563,12 +579,12 @@
                             <label for="m_estado" class="font-weight-bold text-secondary mb-1">Estado inicial <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-toggle-on"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-toggle-on"></i></span>
                                 </div>
                                 <select
                                     name="estado"
                                     id="m_estado"
-                                    class="form-control-premium @error('estado') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('estado') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">-- Seleccione --</option>
@@ -587,13 +603,13 @@
                             <label for="m_fecha_registro" class="font-weight-bold text-secondary mb-1">Fecha de Registro <span class="text-danger">*</span></label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light text-muted"><i class="fas fa-calendar-alt"></i></span>
+                                    <span class="input-group-text input-group-text-premium"><i class="fas fa-calendar-alt"></i></span>
                                 </div>
                                 <input
                                     type="date"
                                     name="fecha_registro"
                                     id="m_fecha_registro"
-                                    class="form-control-premium @error('fecha_registro') is-invalid @enderror"
+                                    class="form-control form-control-premium @error('fecha_registro') is-invalid @enderror"
                                     value="{{ old('fecha_registro') }}"
                                     required
                                 >
@@ -604,7 +620,6 @@
                         </div>
 
                     </div>
-                </div>
                 </div>
                 <div class="modal-footer modal-footer-premium">
                     <button type="button" class="btn text-white" data-dismiss="modal" style="background: rgba(255,255,255,0.1); border: none;">Cancelar</button>

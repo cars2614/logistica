@@ -27,10 +27,8 @@ class TrackingController extends Controller
         $guia = Guia::with(['clienteOrigen', 'clienteDestino', 'tipoEntrega', 'estados'])->findOrFail($id);
         $usuario = auth()->user();
 
-        $rol = $usuario && $usuario->rol ? trim(strtolower($usuario->rol->nombre)) : '';
-
-        $esAdmin = in_array($rol, ['admin', 'administrador']) || (isset($usuario->rol_id) && $usuario->rol_id == 1);
-        $esRepartidor = $rol === 'repartidor' || (isset($usuario->rol_id) && $usuario->rol_id == 3);
+        $esAdmin = $usuario && $usuario->hasRole(\App\Enums\RoleEnum::ADMIN->value);
+        $esRepartidor = $usuario && $usuario->hasRole(\App\Enums\RoleEnum::REPARTIDOR->value);
         $esCliente = ! $esAdmin && ! $esRepartidor;
 
         $ultimoEstado = $guia->estados()->latest()->first();
@@ -53,8 +51,7 @@ class TrackingController extends Controller
         $user = auth()->user();
 
         // 1. Verificación de Seguridad Anti-IDOR
-        $rol = $user->rol ? trim(strtolower($user->rol->nombre)) : '';
-        $esAdmin = in_array($rol, ['admin', 'administrador']) || (isset($user->rol_id) && $user->rol_id == 1);
+        $esAdmin = $user && $user->hasRole(\App\Enums\RoleEnum::ADMIN->value);
         
         if (!$esAdmin && $guia->id_repartidor !== $user->id) {
             return response()->json([
@@ -68,7 +65,6 @@ class TrackingController extends Controller
         // Registro físico en la tabla estado_guias
         $nuevoEstado = EstadoGuia::create([
             'id_guia' => $guia->id,
-            'guia_id' => $guia->id,
             'id_usuario' => $usuarioId,
             'estado' => $request->estado,
             'descripcion' => $request->descripcion,

@@ -3,10 +3,10 @@
 @section('title', 'Seguimiento - Guía #' . $guia->id)
 
 @section('content_header')
-<div class="d-flex align-items-center justify-content-between flex-wrap">
-    <h1><i class="fas fa-satellite-dish mr-2"></i>Seguimiento en Tiempo Real — Guía #{{ $guia->id }}</h1>
+<div class="d-flex align-items-center justify-content-between flex-wrap premium-container">
+    <h1 class="text-white"><i class="fas fa-satellite-dish text-info mr-2"></i>Seguimiento en Tiempo Real — Guía #{{ $guia->id }}</h1>
     <div>
-        <a href="/admin/guia" class="btn btn-secondary btn-sm mr-2">
+        <a href="/admin/guia" class="btn btn-sm mr-2 text-white" style="background: rgba(255,255,255,0.1); border: none;">
     <i class="fas fa-arrow-left mr-1"></i> Volver al Listado
 </a>
         @if($ultimoEstado)
@@ -30,18 +30,18 @@
 @stop
 
 @section('content')
-<div class="row">
+<div class="row premium-container">
 
     {{-- Columna izquierda --}}
     <div class="col-md-4">
 
         {{-- Datos del paquete --}}
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-box mr-1"></i> Datos del Paquete</h3>
+        <div class="card card-custom-premium">
+            <div class="card-header card-header-premium">
+                <h3 class="card-title-premium"><i class="fas fa-box text-info mr-1"></i> Datos del Paquete</h3>
             </div>
             <div class="card-body pb-2">
-                <table class="table table-sm table-borderless mb-0">
+                <table class="table table-premium table-borderless mb-0">
                     <tr><th style="width:45%">Observación</th><td>{{ $guia->observacion ?? 'Ninguna' }}</td></tr>
                     <tr><th>Peso</th><td>{{ $guia->peso }} Kg</td></tr>
                     <tr><th>Volumen</th><td>{{ $guia->volumen }} m³</td></tr>
@@ -54,21 +54,21 @@
         </div>
 
         {{-- Panel de control GPS visible para interactividad directa --}}
-        <div class="card card-success card-outline">
-            <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-map-marker-alt mr-1"></i> Control de Ubicación</h3>
+        <div class="card card-custom-premium">
+            <div class="card-header card-header-premium">
+                <h3 class="card-title-premium"><i class="fas fa-map-marker-alt text-success mr-1"></i> Control de Ubicación</h3>
             </div>
             <div class="card-body">
 
-                <div id="alerta-gps" class="alert alert-success alert-dismissible d-none">
+                <div id="alerta-gps" class="alert alert-success alert-dismissible d-none" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.2); color: #10B981;">
                     <i class="fas fa-check-circle mr-1"></i>
                     <span id="alerta-mensaje"></span>
-                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <button type="button" class="close text-white" data-dismiss="alert"><span>&times;</span></button>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-tag mr-1"></i> Estado del Paquete</label>
-                    <select id="select-estado" class="form-control" required>
+                    <label><i class="fas fa-tag text-info mr-1"></i> Estado del Paquete</label>
+                    <select id="select-estado" class="form-control form-control-premium" required>
                         <option value="">— Seleccione un estado —</option>
                         @foreach($estadosDelSistema as $estadoPrincipal => $subtipos)
                             <option value="{{ $estadoPrincipal }}">{{ $estadoPrincipal }}</option>
@@ -77,20 +77,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-list mr-1"></i> Detalle del Estado</label>
-                    <select id="select-descripcion" class="form-control" disabled required>
+                    <label><i class="fas fa-list text-info mr-1"></i> Detalle del Estado</label>
+                    <select id="select-descripcion" class="form-control form-control-premium" disabled required>
                         <option value="">— Seleccione primero un estado —</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-crosshairs mr-1"></i> Coordenadas del Punto</label>
+                    <label><i class="fas fa-crosshairs text-info mr-1"></i> Coordenadas del Punto</label>
                     <div class="row">
                         <div class="col-6">
-                            <input type="text" id="input-latitud"  class="form-control form-control-sm" placeholder="Latitud" readonly>
+                            <input type="text" id="input-latitud"  class="form-control form-control-premium form-control-sm" placeholder="Latitud" readonly>
                         </div>
                         <div class="col-6">
-                            <input type="text" id="input-longitud" class="form-control form-control-sm" placeholder="Longitud" readonly>
+                            <input type="text" id="input-longitud" class="form-control form-control-premium form-control-sm" placeholder="Longitud" readonly>
                         </div>
                     </div>
                     <span class="badge badge-warning mt-2 d-block text-left" style="white-space: normal; font-size: 11px;">
@@ -111,9 +111,9 @@
         </div>
 
         {{-- Historial de estados --}}
-        <div class="card card-outline card-secondary">
-            <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-history mr-1"></i> Historial de Estados</h3>
+        <div class="card card-custom-premium">
+            <div class="card-header card-header-premium">
+                <h3 class="card-title-premium"><i class="fas fa-history text-info mr-1"></i> Historial de Estados</h3>
             </div>
             <div class="card-body p-0">
                 <div id="timeline-estados" style="max-height:280px;overflow-y:auto;padding:15px;">
@@ -126,9 +126,9 @@
 
     {{-- Columna derecha: Mapa --}}
     <div class="col-md-8">
-        <div class="card card-outline card-info">
-            <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-map mr-1"></i> Mapa de Recorrido</h3>
+        <div class="card card-custom-premium">
+            <div class="card-header card-header-premium">
+                <h3 class="card-title-premium"><i class="fas fa-map text-info mr-1"></i> Mapa de Recorrido</h3>
                 <div class="card-tools">
                     <span id="badge-vivo" class="badge badge-danger d-none">
                         <i class="fas fa-circle"></i> TRANSMITIENDO
@@ -147,6 +147,20 @@
 @section('css')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    .content-wrapper { background-color: #0A0F1E !important; position: relative; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .content-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px); background-size: 35px 35px; pointer-events: none; z-index: 1; }
+    .premium-container { position: relative; z-index: 2; }
+    .card-custom-premium { background: rgba(13, 19, 35, 0.65) !important; backdrop-filter: blur(16px); border-radius: 16px !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important; margin-top: 15px; }
+    .card-header-premium { padding: 20px 24px !important; background: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
+    .card-title-premium { font-size: 16px; font-weight: 600; color: #ffffff; margin: 0; }
+    .table-premium th { background-color: rgba(255, 255, 255, 0.01) !important; color: #94A3B8 !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase !important; border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; padding: 12px 15px !important; }
+    .table-premium td { padding: 12px 15px !important; color: #E2E8F0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; font-size: 13px !important; }
+    .form-control-premium { background-color: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; color: #fff !important; border-radius: 8px !important; }
+    .form-control-premium option { background-color: #131A2E !important; color: #fff !important; }
+    .form-control-premium:focus { border-color: #0EA5E9 !important; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important; }
+    label { color: #94A3B8; font-weight: 500; }
 .estado-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:14px; border-left: 2px solid #e9ecef; padding-left: 10px; }
 .estado-punto { width:12px; height:12px; border-radius:50%; flex-shrink:0; margin-top:4px; border:2px solid #fff; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
 .estado-punto.bodega    { background:#ffc107; }

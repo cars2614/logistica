@@ -29,7 +29,7 @@
                 <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close"
                     style="opacity: 0.5;">
                     <span aria-hidden="true">&times;</span>
-                    </< /button>
+                    </button>
             </div>
         @endif
 

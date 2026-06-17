@@ -31,6 +31,18 @@ Route::middleware('auth')->group(function () {
 // 2. Rutas de autenticación (generadas por Breeze)
 require __DIR__ . '/auth.php';
 
+// Ruta temporal para instalar la base de datos en Render (solo se ejecuta si está vacía)
+Route::get('/instalar-bd', function () {
+    if (!\Illuminate\Support\Facades\Schema::hasTable('roles')) {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            '--force' => true
+        ]);
+        return 'Base de datos instalada y poblada con éxito. Ya puedes <a href="/login">Ir al Login</a>';
+    }
+    return 'La base de datos ya estaba instalada. <a href="/login">Ir al Login</a>';
+});
+
 // 3. Rutas de Repartidor — Protegidas por autenticación y optimizadas
 Route::middleware(['auth'])->prefix('repartidor')->name('repartidor.')->group(function () {
     Route::get('/dashboard', [RepartidorController::class, 'index'])->name('dashboard'); 
